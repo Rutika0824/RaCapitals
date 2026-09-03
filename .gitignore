@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Environment variables
+.env
+frontend/.env
+backend/.env
+.env.local
+.env.production
+
+# Build outputs
+dist/
+build/
+
+# Uploads
+backend/uploads/*
+
+# Keep uploads folder
+!backend/uploads/.gitkeep
