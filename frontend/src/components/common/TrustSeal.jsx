@@ -1,0 +1,52 @@
+const TrustSeal = ({ size = 280, showSubText = true, showRingText = false, className = '' }) => {
+  const numberFontSize = size <= 48 ? Math.round(size * 0.42) : 64
+  const subFontSize = size <= 48 ? Math.round(size * 0.09) : 10
+  const numberYOffset = size <= 48 ? Math.round(size * 0.30) : 0
+  const subYOffset = size <= 48 ? Math.round(size * 0.30) : 44
+  const cx = 150
+  const cy = 150
+  const outerR = 118
+  const innerR = 95
+  const textR = 108
+  const arcStartX = cx - textR
+  const arcEndX = cx + textR
+  const arcPathId = `trust-seal-top-arc-${size}`
+  const ringFontSize = size <= 48 ? Math.max(Math.round(size * 0.085), 6) : 10
+  return (
+    <svg
+      className={className}
+      viewBox="0 0 300 300"
+      width={size}
+      height={size}
+      role="img"
+      aria-label="RA Capitals trust seal"
+    >
+      <defs>
+        <path
+          id={arcPathId}
+          d={`M ${arcStartX},${cy} A ${textR},${textR} 0 0,1 ${arcEndX},${cy}`}
+          fill="none"
+        />
+      </defs>
+      <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
+      <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
+      {showRingText && (
+        <text className="trust-seal-ring-text" fontSize={ringFontSize}>
+          <textPath href={`#${arcPathId}`} startOffset="50%" textAnchor="middle">
+            RA CAPITALS • OFFLINE TRACK RECORD • SINCE 2021
+          </textPath>
+        </text>
+      )}
+      <text x="150" y={150 + numberYOffset} textAnchor="middle" className="trust-seal-number">
+        5+
+      </text>
+      {showSubText && (
+        <text x="150" y={150 + subYOffset} textAnchor="middle" className="trust-seal-sub">
+          YEARS TRADING
+        </text>
+      )}
+    </svg>
+  )
+}
+
+export default TrustSeal

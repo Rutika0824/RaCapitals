@@ -1,5 +1,6 @@
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
+import TrustSeal from './TrustSeal'
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth()
@@ -10,7 +11,7 @@ const Navbar = () => {
     <header className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="wordmark">
-          <img src="/logo.svg" alt="RA Capitals" className="brand-logo" />
+          <TrustSeal size={36} showSubText={false} className="brand-logo" />
           <span className="wordmark-text">RA CAPITALS</span>
         </Link>
         <nav className="nav-links">

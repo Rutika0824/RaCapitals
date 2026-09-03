@@ -176,11 +176,6 @@ const AdminListings = () => {
     }
   }
 
-  const handleDelete = (company) => {
-    if (!window.confirm(`Permanently delete "${company.name}"? This cannot be undone.`)) return
-    console.log('Delete endpoint not yet implemented')
-  }
-
   useEffect(() => {
     if (!flash) return
     const t = setTimeout(() => setFlash(''), 3000)
@@ -278,9 +273,7 @@ const AdminListings = () => {
                       <button type="button" className="row-action-btn" onClick={() => toggleActive(c)}>
                         {c.isActive ? 'Deactivate' : 'Activate'}
                       </button>
-                      <button type="button" className="row-action-btn delete-btn" onClick={() => handleDelete(c)}>
-                        Delete
-                      </button>
+                      
                       <label className="row-action-btn upload-btn-label">
                         {c.logoUrl ? 'Replace Logo' : 'Upload Logo'}
                         <input
