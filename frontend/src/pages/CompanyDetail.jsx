@@ -25,23 +25,34 @@ const PriceChart = ({ history }) => {
     )
   }
   const prices = points.map((p) => Number(p.price)).filter((n) => !Number.isNaN(n))
-  const min = Math.min(...prices)
-  const max = Math.max(...prices)
+  const rawMin = Math.min(...prices)
+  const rawMax = Math.max(...prices)
+  const range = rawMax - rawMin || 1
+
+  // Reserve vertical headroom so the curve never reaches the row where
+  // the Y-axis labels live. The data range is padded by 8% top & bottom,
+  // and the actual plot region stops short of the SVG top/bottom edges.
+  const verticalPad = range * 0.08
+  const min = rawMin - verticalPad
+  const max = rawMax + verticalPad
+  const paddedRange = max - min || 1
   const mid = (min + max) / 2
-  const range = max - min || 1
+
   const width = 600
   const height = 300
   const padding = 20
-  const leftPad = 70
-  const bottomPad = 30
-  const plotTop = padding
+  const leftPad = 78
+  const bottomPad = 32
+  const plotTop = padding + 6
   const plotBottom = height - padding - bottomPad
   const plotH = plotBottom - plotTop
-  const plotW = width - padding * 2 - leftPad
+  const plotLeft = leftPad + padding
+  const plotRight = width - padding
+  const plotW = plotRight - plotLeft
   const stepX = plotW / Math.max(prices.length - 1, 1)
   const coords = prices.map((price, i) => {
-    const x = leftPad + padding + i * stepX
-    const y = plotTop + plotH * (1 - (price - min) / range)
+    const x = plotLeft + i * stepX
+    const y = plotTop + plotH * (1 - (price - min) / paddedRange)
     return { x, y, price }
   })
   const formatShortDate = (value) => {
@@ -49,7 +60,7 @@ const PriceChart = ({ history }) => {
     if (Number.isNaN(d.getTime())) return ''
     return d.toLocaleDateString('en-IN', { day: 'numeric', month: 'short', year: 'numeric' })
   }
-  const yLabelY = (val) => plotTop + plotH * (1 - (val - min) / range)
+  const yLabelY = (val) => plotTop + plotH * (1 - (val - min) / paddedRange)
   const gridYs = [max, mid, min].map((v) => yLabelY(v))
   const smoothPath = (pts) => {
     if (pts.length === 0) return ''
@@ -78,6 +89,17 @@ const PriceChart = ({ history }) => {
   const tooltipH = 44
   const tooltipX = hovered ? Math.min(Math.max(hovered.x - tooltipW / 2, padding), width - padding - tooltipW) : 0
   const tooltipY = hovered ? Math.max(hovered.y - tooltipH - 10, padding) : 0
+
+  // Y-axis label layout — render each label with a solid --paper chip behind it
+  // so even if a data point sits very close, the label stays legible.
+  const labelPadX = 4
+  const labelPadY = 2
+  const yLabelsData = [
+    { val: max, text: formatINR(max), key: 'max' },
+    { val: mid, text: formatINR(mid), key: 'mid' },
+    { val: min, text: formatINR(min), key: 'min' },
+  ]
+
   return (
     <div className="chart-wrap">
       <svg viewBox={`0 0 ${width} ${height}`} className="chart-svg" role="img" aria-label="Price history">
@@ -88,19 +110,50 @@ const PriceChart = ({ history }) => {
           </linearGradient>
         </defs>
         <rect x="0" y="0" width={width} height={height} fill="transparent" />
+
+        {/* Horizontal grid lines — span the full plot width, left edge
+            through right edge of the SVG plot region. */}
         {gridYs.map((gy, i) => (
           <line
             key={`grid-${i}`}
-            x1={leftPad + padding - 6}
+            x1={plotLeft}
             y1={gy}
-            x2={width - padding}
+            x2={plotRight}
             y2={gy}
             className="chart-grid-line"
           />
         ))}
-        <text x={leftPad} y={yLabelY(max) + 4} className="chart-axis-label" textAnchor="start">{formatINR(max)}</text>
-        <text x={leftPad} y={yLabelY(mid) + 4} className="chart-axis-label" textAnchor="start">{formatINR(mid)}</text>
-        <text x={leftPad} y={yLabelY(min) + 4} className="chart-axis-label" textAnchor="start">{formatINR(min)}</text>
+
+        {/* Y-axis labels with a solid paper-coloured chip behind each one
+            so the curve / grid lines never visually overlap the text. */}
+        {yLabelsData.map(({ val, text, key }) => {
+          const ly = yLabelY(val) + 4
+          const approxW = text.length * 6.2 + labelPadX * 2
+          const chipX = leftPad
+          const chipY = ly - 11 - labelPadY
+          return (
+            <g key={`ylabel-${key}`}>
+              <rect
+                x={chipX}
+                y={chipY}
+                width={approxW}
+                height={14 + labelPadY * 2}
+                rx="3"
+                ry="3"
+                className="chart-axis-label-bg"
+              />
+              <text
+                x={chipX + labelPadX}
+                y={ly}
+                className="chart-axis-label"
+                textAnchor="start"
+              >
+                {text}
+              </text>
+            </g>
+          )
+        })}
+
         <path d={areaPath} fill="url(#chart-area-gradient)" stroke="none" />
         <path d={linePath} fill="none" stroke="var(--brass)" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
         {coords.map((c, i) => (
@@ -123,10 +176,10 @@ const PriceChart = ({ history }) => {
           </g>
         ))}
         {firstDate && (
-          <text x={leftPad + padding} y={height - 8} className="chart-axis-label" textAnchor="start">{formatShortDate(firstDate)}</text>
+          <text x={plotLeft} y={height - 8} className="chart-axis-label" textAnchor="start">{formatShortDate(firstDate)}</text>
         )}
         {lastDate && (
-          <text x={width - padding} y={height - 8} className="chart-axis-label" textAnchor="end">{formatShortDate(lastDate)}</text>
+          <text x={plotRight} y={height - 8} className="chart-axis-label" textAnchor="end">{formatShortDate(lastDate)}</text>
         )}
         {hovered && (
           <g pointerEvents="none">

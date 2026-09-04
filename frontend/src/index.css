@@ -846,14 +846,20 @@ a:hover {
 .chart-grid-line {
   stroke: var(--paper-2, #e5e1d8);
   stroke-width: 1;
-  opacity: 0.6;
-  stroke-dasharray: 2 4;
+  opacity: 0.55;
+  stroke-dasharray: 3 5;
+  vector-effect: non-scaling-stroke;
 }
 
 .chart-axis-label {
   font-size: 11px;
   fill: var(--muted, #6b6b6b);
   font-family: 'IBM Plex Mono', monospace;
+}
+
+.chart-axis-label-bg {
+  fill: var(--paper);
+  stroke: none;
 }
 
 .chart-hover-line {
