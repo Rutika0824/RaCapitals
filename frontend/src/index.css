@@ -1803,7 +1803,7 @@ a:hover {
   align-items: center;
   justify-content: center;
   padding: 1rem;
-  z-index: 50;
+  z-index: 9999;
 }
 
 .modal {
@@ -3092,5 +3092,1021 @@ a:hover {
 @media (min-width: 600px) and (max-width: 767px) {
   .admin-overview-stats {
     grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ============================================================
+   Public site dark theme (PERMANENT, default for public pages only)
+   Scope: .page-wrap is used by every public page (Home, Catalog,
+   CompanyDetail, Contact, Disclaimer, Terms, Privacy) and NEVER by
+   admin pages — admin pages use .admin-layout / .admin-wrap /
+   .admin-login-wrap instead, so this block affects no admin page.
+   ============================================================ */
+
+.page-wrap {
+  background: #0F1B2D;
+  color: var(--paper);
+  position: relative;
+}
+
+.page-wrap::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+      radial-gradient(700px circle at 80% 12%, rgba(176, 141, 87, 0.18), transparent 60%),
+      radial-gradient(900px circle at 10% 85%, rgba(176, 141, 87, 0.10), transparent 60%);
+  z-index: 0;
+}
+
+.page-wrap > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Navbar — permanently dark */
+.page-wrap .navbar {
+  background: #0F1B2D;
+  border-bottom-color: rgba(176, 141, 87, 0.25);
+}
+
+.page-wrap .wordmark,
+.page-wrap .nav-links a {
+  color: var(--paper);
+}
+
+.page-wrap .nav-links a:hover {
+  color: var(--brass);
+}
+
+.page-wrap .nav-links a.active {
+  border-bottom-color: var(--brass);
+  color: var(--brass);
+}
+
+/* Compliance ribbon */
+.page-wrap .compliance-ribbon {
+  background: #0A1623;
+  color: var(--paper);
+  border-bottom-color: var(--brass);
+}
+
+/* Page main text defaults */
+.page-wrap .page-main {
+  color: var(--paper);
+}
+
+.page-wrap .page-header h1,
+.page-wrap .section-title,
+.page-wrap .hero-headline,
+.page-wrap .trust-band-heading,
+.page-wrap .step-card h3,
+.page-wrap .step-card p,
+.page-wrap .trust-band-label,
+.page-wrap .trust-band-points p,
+.page-wrap .preview-card-name,
+.page-wrap .preview-card-price,
+.page-wrap .legal-page h1,
+.page-wrap .legal-page p,
+.page-wrap .stat-value,
+.page-wrap .company-header-text h1,
+.page-wrap .detail-title,
+.page-wrap .hero-text {
+  color: var(--paper);
+}
+
+.page-wrap .muted {
+  color: #A7B3C2;
+}
+
+.page-wrap .hero-body {
+  color: #C8D2DF;
+}
+
+.page-wrap .eyebrow,
+.page-wrap .hero-stat-label,
+.page-wrap .stat-label,
+.page-wrap .detail-subhead,
+.page-wrap .detail-hero-price-label,
+.page-wrap .kv-label,
+.page-wrap .preview-card-price-label,
+.page-wrap .preview-card-sector,
+.page-wrap .sector-badge,
+.page-wrap .preview-card-range,
+.page-wrap .trust-band-num,
+.page-wrap .step-number {
+  color: var(--brass);
+}
+
+.page-wrap .sector-badge {
+  background: rgba(176, 141, 87, 0.12);
+  color: var(--brass);
+}
+
+.page-wrap .hero-stat {
+  border-top-color: var(--brass);
+}
+
+/* Hero glow boost */
+.page-wrap .hero-glow-brass {
+  background: radial-gradient(circle, rgba(176, 141, 87, 0.45) 0%, rgba(176, 141, 87, 0) 70%);
+}
+
+.page-wrap .hero-glow-ink {
+  background: radial-gradient(circle, rgba(176, 141, 87, 0.18) 0%, rgba(176, 141, 87, 0) 70%);
+}
+
+/* Cards — dark surfaces with brass accents */
+.page-wrap .preview-card,
+.page-wrap .step-card,
+.page-wrap .stat-card,
+.page-wrap .contact-card,
+.page-wrap .company-logo,
+.page-wrap .chart-wrap,
+.page-wrap .catalog-card,
+.page-wrap .catalog-table-wrap,
+.page-wrap .modal {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.25);
+  color: var(--paper);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.page-wrap .preview-card:hover,
+.page-wrap .step-card:hover {
+  border-color: var(--brass);
+  box-shadow: 0 8px 24px rgba(176, 141, 87, 0.18);
+}
+
+.page-wrap .step-card {
+  border-left-color: var(--brass);
+}
+
+.page-wrap .preview-card-logo,
+.page-wrap .catalog-card-kv .kv-row,
+.page-wrap .detail-history-table th,
+.page-wrap .detail-history-table td,
+.page-wrap .preview-card-mid,
+.page-wrap .preview-card-range {
+  border-color: rgba(176, 141, 87, 0.18);
+}
+
+.page-wrap .preview-card-mid,
+.page-wrap .preview-card-range {
+  border-top-color: rgba(176, 141, 87, 0.18);
+}
+
+.page-wrap .preview-card-logo {
+  background: #0F1B2D;
+}
+
+.page-wrap .sparkline-empty {
+  background: linear-gradient(90deg, #142340, #1A2B3C);
+}
+
+/* Trust band — gradient dark surface */
+.page-wrap .trust-band {
+  background: linear-gradient(180deg, #142340 0%, #1A2B3C 100%);
+  border-color: rgba(176, 141, 87, 0.3);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.35);
+}
+
+/* Catalog / CompanyDetail table and card text */
+.page-wrap .catalog-table th,
+.page-wrap .detail-history-table th {
+  color: var(--brass);
+  background: #142340;
+}
+
+.page-wrap .catalog-table td,
+.page-wrap .detail-history-table td {
+  color: var(--paper);
+  border-bottom-color: rgba(176, 141, 87, 0.18);
+}
+
+.page-wrap .catalog-table th,
+.page-wrap .catalog-table td {
+  border-bottom-color: rgba(176, 141, 87, 0.18);
+}
+
+.page-wrap .catalog-row:hover {
+  background: #142340;
+}
+
+.page-wrap .company-name {
+  color: var(--paper);
+}
+
+/* Chart axis & grid — legible on dark */
+.page-wrap .chart-axis-label {
+  fill: var(--paper);
+}
+
+.page-wrap .chart-grid-line {
+  stroke: rgba(176, 141, 87, 0.25);
+  stroke-dasharray: 3 5;
+}
+
+.page-wrap .chart-axis-label-bg {
+  fill: #1A2B3C;
+}
+
+.page-wrap .chart-empty {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.25);
+  color: var(--paper);
+}
+
+.page-wrap .chart-empty p {
+  color: var(--paper);
+}
+
+.page-wrap .chart-tooltip-box {
+  fill: var(--ink);
+  stroke: rgba(176, 141, 87, 0.4);
+}
+
+.page-wrap .chart-tooltip-price,
+.page-wrap .chart-tooltip-date {
+  fill: var(--paper);
+}
+
+/* Detail side / kv list */
+.page-wrap .kv-value,
+.page-wrap .detail-hero-price-value {
+  color: var(--paper);
+}
+
+.page-wrap .kv-list .kv-row,
+.page-wrap .detail-section + .detail-section {
+  border-bottom-color: rgba(176, 141, 87, 0.18);
+}
+
+/* Buttons */
+.page-wrap .primary-btn {
+  background: var(--brass);
+  color: #0F1B2D;
+  border: 1px solid var(--brass);
+}
+
+.page-wrap .primary-btn:hover {
+  background: var(--paper);
+  color: #0F1B2D;
+  border-color: var(--paper);
+}
+
+.page-wrap .secondary-btn,
+.page-wrap .home-preview-cta {
+  background: transparent;
+  color: var(--paper);
+  border-color: rgba(176, 141, 87, 0.6);
+}
+
+.page-wrap .secondary-btn:hover,
+.page-wrap .home-preview-cta:hover {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+.page-wrap .enquire-btn {
+  background: var(--brass);
+  color: #0F1B2D;
+}
+
+.page-wrap .enquire-btn:hover {
+  background: var(--paper);
+}
+
+/* Form inputs / search */
+.page-wrap .search-input,
+.page-wrap .form-input,
+.page-wrap .contact-form-textarea {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.25);
+  color: var(--paper);
+}
+
+.page-wrap .search-input::placeholder,
+.page-wrap .form-input::placeholder,
+.page-wrap .contact-form-textarea::placeholder {
+  color: #A7B3C2;
+}
+
+.page-wrap .search-input:focus,
+.page-wrap .form-input:focus {
+  outline-color: var(--brass);
+}
+
+.page-wrap .chip {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.25);
+  color: var(--paper);
+}
+
+.page-wrap .chip:hover {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.page-wrap .chip-active {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+/* Form errors */
+.page-wrap .form-error {
+  color: #E2A89C;
+}
+
+/* Footer — already dark; keep consistent */
+.page-wrap .footer {
+  background: #0A1623;
+  color: var(--paper);
+}
+
+.page-wrap .footer-brand-name {
+  color: var(--paper);
+}
+
+.page-wrap .footer-text {
+  color: #A7B3C2;
+}
+
+.page-wrap .footer-col h4 {
+  color: var(--brass);
+}
+
+.page-wrap .footer-col a {
+  color: var(--paper);
+}
+
+.page-wrap .footer-col a:hover {
+  color: var(--brass);
+}
+
+.page-wrap .footer-bottom {
+  border-top-color: rgba(236, 238, 241, 0.12);
+}
+
+.page-wrap .footer-bottom p {
+  color: #A7B3C2;
+}
+
+/* Trust seal — "5+" number flips to paper for legibility on dark bg */
+.page-wrap .trust-seal-number {
+  fill: var(--paper);
+}
+
+/* Catch-all: any base rule that used `color: var(--ink)` for text on
+   public pages now resolves to paper inside .page-wrap. Admin pages
+   are not wrapped in .page-wrap, so they remain on the original ink. */
+.page-wrap .contact-card p,
+.page-wrap .form-label,
+.page-wrap .form-input,
+.page-wrap .form-error {
+  color: var(--paper);
+}
+
+.page-wrap .form-error {
+  color: #E2A89C;
+}
+
+.page-wrap .company-name,
+.page-wrap .company-cell,
+.page-wrap .stat-value,
+.page-wrap .kv-value,
+.page-wrap .detail-hero-price-value,
+.page-wrap .set-price-link,
+.page-wrap .company-header-text h1,
+.page-wrap .company-section,
+.page-wrap .detail-section p,
+.page-wrap .section-title {
+  color: var(--paper);
+}
+
+.page-wrap .set-price-link {
+  color: var(--brass);
+}
+
+.page-wrap .company-section p,
+.page-wrap .detail-section p {
+  color: #C8D2DF;
+}
+
+.page-wrap .contact-card-long-text {
+  color: var(--paper);
+}
+
+.page-wrap .catalog-row .company-name {
+  color: var(--paper);
+}
+
+.page-wrap .catalog-cards-mobile .catalog-card-name {
+  color: var(--paper);
+}
+
+.page-wrap .form-input::placeholder,
+.page-wrap .search-input::placeholder {
+  color: #A7B3C2;
+}
+
+.page-wrap .password-toggle {
+  color: #A7B3C2;
+}
+
+.page-wrap .password-toggle:hover {
+  color: var(--paper);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-wrap,
+  .page-wrap * {
+    transition: none !important;
+  }
+}
+
+/* ============================================================
+   Admin dark theme — same palette as public (.page-wrap).
+   Scoped to .admin-layout (covers every signed-in admin page)
+   and .admin-login-wrap (covers the login page). AdminHeader,
+   AdminSidebar, AdminOverview, AdminListings, AdminCompanyDetail
+   all live inside these wrappers, so every rule below applies
+   uniformly without touching any admin JSX files.
+   Public .page-wrap rules above are not affected.
+   ============================================================ */
+
+.admin-layout,
+.admin-login-wrap {
+  background: #0F1B2D;
+  color: var(--paper);
+  position: relative;
+}
+
+.admin-layout::before,
+.admin-login-wrap::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background:
+      radial-gradient(700px circle at 80% 12%, rgba(176, 141, 87, 0.18), transparent 60%),
+      radial-gradient(900px circle at 10% 85%, rgba(176, 141, 87, 0.10), transparent 60%);
+  z-index: 0;
+}
+
+.admin-layout > *,
+.admin-login-wrap > * {
+  position: relative;
+}
+
+/* ---------- AdminHeader ---------- */
+.admin-layout .admin-header-bar {
+  background: #0A1623;
+  border-bottom: 2px solid var(--brass);
+  color: var(--paper);
+}
+
+.admin-layout .admin-header-bar-brand {
+  color: var(--paper);
+}
+
+.admin-layout .admin-header-bar-brand:hover {
+  color: var(--brass);
+}
+
+.admin-layout .admin-header-bar-user {
+  color: var(--paper);
+}
+
+.admin-layout .admin-header-bar-user .muted,
+.admin-layout .admin-header-bar-user-label {
+  color: #A7B3C2;
+}
+
+.admin-layout .admin-logout-btn {
+  background: transparent;
+  color: var(--paper);
+  border: 1px solid var(--brass);
+}
+
+.admin-layout .admin-logout-btn:hover {
+  background: var(--rust);
+  color: var(--white);
+  border-color: var(--rust);
+}
+
+.admin-layout .admin-hamburger {
+  color: var(--paper);
+  border-color: rgba(176, 141, 87, 0.45);
+}
+
+/* ---------- AdminSidebar ---------- */
+.admin-layout .admin-sidebar {
+  background: #0A1623;
+  border-right: 2px solid var(--brass);
+  color: var(--paper);
+}
+
+.admin-layout .admin-sidebar-item {
+  color: var(--paper);
+}
+
+.admin-layout .admin-sidebar-item:hover {
+  background: #142340;
+  color: var(--paper);
+}
+
+.admin-layout .admin-sidebar-item.active {
+  background: #142340;
+  border-left-color: var(--brass);
+  color: var(--brass);
+}
+
+.admin-layout .admin-sidebar-item.disabled {
+  color: #6B7B8A;
+}
+
+.admin-layout .admin-sidebar-item.disabled:hover {
+  background: transparent;
+  color: #6B7B8A;
+}
+
+.admin-layout .admin-sidebar-overlay {
+  background: rgba(15, 27, 45, 0.7);
+}
+
+/* ---------- Admin body text defaults ---------- */
+.admin-layout h1,
+.admin-layout h2,
+.admin-layout h3,
+.admin-layout p,
+.admin-layout label,
+.admin-layout .muted,
+.admin-layout .flash,
+.admin-layout .back-link,
+.admin-layout .back-pill,
+.admin-layout .admin-page-header h1 {
+  color: var(--paper);
+}
+
+.admin-layout .muted,
+.admin-layout .admin-header-bar-user .muted {
+  color: #A7B3C2;
+}
+
+.admin-layout .flash {
+  background: #142340;
+  color: var(--paper);
+  border-left-color: var(--brass);
+}
+
+.admin-layout .back-pill {
+  background: #1A2B3C;
+  color: var(--paper);
+  border-color: rgba(176, 141, 87, 0.35);
+}
+
+.admin-layout .back-pill:hover {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+.admin-layout .back-link {
+  color: var(--brass);
+}
+
+/* ---------- Stat / detail cards ---------- */
+.admin-layout .stat-card,
+.admin-layout .admin-detail-card,
+.admin-layout .detail-logo-preview,
+.admin-layout .modal,
+.admin-layout .admin-login-card {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.3);
+  color: var(--paper);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.admin-layout .admin-detail-card {
+  border-top-color: var(--brass);
+}
+
+.admin-layout .stat-label,
+.admin-layout .detail-subhead,
+.admin-layout .detail-hero-price-label,
+.admin-layout .admin-detail-card h3,
+.admin-layout .kv-label {
+  color: var(--brass);
+}
+
+.admin-layout .stat-value,
+.admin-layout .detail-hero-price-value,
+.admin-layout .kv-value,
+.admin-layout .detail-title {
+  color: var(--paper);
+}
+
+.admin-layout .admin-overview-stats {
+  background: transparent;
+}
+
+/* ---------- Tables ---------- */
+.admin-layout .admin-table-wrap,
+.admin-layout .detail-history-table {
+  background: transparent;
+}
+
+.admin-layout .admin-table,
+.admin-layout .detail-history-table {
+  color: var(--paper);
+}
+
+.admin-layout .admin-table th,
+.admin-layout .admin-table td,
+.admin-layout .detail-history-table th,
+.admin-layout .detail-history-table td {
+  color: var(--paper);
+  border-bottom-color: rgba(176, 141, 87, 0.18);
+}
+
+.admin-layout .admin-table th,
+.admin-layout .detail-history-table th {
+  background: #142340;
+  color: var(--brass);
+}
+
+.admin-layout .admin-table tbody tr {
+  background: #1A2B3C;
+}
+
+.admin-layout .admin-table tbody tr:nth-child(even),
+.admin-layout .detail-history-table tbody tr:nth-child(even) {
+  background: #142340;
+}
+
+.admin-layout .admin-table tbody tr:hover {
+  background: #243955;
+}
+
+.admin-layout .admin-table a,
+.admin-layout .detail-history-table a {
+  color: var(--brass);
+}
+
+.admin-layout .admin-table a:hover {
+  color: var(--paper);
+}
+
+.admin-layout .admin-logo-thumb {
+  border-color: rgba(176, 141, 87, 0.35);
+  background: #0F1B2D;
+}
+
+.admin-layout .logo-placeholder.small {
+  background: #142340;
+  color: var(--brass);
+}
+
+/* ---------- Status badges ---------- */
+.admin-layout .status-badge.status-live {
+  background: rgba(176, 141, 87, 0.2);
+  color: var(--brass);
+}
+
+.admin-layout .status-badge.status-off {
+  background: rgba(167, 179, 194, 0.18);
+  color: #C8D2DF;
+}
+
+/* ---------- Sector badges ---------- */
+.admin-layout .sector-badge {
+  background: rgba(176, 141, 87, 0.15);
+  color: var(--brass);
+}
+
+/* ---------- Action buttons ---------- */
+.admin-layout .row-action-btn,
+.admin-layout .set-price-link {
+  background: transparent;
+  color: var(--paper);
+  border-color: rgba(176, 141, 87, 0.45);
+}
+
+.admin-layout .row-action-btn:hover,
+.admin-layout .set-price-link:hover {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+.admin-layout .row-action-btn.delete-btn {
+  color: #E2A89C;
+  border-color: rgba(161, 74, 61, 0.7);
+}
+
+.admin-layout .row-action-btn.delete-btn:hover {
+  background: var(--rust);
+  color: var(--white);
+  border-color: var(--rust);
+}
+
+.admin-layout .upload-btn-label {
+  color: inherit;
+}
+
+/* ---------- Form inputs / search / chips ---------- */
+.admin-layout .search-input,
+.admin-layout .form-input,
+.admin-layout .contact-form-textarea {
+  background: #142340;
+  border-color: rgba(176, 141, 87, 0.3);
+  color: var(--paper);
+}
+
+.admin-layout .search-input::placeholder,
+.admin-layout .form-input::placeholder {
+  color: #A7B3C2;
+}
+
+.admin-layout .search-input:focus,
+.admin-layout .form-input:focus {
+  outline-color: var(--brass);
+}
+
+.admin-layout .form-label {
+  color: var(--paper);
+}
+
+.admin-layout .form-error {
+  color: #E2A89C;
+}
+
+.admin-layout .password-toggle {
+  color: #A7B3C2;
+}
+
+.admin-layout .password-toggle:hover {
+  color: var(--paper);
+}
+
+.admin-layout .chip {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.3);
+  color: var(--paper);
+}
+
+.admin-layout .chip:hover {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.admin-layout .chip-active {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+/* ---------- Buttons ---------- */
+.admin-layout .primary-btn {
+  background: var(--brass);
+  color: #0F1B2D;
+  border: 1px solid var(--brass);
+}
+
+.admin-layout .primary-btn:hover {
+  background: var(--paper);
+  color: #0F1B2D;
+  border-color: var(--paper);
+}
+
+.admin-layout .secondary-btn {
+  background: transparent;
+  color: var(--paper);
+  border-color: rgba(176, 141, 87, 0.55);
+}
+
+.admin-layout .secondary-btn:hover {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+.admin-layout .danger-btn {
+  color: #E2A89C;
+  border-color: rgba(161, 74, 61, 0.7);
+  background: transparent;
+}
+
+.admin-layout .danger-btn:hover {
+  background: var(--rust);
+  color: var(--white);
+  border-color: var(--rust);
+}
+
+/* ---------- Admin cards (mobile listings) ---------- */
+.admin-layout .admin-card {
+  background: #1A2B3C;
+  border-top-color: var(--brass);
+  border-color: rgba(176, 141, 87, 0.3);
+  color: var(--paper);
+}
+
+.admin-layout .admin-card-name {
+  color: var(--paper);
+}
+
+.admin-layout .admin-card-kv .kv-row {
+  border-bottom-color: rgba(176, 141, 87, 0.18);
+}
+
+.admin-layout .admin-card-kv .kv-label {
+  color: var(--brass);
+}
+
+.admin-layout .admin-card-kv .kv-value {
+  color: var(--paper);
+}
+
+/* ---------- Modals ---------- */
+.admin-layout .modal-backdrop {
+  background: rgba(15, 27, 45, 0.7);
+}
+
+.admin-layout .modal {
+  background: #1A2B3C;
+  border-top-color: var(--brass);
+  color: var(--paper);
+}
+
+.admin-layout .modal h2,
+.admin-layout .confirm-dialog-title,
+.admin-layout .confirm-dialog-message {
+  color: var(--paper);
+}
+
+.admin-layout .confirm-dialog-message {
+  color: #C8D2DF;
+}
+
+.admin-layout .danger-btn-solid {
+  background: var(--rust);
+  color: var(--white);
+  border-color: var(--rust);
+}
+
+.admin-layout .danger-btn-solid:hover {
+  background: var(--paper);
+  color: #0F1B2D;
+  border-color: var(--paper);
+}
+
+/* ---------- AdminLogin card ---------- */
+.admin-login-wrap .admin-login-card {
+  background: #1A2B3C;
+  border-top-color: var(--brass);
+  color: var(--paper);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.4);
+}
+
+.admin-login-wrap .admin-login-title {
+  color: var(--paper);
+}
+
+.admin-login-wrap .form-label {
+  color: var(--paper);
+}
+
+.admin-login-wrap .form-input {
+  background: #142340;
+  border-color: rgba(176, 141, 87, 0.3);
+  color: var(--paper);
+}
+
+.admin-login-wrap .form-input::placeholder {
+  color: #A7B3C2;
+}
+
+.admin-login-wrap .form-input:focus {
+  outline-color: var(--brass);
+}
+
+.admin-login-wrap .form-error {
+  color: #E2A89C;
+}
+
+.admin-login-wrap .password-toggle {
+  color: #A7B3C2;
+}
+
+.admin-login-wrap .password-toggle:hover {
+  color: var(--paper);
+}
+
+.admin-login-wrap .primary-btn {
+  background: var(--brass);
+  color: #0F1B2D;
+  border-color: var(--brass);
+}
+
+.admin-login-wrap .primary-btn:hover {
+  background: var(--paper);
+  color: #0F1B2D;
+  border-color: var(--paper);
+}
+
+.admin-login-wrap .primary-btn:disabled {
+  opacity: 0.6;
+}
+
+/* ---------- Section / card dividers ---------- */
+.admin-layout .section-heading {
+  color: var(--paper);
+  border-bottom-color: rgba(176, 141, 87, 0.25);
+}
+
+.admin-layout .kv-list .kv-row,
+.admin-layout .admin-detail-card .kv-row {
+  border-bottom-color: rgba(176, 141, 87, 0.18);
+}
+
+.admin-layout .detail-section + .detail-section {
+  border-top-color: rgba(176, 141, 87, 0.18);
+}
+
+.admin-layout .admin-controls {
+  background: transparent;
+}
+
+/* ---------- Chart on admin (AdminCompanyDetail price history) ---------- */
+.admin-layout .chart-wrap {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.3);
+}
+
+.admin-layout .chart-empty {
+  background: #1A2B3C;
+  border-color: rgba(176, 141, 87, 0.3);
+  color: var(--paper);
+}
+
+.admin-layout .chart-axis-label {
+  fill: var(--paper);
+}
+
+.admin-layout .chart-grid-line {
+  stroke: rgba(176, 141, 87, 0.3);
+  stroke-dasharray: 3 5;
+}
+
+.admin-layout .chart-axis-label-bg {
+  fill: #1A2B3C;
+}
+
+.admin-layout .chart-tooltip-box {
+  fill: #0A1623;
+  stroke: rgba(176, 141, 87, 0.45);
+}
+
+.admin-layout .chart-tooltip-price,
+.admin-layout .chart-tooltip-date {
+  fill: var(--paper);
+}
+
+/* ---------- InfoTooltip icon on admin (needs to be visible on dark) ---------- */
+.admin-layout .info-tooltip {
+  color: var(--brass);
+}
+
+.admin-layout .info-tooltip:hover .info-tooltip-icon,
+.admin-layout .info-tooltip:focus .info-tooltip-icon,
+.admin-layout .info-tooltip:focus-within .info-tooltip-icon {
+  color: var(--paper);
+}
+
+.admin-layout .info-tooltip-bubble-portal {
+  background: #0A1623;
+  color: var(--paper);
+  border: 1px solid rgba(176, 141, 87, 0.45);
+}
+
+.admin-layout .info-tooltip-bubble-portal.placement-top::after {
+  border-top-color: #0A1623;
+}
+
+.admin-layout .info-tooltip-bubble-portal.placement-bottom::after {
+  border-bottom-color: #0A1623;
+}
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .admin-layout,
+  .admin-layout *,
+  .admin-login-wrap,
+  .admin-login-wrap * {
+    transition: none !important;
   }
 }
