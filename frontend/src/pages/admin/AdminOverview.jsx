@@ -40,7 +40,7 @@ const AdminOverview = () => {
         <p className="muted">Loading overview…</p>
       ) : (
         <>
-          <div className="company-stats">
+          <div className="admin-overview-stats">
             <div className="stat-card">
               <p className="stat-label">Total Companies</p>
               <p className="stat-value">{total}</p>

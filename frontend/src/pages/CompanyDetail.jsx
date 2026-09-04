@@ -4,6 +4,7 @@ import api from '../services/api'
 import ComplianceRibbon from '../components/common/ComplianceRibbon'
 import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
+import InfoTooltip from '../components/common/InfoTooltip'
 import Navbar from '../components/common/Navbar'
 import { apiBaseWithoutApi, formatINR } from '../utils/format'
 
@@ -224,19 +225,35 @@ const CompanyDetail = () => {
 
         <section className="company-stats">
           <div className="stat-card">
-            <p className="stat-label">Indicative Price</p>
+            <p className="stat-label">
+              <InfoTooltip text="An estimated price based on our own research — not sourced from a live stock exchange.">
+                Indicative Price
+              </InfoTooltip>
+            </p>
             <p className="stat-value mono">{formatINR(latestPrice)}</p>
           </div>
           <div className="stat-card">
-            <p className="stat-label">52W High</p>
+            <p className="stat-label">
+              <InfoTooltip text="Highest and lowest indicative price recorded over the last 12 months.">
+                52W High
+              </InfoTooltip>
+            </p>
             <p className="stat-value mono">{formatINR(company.high52)}</p>
           </div>
           <div className="stat-card">
-            <p className="stat-label">52W Low</p>
+            <p className="stat-label">
+              <InfoTooltip text="Highest and lowest indicative price recorded over the last 12 months.">
+                52W Low
+              </InfoTooltip>
+            </p>
             <p className="stat-value mono">{formatINR(company.low52)}</p>
           </div>
           <div className="stat-card">
-            <p className="stat-label">Lot Size</p>
+            <p className="stat-label">
+              <InfoTooltip text="Minimum number of shares you can enquire about in one transaction.">
+                Lot Size
+              </InfoTooltip>
+            </p>
             <p className="stat-value mono">{company.lotSize ?? '—'}</p>
           </div>
           <div className="stat-card">

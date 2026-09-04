@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router-dom'
 import api from '../../services/api'
 import { apiBaseWithoutApi, formatINR } from '../../utils/format'
+import InfoTooltip from '../../components/common/InfoTooltip'
 
 const AdminCompanyDetail = () => {
   const { id } = useParams()
@@ -163,7 +164,11 @@ const AdminCompanyDetail = () => {
           <section className="detail-section">
             <h3 className="detail-subhead">Market Data</h3>
             <div className="detail-hero-price">
-              <span className="detail-hero-price-label">Latest Price</span>
+              <span className="detail-hero-price-label">
+                <InfoTooltip text="An estimated price based on our own research — not sourced from a live stock exchange.">
+                  Latest Price
+                </InfoTooltip>
+              </span>
               {latestPrice == null ? (
                 <button type="button" className="set-price-link" onClick={() => setPriceModalOpen(true)}>
                   Set price
@@ -174,15 +179,27 @@ const AdminCompanyDetail = () => {
             </div>
             <dl className="kv-list">
               <div className="kv-row">
-                <span className="kv-label">52W High</span>
+                <span className="kv-label">
+                  <InfoTooltip text="Highest and lowest indicative price recorded over the last 12 months.">
+                    52W High
+                  </InfoTooltip>
+                </span>
                 <span className="kv-value mono">{formatINR(company.high52)}</span>
               </div>
               <div className="kv-row">
-                <span className="kv-label">52W Low</span>
+                <span className="kv-label">
+                  <InfoTooltip text="Highest and lowest indicative price recorded over the last 12 months.">
+                    52W Low
+                  </InfoTooltip>
+                </span>
                 <span className="kv-value mono">{formatINR(company.low52)}</span>
               </div>
               <div className="kv-row">
-                <span className="kv-label">Lot Size</span>
+                <span className="kv-label">
+                  <InfoTooltip text="Minimum number of shares you can enquire about in one transaction.">
+                    Lot Size
+                  </InfoTooltip>
+                </span>
                 <span className="kv-value mono">{company.lotSize ?? '—'}</span>
               </div>
               <div className="kv-row">
@@ -304,16 +321,22 @@ const AdminCompanyDetail = () => {
               </label>
               <div className="form-row">
                 <label className="form-label">
-                  Lot Size
+                  <InfoTooltip text="Minimum number of shares a buyer must purchase in one transaction.">
+                    Lot Size
+                  </InfoTooltip>
                   <input type="number" value={editForm.lotSize} onChange={(e) => setEditForm({ ...editForm, lotSize: e.target.value })} className="form-input" />
                 </label>
                 <label className="form-label">
-                  Face Value
+                  <InfoTooltip text="The share's original nominal value set at incorporation — unrelated to its current market price.">
+                    Face Value
+                  </InfoTooltip>
                   <input type="number" step="0.01" value={editForm.faceValue} onChange={(e) => setEditForm({ ...editForm, faceValue: e.target.value })} className="form-input" />
                 </label>
               </div>
               <label className="form-label">
-                ISIN
+                <InfoTooltip text="International Securities Identification Number — a unique code for the share. Leave blank if not yet assigned.">
+                  ISIN
+                </InfoTooltip>
                 <input type="text" value={editForm.isin} onChange={(e) => setEditForm({ ...editForm, isin: e.target.value })} className="form-input" />
               </label>
               {editError && <p className="form-error">{editError}</p>}

@@ -13,6 +13,15 @@
   box-sizing: border-box;
 }
 
+html {
+  overflow-x: hidden;
+}
+
+img, svg {
+  max-width: 100%;
+  height: auto;
+}
+
 html, body, #root {
   margin: 0;
   padding: 0;
@@ -2172,5 +2181,910 @@ a:hover {
   .preview-card:hover {
     transition: none;
     transform: none;
+  }
+}
+
+/* ============================================================
+   InfoTooltip — wrapper that owns hover/focus for label + icon.
+   The whole .info-tooltip is the interactive target; only the
+   bubble is conditionally rendered (icon is always visible).
+   ============================================================ */
+:root {
+  --info-tooltip-icon: #6B7B8A;
+  --info-tooltip-icon-hover: var(--ink);
+}
+
+.info-tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  position: relative;
+  color: var(--info-tooltip-icon);
+  cursor: help;
+  outline: none;
+  vertical-align: middle;
+  border-radius: 4px;
+  padding: 1px 2px;
+  margin: -1px -2px;
+  transition: color 0.15s ease;
+}
+
+.info-tooltip:focus-visible {
+  outline: 2px solid var(--brass);
+  outline-offset: 2px;
+}
+
+.info-tooltip-label {
+  display: inline;
+  color: inherit;
+}
+
+.info-tooltip-icon {
+  display: block;
+  flex-shrink: 0;
+  transition: color 0.15s ease, transform 0.15s ease;
+}
+
+.info-tooltip:hover .info-tooltip-icon,
+.info-tooltip:focus .info-tooltip-icon,
+.info-tooltip:focus-within .info-tooltip-icon {
+  color: var(--info-tooltip-icon-hover);
+  transform: scale(1.08);
+}
+
+/* Portal-rendered bubble — escapes any clipping ancestor */
+.info-tooltip-bubble-portal {
+  position: absolute;
+  background: var(--ink);
+  color: var(--paper);
+  font-size: 0.78rem;
+  line-height: 1.4;
+  padding: 0.5rem 0.7rem;
+  border-radius: 4px;
+  width: max-content;
+  max-width: 240px;
+  text-align: left;
+  white-space: normal;
+  box-shadow: 0 6px 18px rgba(26, 43, 60, 0.22);
+  z-index: 9999;
+  pointer-events: none;
+  animation: infoTooltipFadeIn 0.12s ease-out;
+}
+
+.info-tooltip-bubble-portal.placement-top::after {
+  content: '';
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-top-color: var(--ink);
+}
+
+.info-tooltip-bubble-portal.placement-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 5px solid transparent;
+  border-bottom-color: var(--ink);
+}
+
+@keyframes infoTooltipFadeIn {
+  from { opacity: 0; transform: translateY(2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 600px) {
+  .info-tooltip-bubble-portal {
+    width: 200px;
+    font-size: 0.75rem;
+  }
+}
+
+/* ============================================================
+   ConfirmDialog — styled modal for destructive/neutral confirms
+   ============================================================ */
+.confirm-dialog {
+  max-width: 420px;
+}
+
+.confirm-dialog-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: var(--ink);
+}
+
+.confirm-dialog-message {
+  margin: 0 0 1rem 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.danger-btn-solid {
+  background: var(--rust);
+  color: var(--white);
+  border: 1px solid var(--rust);
+}
+
+.danger-btn-solid:hover {
+  background: var(--ink);
+  color: var(--white);
+  border-color: var(--ink);
+}
+
+/* ============================================================
+   RESPONSIVE — Mobile / Tablet overrides
+   Breakpoints:
+     Mobile  : < 768px
+     Tablet  : 768px – 1023px
+     Desktop : >= 1024px
+   ============================================================ */
+
+/* Hamburger button (public Navbar) */
+.nav-hamburger {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--paper-2);
+  border-radius: 4px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  transition: border-color 0.15s ease;
+}
+
+.nav-hamburger:hover {
+  border-color: var(--brass);
+}
+
+.nav-hamburger-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: var(--ink);
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.nav-hamburger.open .nav-hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.nav-hamburger.open .nav-hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.nav-hamburger.open .nav-hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+/* Hamburger button (admin header) */
+.admin-hamburger {
+  display: none;
+  background: transparent;
+  border: 1px solid rgba(236, 238, 241, 0.35);
+  border-radius: 4px;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  cursor: pointer;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: var(--paper);
+  transition: border-color 0.15s ease;
+}
+
+.admin-hamburger:hover {
+  border-color: var(--brass);
+}
+
+.admin-hamburger-bar {
+  display: block;
+  width: 22px;
+  height: 2px;
+  background: currentColor;
+  border-radius: 2px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.admin-hamburger.open .admin-hamburger-bar:nth-child(1) {
+  transform: translateY(7px) rotate(45deg);
+}
+
+.admin-hamburger.open .admin-hamburger-bar:nth-child(2) {
+  opacity: 0;
+}
+
+.admin-hamburger.open .admin-hamburger-bar:nth-child(3) {
+  transform: translateY(-7px) rotate(-45deg);
+}
+
+.admin-sidebar-overlay {
+  display: none;
+}
+
+/* Show/hide table vs cards */
+.catalog-cards-mobile,
+.admin-listings-cards-mobile {
+  display: none;
+}
+
+/* ----- Page-main / general spacing on small screens ----- */
+@media (max-width: 767px) {
+  .page-main {
+    padding: 1.25rem 1rem 2.5rem 1rem;
+  }
+  .page-header h1 {
+    font-size: 1.6rem;
+  }
+  .admin-wrap,
+  .admin-wrap-wide {
+    padding: 1.25rem 1rem 2.5rem 1rem;
+  }
+}
+
+/* ----- Navbar mobile drawer ----- */
+@media (max-width: 767px) {
+  .navbar-inner {
+    padding: 0.75rem 1rem;
+    position: relative;
+  }
+  .nav-hamburger {
+    display: flex;
+  }
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    background: var(--white);
+    border-bottom: 1px solid var(--paper-2);
+    box-shadow: 0 8px 18px rgba(26, 43, 60, 0.08);
+    padding: 0.5rem 0;
+    max-height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    opacity: 0;
+    transition: max-height 0.25s ease, opacity 0.2s ease, visibility 0s linear 0.25s;
+    z-index: 30;
+  }
+  .nav-links.open {
+    max-height: 360px;
+    visibility: visible;
+    opacity: 1;
+    transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+  .nav-links a {
+    padding: 0.85rem 1.25rem;
+    border-bottom: 1px solid var(--paper-2);
+    font-size: 1rem;
+  }
+  .nav-links a:last-child {
+    border-bottom: none;
+  }
+  .nav-links a.active {
+    border-bottom-color: var(--brass);
+  }
+}
+
+/* ----- Compliance ribbon ----- */
+@media (max-width: 767px) {
+  .compliance-ribbon {
+    font-size: 0.72rem;
+    padding: 0.4rem 0.75rem;
+    line-height: 1.4;
+  }
+}
+
+@media (max-width: 479px) {
+  .compliance-ribbon {
+    font-size: 0.68rem;
+    padding: 0.4rem 0.5rem;
+  }
+}
+
+/* ----- Hero ----- */
+@media (max-width: 1023px) {
+  .hero-grid {
+    grid-template-columns: 1fr;
+    gap: 1.75rem;
+    text-align: center;
+  }
+  .hero-text {
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .hero-stats {
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-logo-wrap {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 767px) {
+  .hero {
+    padding: 2rem 0 1.5rem 0;
+  }
+  .hero-polished {
+    padding-top: 2rem;
+  }
+  .hero-headline {
+    font-size: 1.85rem;
+    line-height: 1.2;
+  }
+  .hero-body {
+    font-size: 0.98rem;
+  }
+  .hero-trust-seal {
+    width: 200px;
+    height: 200px;
+  }
+  .hero-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    max-width: 420px;
+    gap: 1rem 1.25rem;
+  }
+  .hero-glow-brass,
+  .hero-glow-ink {
+    width: 220px;
+    height: 220px;
+  }
+}
+
+@media (max-width: 479px) {
+  .hero-headline {
+    font-size: 1.65rem;
+  }
+  .hero-stats {
+    grid-template-columns: 1fr;
+    max-width: 320px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .hero-trust-seal {
+    width: 180px;
+    height: 180px;
+  }
+}
+
+/* ----- Home live catalog preview ----- */
+@media (max-width: 767px) {
+  .home-preview-controls {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .home-preview-controls .search-input {
+    max-width: none;
+    width: 100%;
+  }
+  .sector-chips {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .preview-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .preview-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- Trust band & how-it-works stacks at < 768 ----- */
+@media (max-width: 767px) {
+  .trust-band {
+    padding: 1.5rem 1.1rem;
+  }
+  .trust-band-heading {
+    font-size: 1.25rem;
+  }
+  .trust-band-points {
+    grid-template-columns: 1fr;
+    gap: 1.1rem;
+  }
+  .steps-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+/* ----- Footer ----- */
+@media (max-width: 767px) {
+  .footer {
+    padding: 2rem 1rem 0 1rem;
+  }
+  .footer-inner {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+  .footer-brand {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+  .footer-bottom {
+    margin-top: 1.5rem;
+  }
+}
+
+/* ----- Catalog (public) ----- */
+@media (max-width: 767px) {
+  .catalog-table-desktop {
+    display: none;
+  }
+  .catalog-cards-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .catalog-card {
+    background: var(--white);
+    border: 1px solid var(--paper-2);
+    border-top: 3px solid var(--brass);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    cursor: pointer;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .catalog-card:hover,
+  .catalog-card:focus-visible {
+    border-color: var(--brass);
+    box-shadow: 0 4px 14px rgba(26, 43, 60, 0.08);
+    outline: none;
+  }
+  .catalog-card-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .catalog-card-name {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--ink);
+    font-weight: 600;
+  }
+  .catalog-card-kv {
+    margin: 0;
+  }
+  .catalog-card-kv .kv-row {
+    display: grid;
+    grid-template-columns: minmax(110px, 0.6fr) 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid var(--paper-2);
+  }
+  .catalog-card-kv .kv-row:last-child {
+    border-bottom: none;
+  }
+  .catalog-card-kv .kv-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .catalog-card-kv .kv-value {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-align: right;
+    word-break: break-word;
+  }
+  .catalog-card-action {
+    display: flex;
+  }
+  .catalog-card-action .enquire-btn {
+    width: 100%;
+    min-height: 40px;
+  }
+}
+
+/* ----- CompanyDetail ----- */
+@media (max-width: 1023px) {
+  .company-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
+
+@media (max-width: 767px) {
+  .company-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.75rem;
+  }
+  .stat-card {
+    padding: 0.85rem 1rem;
+  }
+  .company-header-text h1 {
+    font-size: 1.5rem;
+  }
+  .chart-wrap {
+    padding: 0.5rem;
+  }
+}
+
+@media (max-width: 479px) {
+  .company-stats {
+    grid-template-columns: 1fr;
+  }
+  .chart-axis-label {
+    font-size: 9px;
+  }
+  .chart-tooltip-price {
+    font-size: 10px;
+  }
+  .chart-tooltip-date {
+    font-size: 8px;
+  }
+}
+
+/* ----- Contact ----- */
+@media (min-width: 600px) and (max-width: 1023px) {
+  .contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 599px) {
+  .contact-grid {
+    grid-template-columns: 1fr;
+  }
+  .contact-form-section {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 479px) {
+  .contact-card {
+    padding: 1rem 1.1rem;
+  }
+}
+
+/* ----- Legal pages ----- */
+@media (max-width: 767px) {
+  .legal-page {
+    padding: 0 0.25rem;
+  }
+  .legal-page h1 {
+    font-size: 1.45rem;
+  }
+}
+
+/* ----- Admin login ----- */
+@media (max-width: 767px) {
+  .admin-login-wrap {
+    padding: 1.25rem 1rem;
+  }
+  .admin-login-card {
+    width: min(440px, 90vw);
+    max-width: 90vw;
+    padding: 28px 22px;
+  }
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- Admin header & sidebar ----- */
+@media (max-width: 1023px) {
+  .admin-header-bar-inner {
+    padding: 0.6rem 1rem;
+    gap: 0.75rem;
+  }
+  .admin-hamburger {
+    display: flex;
+  }
+  .admin-header-bar-brand {
+    font-size: 0.85rem;
+    gap: 0.45rem;
+  }
+  .admin-header-bar-brand-text {
+    display: none;
+  }
+  .admin-sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100vh;
+    z-index: 60;
+    transform: translateX(-100%);
+    transition: transform 0.25s ease;
+    box-shadow: 4px 0 18px rgba(0, 0, 0, 0.25);
+  }
+  .admin-sidebar.open {
+    transform: translateX(0);
+  }
+  .admin-sidebar-overlay {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(26, 43, 60, 0.55);
+  }
+  .admin-layout-body {
+    display: block;
+  }
+  .admin-layout-content {
+    width: 100%;
+  }
+}
+
+@media (max-width: 767px) {
+  .admin-header-bar-user-label {
+    display: none;
+  }
+  .admin-header-bar-user {
+    font-size: 0.8rem;
+    max-width: 130px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .admin-logout-btn {
+    padding: 0.4rem 0.75rem;
+    font-size: 0.78rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .admin-header-bar-user {
+    display: none;
+  }
+}
+
+/* ----- Admin dashboard cards ----- */
+@media (max-width: 599px) {
+  .admin-overview-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* ----- Admin Listings: cards on mobile ----- */
+@media (max-width: 767px) {
+  .admin-listings-table-desktop {
+    display: none;
+  }
+  .admin-listings-cards-mobile {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+  .admin-card {
+    background: var(--white);
+    border: 1px solid var(--paper-2);
+    border-top: 3px solid var(--brass);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .admin-card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    flex-wrap: wrap;
+  }
+  .admin-card-logo {
+    flex-shrink: 0;
+  }
+  .admin-card-head-text {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+  }
+  .admin-card-name {
+    margin: 0;
+    font-size: 1.05rem;
+    color: var(--ink);
+    font-weight: 600;
+    word-break: break-word;
+  }
+  .admin-card-kv {
+    margin: 0;
+  }
+  .admin-card-kv .kv-row {
+    display: grid;
+    grid-template-columns: minmax(110px, 0.6fr) 1fr;
+    gap: 0.5rem;
+    align-items: baseline;
+    padding: 0.45rem 0;
+    border-bottom: 1px solid var(--paper-2);
+  }
+  .admin-card-kv .kv-row:last-child {
+    border-bottom: none;
+  }
+  .admin-card-kv .kv-label {
+    font-size: 0.75rem;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    font-weight: 600;
+  }
+  .admin-card-kv .kv-value {
+    margin: 0;
+    font-size: 0.95rem;
+    color: var(--ink);
+    text-align: right;
+    word-break: break-word;
+  }
+  .admin-card-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+  .admin-card-actions .row-action-btn {
+    flex: 1 1 auto;
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0.45rem 0.75rem;
+    font-size: 0.78rem;
+  }
+}
+
+/* ----- Admin Company Detail (view page) ----- */
+@media (max-width: 1023px) {
+  .detail-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+}
+
+@media (max-width: 767px) {
+  .detail-topbar {
+    gap: 0.75rem;
+  }
+  .detail-title {
+    font-size: 1.4rem;
+  }
+  .detail-meta-row {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .detail-hero-price-value {
+    font-size: 1.4rem;
+  }
+  .detail-logo-preview {
+    width: 110px;
+    height: 110px;
+    max-width: 110px;
+    max-height: 110px;
+  }
+  .kv-list {
+    max-width: 100%;
+  }
+  .kv-list .kv-row {
+    grid-template-columns: minmax(100px, 0.5fr) 1fr;
+    gap: 0.5rem;
+  }
+  .admin-detail-card .kv-row {
+    grid-template-columns: minmax(100px, 0.5fr) 1fr;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .kv-list .kv-row,
+  .admin-detail-card .kv-row {
+    grid-template-columns: 1fr;
+    gap: 0.2rem;
+  }
+  .kv-list .kv-value,
+  .admin-detail-card .kv-value {
+    text-align: left;
+  }
+}
+
+/* ----- Touch-target sizing on mobile ----- */
+@media (max-width: 767px) {
+  .row-action-btn,
+  .secondary-btn,
+  .primary-btn,
+  .enquire-btn,
+  .chip,
+  .set-price-link,
+  .row-action-btn.upload-btn-label {
+    min-height: 40px;
+  }
+  .modal-actions .secondary-btn,
+  .modal-actions .primary-btn {
+    min-height: 44px;
+  }
+}
+
+/* ----- Misc safety nets ----- */
+@media (max-width: 767px) {
+  .admin-page-header {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+  .admin-page-header h1 {
+    font-size: 1.45rem;
+  }
+  .admin-controls {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.65rem;
+  }
+  .admin-controls .search-input {
+    width: 100%;
+    max-width: none;
+  }
+  .admin-controls .secondary-btn {
+    align-self: flex-start;
+  }
+  .home-preview-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .hero-trust-seal {
+    margin: 0 auto;
+  }
+}
+
+/* Admin overview: stat cards stack on small screens */
+/* ============================================================
+   Small layout helpers for tooltip placement
+   ============================================================ */
+.th-label-with-tooltip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0;
+}
+
+.form-label-text {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* ============================================================
+   Admin overview: stat cards stack on small screens
+   ============================================================ */
+.admin-overview-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+@media (max-width: 599px) {
+  .admin-overview-stats {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (min-width: 600px) and (max-width: 767px) {
+  .admin-overview-stats {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
