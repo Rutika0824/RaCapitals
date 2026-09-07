@@ -8,6 +8,12 @@ const WORDS = [
   { text: 'today.', delay: '0.6s' },
 ]
 
+const LINES = [
+  { text: "Own tomorrow's", delay: '0.1s' },
+  { text: 'listed companies,', delay: '0.35s', accent: true },
+  { text: 'today.', delay: '0.6s' },
+]
+
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -15,27 +21,44 @@ const prefersReducedMotion = () =>
 const AnimatedHeadline = ({ text }) => {
   const { theme } = useTheme()
   const isEvergreen = theme === 'evergreen'
+  const isBlack = theme === 'black'
   const reduced = prefersReducedMotion()
 
-  if (!isEvergreen || reduced) {
-    return <>{text}</>
+  if (isEvergreen && !reduced) {
+    return (
+      <>
+        {WORDS.map((w, i) => (
+          <span key={i}>
+            <span
+              className="animated-word"
+              style={{ animationDelay: w.delay }}
+            >
+              {w.text}
+            </span>
+            {w.breakAfter && <br />}
+          </span>
+        ))}
+      </>
+    )
   }
 
-  return (
-    <>
-      {WORDS.map((w, i) => (
-        <span key={i}>
-          <span
-            className="animated-word"
-            style={{ animationDelay: w.delay }}
+  if (isBlack && !reduced) {
+    return (
+      <>
+        {LINES.map((line, i) => (
+          <div
+            key={i}
+            className={`clip-reveal line-${i + 1}`}
+            style={{ color: line.accent ? 'var(--brass)' : 'var(--page-text)' }}
           >
-            {w.text}
-          </span>
-          {w.breakAfter && <br />}
-        </span>
-      ))}
-    </>
-  )
+            {line.text}
+          </div>
+        ))}
+      </>
+    )
+  }
+
+  return <>{text}</>
 }
 
 export default AnimatedHeadline

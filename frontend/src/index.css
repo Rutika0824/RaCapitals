@@ -5067,6 +5067,31 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ============================================================
+   Clip-reveal headline — unfurl left-to-right (black theme only)
+   ============================================================ */
+.clip-reveal {
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+  animation: clipUnfurl 1.2s cubic-bezier(0.77, 0, 0.175, 1) forwards;
+}
+
+.line-1 { animation-delay: 0.1s; }
+.line-2 { animation-delay: 0.35s; }
+.line-3 { animation-delay: 0.6s; }
+
+@keyframes clipUnfurl {
+  to {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .clip-reveal {
+    animation: none;
+    clip-path: none;
+  }
+}
+
 
 
 
