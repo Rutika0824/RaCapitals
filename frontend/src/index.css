@@ -5092,6 +5092,39 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ============================================================
+   3D rotate-in headline — white theme only
+   ============================================================ */
+.perspective-container {
+  perspective: 800px;
+}
+
+.line-3d {
+  opacity: 0;
+  transform-origin: top center;
+  transform: rotateX(-80deg) translateZ(-50px);
+  animation: rotateIn3D 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.d1 { animation-delay: 0.1s; }
+.d2 { animation-delay: 0.3s; }
+.d3 { animation-delay: 0.5s; }
+
+@keyframes rotateIn3D {
+  to {
+    opacity: 1;
+    transform: rotateX(0deg) translateZ(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .line-3d {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+}
+
 
 
 

@@ -14,6 +14,12 @@ const LINES = [
   { text: 'today.', delay: '0.6s' },
 ]
 
+const LINES_3D = [
+  { text: "Own tomorrow's", delay: '0.1s' },
+  { text: 'listed companies,', delay: '0.3s', accent: true },
+  { text: 'today.', delay: '0.5s' },
+]
+
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -22,6 +28,7 @@ const AnimatedHeadline = ({ text }) => {
   const { theme } = useTheme()
   const isEvergreen = theme === 'evergreen'
   const isBlack = theme === 'black'
+  const isWhite = theme === 'white'
   const reduced = prefersReducedMotion()
 
   if (isEvergreen && !reduced) {
@@ -55,6 +62,22 @@ const AnimatedHeadline = ({ text }) => {
           </div>
         ))}
       </>
+    )
+  }
+
+  if (isWhite && !reduced) {
+    return (
+      <div className="perspective-container">
+        {LINES_3D.map((line, i) => (
+          <div
+            key={i}
+            className={`line-3d d${i + 1}`}
+            style={{ color: line.accent ? 'var(--brass)' : 'var(--page-text)' }}
+          >
+            {line.text}
+          </div>
+        ))}
+      </div>
     )
   }
 
