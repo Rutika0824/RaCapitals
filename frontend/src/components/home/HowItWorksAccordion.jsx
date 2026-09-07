@@ -5,24 +5,18 @@ const STEPS = [
   {
     num: '01',
     title: 'Discover a company',
-    desc: "Browse our indicative price list across sectors and shortlist opportunities that fit your thesis.",
+    desc: 'Browse our indicative price list across sectors and shortlist opportunities that fit your thesis.',
   },
   {
     num: '02',
     title: 'Enquire, we follow up on WhatsApp',
-    desc: "Tap enquire on any listing. Our team responds personally with current availability and lot details.",
+    desc: 'Tap enquire on any listing. Our team responds personally with current availability and lot details.',
   },
   {
     num: '03',
     title: 'Shares reach your demat account',
-    desc: "Once confirmed, shares are transferred securely into your demat account with full documentation.",
+    desc: 'Once confirmed, shares are transferred securely into your demat account with full documentation.',
   },
-]
-
-const GRADIENTS = [
-  'linear-gradient(160deg, #6366F1 0%, #4F46E5 100%)',
-  'linear-gradient(160deg, #4F46E5 0%, #4338CA 100%)',
-  'linear-gradient(160deg, #4338CA 0%, #3730A3 100%)',
 ]
 
 const HowItWorksAccordion = () => {
@@ -32,33 +26,30 @@ const HowItWorksAccordion = () => {
   return (
     <section className="how-it-works reveal" ref={sectionRef}>
       <h2 className="section-title">How it works</h2>
-      <div className="accordion-cards">
-        {STEPS.map((step, i) => {
-          const isOpen = openIndex === i
-          return (
+      <div className="accordion-bg">
+        <div className="accordion-cards">
+          {STEPS.map((step, i) => {
+            const isOpen = openIndex === i
+            return (
             <button
               key={i}
               type="button"
               className={`accordion-card ${isOpen ? 'accordion-card-open' : ''}`}
-              style={{ background: GRADIENTS[i] }}
-              onClick={() => setOpenIndex(i)}
+              onMouseEnter={() => setOpenIndex(i)}
+              onMouseLeave={() => setOpenIndex(0)}
               aria-expanded={isOpen}
             >
-              <div className="accordion-card-inner">
-                <span className="accordion-num">{step.num}</span>
-                <h3
-                  className="accordion-title"
-                  style={isOpen ? { writingMode: 'horizontal-tb' } : undefined}
-                >
-                  {step.title}
-                </h3>
-              </div>
-              <div className="accordion-desc-wrap">
-                <p className="accordion-desc">{step.desc}</p>
-              </div>
-            </button>
-          )
-        })}
+                <div className="accordion-card-inner">
+                  <span className="accordion-num">{step.num}</span>
+                  <h3 className="accordion-title">{step.title}</h3>
+                </div>
+                <div className="accordion-desc-wrap">
+                  <p className="accordion-desc">{step.desc}</p>
+                </div>
+              </button>
+            )
+          })}
+        </div>
       </div>
     </section>
   )
