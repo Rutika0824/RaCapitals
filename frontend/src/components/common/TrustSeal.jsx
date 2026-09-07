@@ -1,4 +1,8 @@
+import { useTheme } from '../../context/ThemeContext'
+
 const TrustSeal = ({ size = 280, showSubText = true, showRingText = false, className = '' }) => {
+  const { theme } = useTheme()
+  const isSage = theme === 'sage-editorial'
   const numberFontSize = size <= 48 ? Math.round(size * 0.42) : 64
   const subFontSize = size <= 48 ? Math.round(size * 0.09) : 10
   const numberYOffset = size <= 48 ? Math.round(size * 0.30) : 0
@@ -28,15 +32,17 @@ const TrustSeal = ({ size = 280, showSubText = true, showRingText = false, class
           fill="none"
         />
       </defs>
-      <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
-      <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
       {showRingText && (
-        <text className="trust-seal-ring-text" fontSize={ringFontSize}>
-          <textPath href={`#${arcPathId}`} startOffset="50%" textAnchor="middle">
-            RA CAPITALS • OFFLINE TRACK RECORD • SINCE 2021
-          </textPath>
-        </text>
+        <g className={`trust-seal-ring ${isSage ? 'trust-seal-ring-spin' : ''}`}>
+          <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
+          <text className="trust-seal-ring-text" fontSize={ringFontSize}>
+            <textPath href={`#${arcPathId}`} startOffset="50%" textAnchor="middle">
+              RA CAPITALS • OFFLINE TRACK RECORD • SINCE 2021
+            </textPath>
+          </text>
+        </g>
       )}
+      <circle cx={cx} cy={cy} r={innerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
       <text x="150" y={150 + numberYOffset} textAnchor="middle" className="trust-seal-number">
         5+
       </text>

@@ -4849,6 +4849,28 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 /* ============================================================
+   TrustSeal outer ring rotation — sage-editorial theme only
+   ============================================================ */
+@keyframes sealRotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+.trust-seal-ring {
+  transform-origin: 150px 150px;
+}
+
+.trust-seal-ring-spin {
+  animation: sealRotate 35s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .trust-seal-ring-spin {
+    animation: none;
+  }
+}
+
+/* ============================================================
    How It Works accordion — indigo-light theme only
    ============================================================ */
 .accordion-bg {
