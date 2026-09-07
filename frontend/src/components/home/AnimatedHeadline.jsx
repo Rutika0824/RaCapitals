@@ -1,0 +1,41 @@
+import { useTheme } from '../../context/ThemeContext'
+
+const WORDS = [
+  { text: "Own", delay: '0.1s' },
+  { text: "tomorrow's", delay: '0.2s', breakAfter: true },
+  { text: 'listed', delay: '0.35s' },
+  { text: 'companies,', delay: '0.45s', breakAfter: true },
+  { text: 'today.', delay: '0.6s' },
+]
+
+const prefersReducedMotion = () =>
+  typeof window !== 'undefined' &&
+  window.matchMedia('(prefers-reduced-motion: reduce)').matches
+
+const AnimatedHeadline = ({ text }) => {
+  const { theme } = useTheme()
+  const isEvergreen = theme === 'evergreen'
+  const reduced = prefersReducedMotion()
+
+  if (!isEvergreen || reduced) {
+    return <>{text}</>
+  }
+
+  return (
+    <>
+      {WORDS.map((w, i) => (
+        <span key={i}>
+          <span
+            className="animated-word"
+            style={{ animationDelay: w.delay }}
+          >
+            {w.text}
+          </span>
+          {w.breakAfter && <br />}
+        </span>
+      ))}
+    </>
+  )
+}
+
+export default AnimatedHeadline

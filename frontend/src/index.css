@@ -5032,6 +5032,41 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ============================================================
+   Animated headline — word-by-word fade + gold shimmer (evergreen only)
+   ============================================================ */
+.animated-word {
+  display: inline-block;
+  opacity: 0;
+  transform: translateY(12px);
+  animation: wordIn 0.7s ease-out forwards;
+  background: linear-gradient(120deg, #f1e4c3 30%, #ffffff 50%, #c5a059 70%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+@keyframes wordIn {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+    background-position: -100% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animated-word {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+}
+
 
 
 

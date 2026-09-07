@@ -11,7 +11,7 @@ import useScrollReveal from '../hooks/useScrollReveal'
 import FloatingParticles from '../components/common/FloatingParticles'
 import { useTheme } from '../context/ThemeContext'
 import HowItWorksAccordion from '../components/home/HowItWorksAccordion'
-import SplitFlapText from '../components/home/SplitFlapText'
+import AnimatedHeadline from '../components/home/AnimatedHeadline'
 
 const SECTORS = ['All', 'Fintech', 'Energy', 'Logistics', 'Consumer', 'Healthcare']
 const PREVIEW_LIMIT = 6
@@ -93,7 +93,7 @@ const Home = () => {
           <div className="hero-grid">
             <div className="hero-text">
               <p className="eyebrow fade-in-up">Unlisted &amp; Pre-IPO Shares</p>
-              <h1 className="hero-headline fade-in-up delay-1"><SplitFlapText text="Own tomorrow's listed companies, today." className="hero-headline" /></h1>
+              <h1 className="hero-headline fade-in-up delay-1"><AnimatedHeadline text="Own tomorrow's listed companies, today." /></h1>
               <p className="hero-body fade-in-up delay-2">
                 RA Capitals has spent the last five years helping investors access unlisted and pre-IPO equity
                 through an offline network built on trust, diligence, and direct relationships. This platform
