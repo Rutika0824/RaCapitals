@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import TrustSeal from './TrustSeal'
+import ThemeToggle from './ThemeToggle'
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth()
@@ -54,6 +55,7 @@ const Navbar = () => {
             </NavLink>
           )}
         </nav>
+        <ThemeToggle />
       </div>
     </header>
   )

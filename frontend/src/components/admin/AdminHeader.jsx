@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import ConfirmDialog from '../common/ConfirmDialog'
+import ThemeToggle from '../common/ThemeToggle'
 
 const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
   const { username, isAuthenticated, logout } = useAuth()
@@ -46,6 +47,7 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
             <span className="admin-header-bar-user-label">Signed in as </span>
             <span className="mono">{username}</span>
           </span>
+          <ThemeToggle />
           <button
             type="button"
             className="admin-logout-btn"

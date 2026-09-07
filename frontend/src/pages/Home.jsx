@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import ComplianceRibbon from '../components/common/ComplianceRibbon'
@@ -7,6 +7,7 @@ import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
 import TrustSeal from '../components/common/TrustSeal'
+import useScrollReveal from '../hooks/useScrollReveal'
 
 const SECTORS = ['All', 'Fintech', 'Energy', 'Logistics', 'Consumer', 'Healthcare']
 const PREVIEW_LIMIT = 6
@@ -16,6 +17,11 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [sector, setSector] = useState('All')
+
+  const previewRef = useScrollReveal()
+  const trustRef = useScrollReveal()
+  const howRef = useScrollReveal()
+  const gridRef = useRef(null)
 
   useEffect(() => {
     let cancelled = false
@@ -47,6 +53,26 @@ const Home = () => {
       .filter((c) => !q || (c.name || '').toLowerCase().includes(q))
       .slice(0, PREVIEW_LIMIT)
   }, [companies, sector, search])
+
+  useEffect(() => {
+    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+    if (reduced || !gridRef.current) return
+    const nodes = gridRef.current.querySelectorAll('.reveal:not(.reveal-visible)')
+    if (!nodes.length) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('reveal-visible')
+            observer.unobserve(entry.target)
+          }
+        })
+      },
+      { threshold: 0.15 }
+    )
+    nodes.forEach((n) => observer.observe(n))
+    return () => observer.disconnect()
+  }, [visible])
 
   return (
     <div className="page-wrap">
@@ -88,7 +114,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="home-preview">
+        <section className="home-preview reveal" ref={previewRef}>
           <div className="home-preview-header">
             <div>
               <p className="eyebrow">Live Catalog</p>
@@ -128,9 +154,11 @@ const Home = () => {
                 : 'No listings match your search.'}
             </p>
           ) : (
-            <div className="preview-grid">
-              {visible.map((c) => (
-                <CompanyPreviewCard key={c._id} company={c} />
+            <div className="preview-grid" ref={gridRef}>
+              {visible.map((c, i) => (
+                <div key={c._id} className={`reveal reveal-stagger-${Math.min(i, 6)}`}>
+                  <CompanyPreviewCard company={c} />
+                </div>
               ))}
             </div>
           )}
@@ -142,7 +170,7 @@ const Home = () => {
           )}
         </section>
 
-        <section className="trust-band">
+        <section className="trust-band reveal" ref={trustRef}>
           <div className="trust-band-inner">
             <h2 className="trust-band-heading">Research you can rely on, access you can trust.</h2>
             <ul className="trust-band-points">
@@ -165,7 +193,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="how-it-works">
+        <section className="how-it-works reveal" ref={howRef}>
           <h2 className="section-title fade-in-up">How it works</h2>
           <div className="steps-grid">
             <div className="step-card fade-in-up">
