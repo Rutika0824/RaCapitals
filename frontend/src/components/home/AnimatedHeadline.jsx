@@ -20,6 +20,12 @@ const LINES_3D = [
   { text: 'today.', delay: '0.5s' },
 ]
 
+const LINES_INDIGO = [
+  { text: "Own tomorrow's", delay: '0.1s' },
+  { text: 'listed companies,', delay: '0.3s', accent: true },
+  { text: 'today.', delay: '0.5s' },
+]
+
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
@@ -29,6 +35,7 @@ const AnimatedHeadline = ({ text }) => {
   const isEvergreen = theme === 'evergreen'
   const isBlack = theme === 'black'
   const isWhite = theme === 'white'
+  const isIndigo = theme === 'indigo-light'
   const reduced = prefersReducedMotion()
 
   if (isEvergreen && !reduced) {
@@ -78,6 +85,22 @@ const AnimatedHeadline = ({ text }) => {
           </div>
         ))}
       </div>
+    )
+  }
+
+  if (isIndigo && !reduced) {
+    return (
+      <>
+        {LINES_INDIGO.map((line, i) => (
+          <div
+            key={i}
+            className={`shimmer-line s${i + 1}`}
+            style={{ color: line.accent ? 'var(--brass)' : 'var(--page-text)' }}
+          >
+            {line.text}
+          </div>
+        ))}
+      </>
     )
   }
 

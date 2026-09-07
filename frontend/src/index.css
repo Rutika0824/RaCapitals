@@ -5125,6 +5125,49 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+/* ============================================================
+   Continuous gold shimmer headline — indigo-light theme only
+   ============================================================ */
+.shimmer-line {
+  font-family: 'Cinzel', serif;
+  background: linear-gradient(110deg, #1E1B3A 0%, #1E1B3A 35%, #4F46E5 50%, #1E1B3A 65%, #1E1B3A 100%);
+  background-size: 200% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  transform: translateY(15px);
+  animation: fadeInUp 0.8s ease-out forwards, continuousShimmer 5s ease-in-out infinite;
+}
+
+.s1 { animation-delay: 0.1s, 0.9s; }
+.s2 { animation-delay: 0.3s, 1.1s; }
+.s3 { animation-delay: 0.5s, 1.3s; }
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes continuousShimmer {
+  0% { background-position: 200% 0; }
+  50%, 100% { background-position: -200% 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .shimmer-line {
+    animation: none;
+    opacity: 1;
+    transform: none;
+    background: none;
+    -webkit-background-clip: unset;
+    background-clip: unset;
+    -webkit-text-fill-color: unset;
+  }
+}
+
 
 
 
