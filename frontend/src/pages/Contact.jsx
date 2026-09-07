@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
+import FloatingParticles from '../components/common/FloatingParticles'
 
 const ContactMailIcon = () => (
   <svg className="contact-card-icon" viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
@@ -71,6 +72,9 @@ const Contact = () => {
     <div className="page-wrap">
       <Navbar />
       <main className="page-main">
+        <div className="particles-container">
+          <FloatingParticles />
+        </div>
         <header className="page-header">
           <p className="eyebrow">Contact</p>
           <h1>Get in touch with RA Capitals</h1>
@@ -80,24 +84,24 @@ const Contact = () => {
         </header>
 
         <section className="contact-grid">
-          <div className="contact-card">
+          <div className="contact-card card-hover-tilt">
             <ContactBriefcaseIcon />
             <h3>Company</h3>
             <p>RA Capitals</p>
           </div>
-          <div className="contact-card">
+          <div className="contact-card card-hover-tilt">
             <ContactOfficeIcon />
             <h3>Registered Office</h3>
             {/* PLACEHOLDER — replace with actual registered address */}
             <p>[Registered Office Address Line 1]<br />[City, State, PIN]<br />India</p>
           </div>
-          <div className="contact-card">
+          <div className="contact-card card-hover-tilt">
             <ContactMailIcon />
             <h3>Email</h3>
             {/* PLACEHOLDER — replace with real contact email */}
             <p className="mono contact-card-long-text">{CONTACT_EMAIL}</p>
           </div>
-          <div className="contact-card">
+          <div className="contact-card card-hover-tilt">
             <ContactPhoneIcon />
             <h3>Phone / WhatsApp</h3>
             {/* PLACEHOLDER — replace with real contact phone */}

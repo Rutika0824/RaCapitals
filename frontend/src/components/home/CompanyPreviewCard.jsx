@@ -12,7 +12,7 @@ const CompanyPreviewCard = ({ company }) => {
     : null
   const initial = company.name ? company.name.charAt(0).toUpperCase() : '?'
   return (
-    <article className="preview-card">
+    <article className="preview-card card-hover-tilt">
       <Link to={`/company/${company._id}`} className="preview-card-link" aria-label={`View ${company.name}`}>
         <div className="preview-card-top">
           <div className="preview-card-logo">

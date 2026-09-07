@@ -41,15 +41,15 @@ const AdminOverview = () => {
       ) : (
         <>
           <div className="admin-overview-stats">
-            <div className="stat-card">
+            <div className="stat-card card-hover-tilt">
               <p className="stat-label">Total Companies</p>
               <p className="stat-value">{total}</p>
             </div>
-            <div className="stat-card">
+            <div className="stat-card card-hover-tilt">
               <p className="stat-label">Live</p>
               <p className="stat-value">{live}</p>
             </div>
-            <div className="stat-card">
+            <div className="stat-card card-hover-tilt">
               <p className="stat-label">Deactivated</p>
               <p className="stat-value">{deactivated}</p>
             </div>

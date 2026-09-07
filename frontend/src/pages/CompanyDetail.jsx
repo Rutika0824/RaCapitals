@@ -6,6 +6,7 @@ import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import InfoTooltip from '../components/common/InfoTooltip'
 import Navbar from '../components/common/Navbar'
+import FloatingParticles from '../components/common/FloatingParticles'
 import { apiBaseWithoutApi, formatINR } from '../utils/format'
 
 const buildLogoSrc = (logoUrl) => {
@@ -254,6 +255,9 @@ const CompanyDetail = () => {
       <Navbar />
       <ComplianceRibbon />
       <main className="page-main">
+        <div className="particles-container">
+          <FloatingParticles />
+        </div>
         <header className="company-header">
           <div className="company-logo">
             {logoSrc ? (

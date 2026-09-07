@@ -53,6 +53,12 @@ const AdminListings = () => {
     fetchCompanies()
   }, [])
 
+  useEffect(() => {
+    const trimmed = search.trim()
+    const handler = setTimeout(() => fetchCompanies(sector, trimmed || undefined), 500)
+    return () => clearTimeout(handler)
+  }, [search])
+
   const openCreate = () => {
     setEditing(null)
     setForm(EMPTY_FORM)

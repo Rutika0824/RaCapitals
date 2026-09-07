@@ -136,7 +136,7 @@ const Catalog = () => {
               {companies.map((c) => (
                 <article
                   key={c._id}
-                  className="catalog-card"
+                   className="catalog-card card-hover-tilt"
                   onClick={() => navigate(`/company/${c._id}`)}
                   role="button"
                   tabIndex={0}

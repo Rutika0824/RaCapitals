@@ -8,6 +8,9 @@ import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
 import TrustSeal from '../components/common/TrustSeal'
 import useScrollReveal from '../hooks/useScrollReveal'
+import FloatingParticles from '../components/common/FloatingParticles'
+import { useTheme } from '../context/ThemeContext'
+import HowItWorksAccordion from '../components/home/HowItWorksAccordion'
 
 const SECTORS = ['All', 'Fintech', 'Energy', 'Logistics', 'Consumer', 'Healthcare']
 const PREVIEW_LIMIT = 6
@@ -17,6 +20,7 @@ const Home = () => {
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [sector, setSector] = useState('All')
+  const { theme } = useTheme()
 
   const previewRef = useScrollReveal()
   const trustRef = useScrollReveal()
@@ -80,6 +84,9 @@ const Home = () => {
       <ComplianceRibbon />
       <main className="page-main">
         <section className="hero hero-polished">
+          <div className="particles-container">
+            <FloatingParticles />
+          </div>
           <div className="hero-glow hero-glow-brass" aria-hidden="true" />
           <div className="hero-glow hero-glow-ink" aria-hidden="true" />
           <div className="hero-grid">
@@ -115,6 +122,9 @@ const Home = () => {
         </section>
 
         <section className="home-preview reveal" ref={previewRef}>
+          <div className="particles-container">
+            <FloatingParticles />
+          </div>
           <div className="home-preview-header">
             <div>
               <p className="eyebrow">Live Catalog</p>
@@ -193,26 +203,30 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="how-it-works reveal" ref={howRef}>
-          <h2 className="section-title fade-in-up">How it works</h2>
-          <div className="steps-grid">
-            <div className="step-card fade-in-up">
-              <div className="step-number">01</div>
-              <h3>Discover a company</h3>
-              <p>Browse our indicative price list across sectors and shortlist opportunities that fit your thesis.</p>
+        {theme === 'indigo-light' ? (
+          <HowItWorksAccordion />
+        ) : (
+          <section className="how-it-works" ref={howRef}>
+            <h2 className="section-title fade-in-up">How it works</h2>
+            <div className="steps-grid">
+              <div className="step-card fade-in-up">
+                <div className="step-number">01</div>
+                <h3>Discover a company</h3>
+                <p>Browse our indicative price list across sectors and shortlist opportunities that fit your thesis.</p>
+              </div>
+              <div className="step-card fade-in-up delay-1">
+                <div className="step-number">02</div>
+                <h3>Enquire, we follow up on WhatsApp</h3>
+                <p>Tap enquire on any listing. Our team responds personally with current availability and lot details.</p>
+              </div>
+              <div className="step-card fade-in-up delay-2">
+                <div className="step-number">03</div>
+                <h3>Shares reach your demat account</h3>
+                <p>Once confirmed, shares are transferred securely into your demat account with full documentation.</p>
+              </div>
             </div>
-            <div className="step-card fade-in-up delay-1">
-              <div className="step-number">02</div>
-              <h3>Enquire, we follow up on WhatsApp</h3>
-              <p>Tap enquire on any listing. Our team responds personally with current availability and lot details.</p>
-            </div>
-            <div className="step-card fade-in-up delay-2">
-              <div className="step-number">03</div>
-              <h3>Shares reach your demat account</h3>
-              <p>Once confirmed, shares are transferred securely into your demat account with full documentation.</p>
-            </div>
-          </div>
-        </section>
+          </section>
+        )}
       </main>
       <Footer />
     </div>
