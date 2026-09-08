@@ -1192,6 +1192,8 @@ a:hover {
 .contact-form-section {
   margin-top: 2.5rem;
   max-width: 640px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .contact-form {

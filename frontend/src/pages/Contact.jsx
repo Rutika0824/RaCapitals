@@ -92,87 +92,89 @@ const Contact = () => {
           <p className="muted">
             We respond to every WhatsApp and email enquiry within one business day.
           </p>
-        </header>
-
-        <section className="contact-info-row">
-          <div className="contact-card contact-card-compact">
-            <ContactBriefcaseIcon />
-            <div className="contact-card-body">
-              <h3>Company</h3>
-              <p>RA Capitals</p>
-            </div>
-          </div>
-          <div className="contact-card contact-card-compact">
-            <ContactOfficeIcon />
-            <div className="contact-card-body">
-              <h3>Registered Office</h3>
-              <p>[Registered Office Address Line 1]<br />[City, State, PIN]<br />India</p>
-            </div>
-          </div>
-          <div className="contact-card contact-card-compact">
-            <ContactMailIcon />
-            <div className="contact-card-body">
-              <h3>Email</h3>
-              <p className="mono">{CONTACT_EMAIL}</p>
-            </div>
-          </div>
-          <div className="contact-card contact-card-compact">
-            <ContactPhoneIcon />
-            <div className="contact-card-body">
-              <h3>Phone / WhatsApp</h3>
-              <p className="mono">+91 99999 99999</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="contact-form-section">
-          <h2 className="section-title">Send us a message</h2>
           {success && (
             <p className="form-success">Thank you! Your message has been sent. We will get back to you within one business day.</p>
           )}
           {errors.form && <p className="form-error">{errors.form}</p>}
-          <form className="admin-form contact-form" onSubmit={handleSubmit} noValidate>
-            <label className="form-label">
-              Name
-              <input
-                type="text"
-                className="form-input"
-                value={form.name}
-                onChange={handleChange('name')}
-                placeholder="Your full name"
-                aria-invalid={Boolean(errors.name)}
-              />
-              {errors.name && <span className="form-error">{errors.name}</span>}
-            </label>
-            <label className="form-label">
-              Email
-              <input
-                type="email"
-                className="form-input"
-                value={form.email}
-                onChange={handleChange('email')}
-                placeholder="you@example.com"
-                aria-invalid={Boolean(errors.email)}
-              />
-              {errors.email && <span className="form-error">{errors.email}</span>}
-            </label>
-            <label className="form-label">
-              Message
-              <textarea
-                className="form-input contact-form-textarea"
-                value={form.message}
-                onChange={handleChange('message')}
-                placeholder="How can we help?"
-                rows={5}
-                aria-invalid={Boolean(errors.message)}
-              />
-              {errors.message && <span className="form-error">{errors.message}</span>}
-            </label>
-            <button type="submit" className="primary-btn contact-form-submit" disabled={submitting}>
-              {submitting ? 'Sending...' : 'Send Message'}
-            </button>
-          </form>
-        </section>
+        </header>
+
+        <div className="contact-content-centered">
+          <section className="contact-info-row">
+            <div className="contact-card contact-card-compact">
+              <ContactBriefcaseIcon />
+              <div className="contact-card-body">
+                <h3>Company</h3>
+                <p>RA Capitals</p>
+              </div>
+            </div>
+            <div className="contact-card contact-card-compact">
+              <ContactOfficeIcon />
+              <div className="contact-card-body">
+                <h3>Registered Office</h3>
+                <p>[Registered Office Address Line 1]<br />[City, State, PIN]<br />India</p>
+              </div>
+            </div>
+            <div className="contact-card contact-card-compact">
+              <ContactMailIcon />
+              <div className="contact-card-body">
+                <h3>Email</h3>
+                <p className="mono">{CONTACT_EMAIL}</p>
+              </div>
+            </div>
+            <div className="contact-card contact-card-compact">
+              <ContactPhoneIcon />
+              <div className="contact-card-body">
+                <h3>Phone / WhatsApp</h3>
+                <p className="mono">+91 99999 99999</p>
+              </div>
+            </div>
+          </section>
+
+          <section className="contact-form-section">
+            <h2 className="section-title">Send us a message</h2>
+            <form className="admin-form contact-form" onSubmit={handleSubmit} noValidate>
+              <label className="form-label">
+                Name
+                <input
+                  type="text"
+                  className="form-input"
+                  value={form.name}
+                  onChange={handleChange('name')}
+                  placeholder="Your full name"
+                  aria-invalid={Boolean(errors.name)}
+                />
+                {errors.name && <span className="form-error">{errors.name}</span>}
+              </label>
+              <label className="form-label">
+                Email
+                <input
+                  type="email"
+                  className="form-input"
+                  value={form.email}
+                  onChange={handleChange('email')}
+                  placeholder="you@example.com"
+                  aria-invalid={Boolean(errors.email)}
+                />
+                {errors.email && <span className="form-error">{errors.email}</span>}
+              </label>
+              <label className="form-label">
+                Message
+                <textarea
+                  className="form-input contact-form-textarea"
+                  value={form.message}
+                  onChange={handleChange('message')}
+                  placeholder="How can we help?"
+                  rows={5}
+                  aria-invalid={Boolean(errors.message)}
+                />
+                {errors.message && <span className="form-error">{errors.message}</span>}
+              </label>
+              <button type="submit" className="primary-btn contact-form-submit" disabled={submitting}>
+                {submitting ? 'Sending...' : 'Send Message'}
+              </button>
+            </form>
+          </section>
+        </div>
       </main>
       <Footer />
     </div>
