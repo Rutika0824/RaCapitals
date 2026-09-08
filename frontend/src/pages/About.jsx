@@ -1,4 +1,3 @@
-import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import Navbar from '../components/common/Navbar'
 import Footer from '../components/common/Footer'
@@ -7,86 +6,23 @@ import FloatingParticles from '../components/common/FloatingParticles'
 const ABOUT_SECTIONS = [
   {
     title: 'Who we are',
-    body: 'RA Capitals is a research-focused intermediary for unlisted and pre-IPO shares in India. We work directly with company management, early investors, and promoters to verify fundamentals before any listing is presented to clients.',
-    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80'
+    body: 'RA Capitals is a research-focused intermediary for unlisted and pre-IPO shares in India. We work directly with company management, early investors, and promoters to verify fundamentals before any listing is presented to clients.'
   },
   {
     title: 'What we do',
-    body: 'We maintain a curated price list across sectors, supported by documented due diligence. Every enquiry is handled by a person on our team — no ticket queues, no auto-replies. We believe transparency and personal follow-up are non-negotiable.',
-    image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80'
+    body: 'We maintain a curated price list across sectors, supported by documented due diligence. Every enquiry is handled by a person on our team — no ticket queues, no auto-replies. We believe transparency and personal follow-up are non-negotiable.'
   },
   {
     title: 'How it works',
-    body: 'Browse the price list, shortlist opportunities, and tap Enquire. Our team responds on WhatsApp or email within one business day with current availability, lot size, and next steps. Once confirmed, shares move via demat-to-demat transfer.',
-    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80'
+    body: 'Browse the price list, shortlist opportunities, and tap Enquire. Our team responds on WhatsApp or email within one business day with current availability, lot size, and next steps. Once confirmed, shares move via demat-to-demat transfer.'
   },
   {
     title: 'Our track record',
-    body: 'Five years of offline track record in unlisted and pre-IPO equity. We have helped hundreds of investors access companies before they list, with a focus on risk-aware allocation and clear communication.',
-    image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=80'
+    body: 'Five years of offline track record in unlisted and pre-IPO equity. We have helped hundreds of investors access companies before they list, with a focus on risk-aware allocation and clear communication.'
   }
 ]
 
-const CARD_OFFSET_X = 260
-const CARD_DEPTH_Z = 80
-const FRONT_Z = 100
-const ROTATION = 19
-const EASING = 'cubic-bezier(0.25, 1, 0.5, 1)'
-
-const getCardStyle = (index, activeIndex) => {
-  const offset = index - activeIndex
-  const absOffset = Math.abs(offset)
-
-  if (absOffset === 0) {
-    return {
-      transform: `translate(-50%) translateX(0px) translateZ(${FRONT_Z}px) rotateY(0deg)`,
-      opacity: 1,
-      zIndex: 10,
-      filter: 'brightness(1)',
-      transition: `all 0.5s ${EASING}`
-    }
-  }
-
-  const sign = offset < 0 ? 1 : -1
-  const x = offset * CARD_OFFSET_X
-  const z = absOffset === 1 ? -CARD_DEPTH_Z : -CARD_DEPTH_Z * 2
-  const brightness = absOffset === 1 ? 0.7 : 0.5
-  const zIndex = 10 - absOffset
-
-  return {
-    transform: `translate(-50%) translateX(${x}px) translateZ(${z}px) rotateY(${sign * ROTATION}deg)`,
-    opacity: 0.75,
-    zIndex,
-    filter: `brightness(${brightness})`,
-    transition: `all 0.5s ${EASING}`
-  }
-}
-
-const CoverflowCard = ({ section, isActive, onMouseEnter, style }) => (
-  <div
-    className={`coverflow-card ${isActive ? 'coverflow-card-active' : ''}`}
-    onMouseEnter={onMouseEnter}
-    style={style}
-    role="button"
-    tabIndex={0}
-    aria-label={`View: ${section.title}`}
-  >
-    <div className="coverflow-card-inner">
-      <div className="coverflow-card-img-wrap">
-        <img src={section.image} alt="" className="coverflow-card-img" loading="lazy" />
-        <span className="coverflow-card-close" aria-hidden="true">✕</span>
-      </div>
-      <div className="coverflow-card-content">
-        <h3>{section.title}</h3>
-        <p>{section.body}</p>
-      </div>
-    </div>
-  </div>
-)
-
 const About = () => {
-  const [activeIndex, setActiveIndex] = useState(0)
-
   return (
     <div className="page-wrap">
       <Navbar />
@@ -103,19 +39,14 @@ const About = () => {
           </p>
         </header>
 
-        <section className="coverflow-section" aria-label="About RA Capitals">
-          <div className="coverflow-outer">
-            <div className="coverflow-inner">
-              {ABOUT_SECTIONS.map((section, i) => (
-                <CoverflowCard
-                  key={section.title}
-                  section={section}
-                  isActive={i === activeIndex}
-                  onMouseEnter={() => setActiveIndex(i)}
-                  style={getCardStyle(i, activeIndex)}
-                />
-              ))}
-            </div>
+        <section className="about-section">
+          <div className="about-grid">
+            {ABOUT_SECTIONS.map((section) => (
+              <div key={section.title} className="about-card">
+                <h3>{section.title}</h3>
+                <p>{section.body}</p>
+              </div>
+            ))}
           </div>
         </section>
 
