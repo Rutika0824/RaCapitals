@@ -92,10 +92,6 @@ const Contact = () => {
           <p className="muted">
             We respond to every WhatsApp and email enquiry within one business day.
           </p>
-          {success && (
-            <p className="form-success">Thank you! Your message has been sent. We will get back to you within one business day.</p>
-          )}
-          {errors.form && <p className="form-error">{errors.form}</p>}
         </header>
 
         <div className="contact-content-centered">
@@ -132,6 +128,10 @@ const Contact = () => {
 
           <section className="contact-form-section">
             <h2 className="section-title">Send us a message</h2>
+            {success && (
+              <p className="form-success">Thank you! Your message has been sent. We will get back to you Soon</p>
+            )}
+            {errors.form && <p className="form-error">{errors.form}</p>}
             <form className="admin-form contact-form" onSubmit={handleSubmit} noValidate>
               <label className="form-label">
                 Name
