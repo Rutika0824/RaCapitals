@@ -8,29 +8,29 @@ const ABOUT_SECTIONS = [
   {
     title: 'Who we are',
     body: 'RA Capitals is a research-focused intermediary for unlisted and pre-IPO shares in India. We work directly with company management, early investors, and promoters to verify fundamentals before any listing is presented to clients.',
-    image: 'https://images.unsplash.com/photo-1556075294-3b8eb5e2e0d2?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=600&q=80'
   },
   {
     title: 'What we do',
     body: 'We maintain a curated price list across sectors, supported by documented due diligence. Every enquiry is handled by a person on our team — no ticket queues, no auto-replies. We believe transparency and personal follow-up are non-negotiable.',
-    image: 'https://images.unsplash.com/photo-1551836880-7e8b9d710b9c?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1464983953574-0892a716854b?auto=format&fit=crop&w=600&q=80'
   },
   {
     title: 'How it works',
     body: 'Browse the price list, shortlist opportunities, and tap Enquire. Our team responds on WhatsApp or email within one business day with current availability, lot size, and next steps. Once confirmed, shares move via demat-to-demat transfer.',
-    image: 'https://images.unsplash.com/photo-1551360401-62fe59164005?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1519389950473-47ba0277781c?auto=format&fit=crop&w=600&q=80'
   },
   {
     title: 'Our track record',
     body: 'Five years of offline track record in unlisted and pre-IPO equity. We have helped hundreds of investors access companies before they list, with a focus on risk-aware allocation and clear communication.',
-    image: 'https://images.unsplash.com/photo-1486072431993-8059aec5f261?auto=format&fit=crop&w=600&q=80'
+    image: 'https://images.unsplash.com/photo-1470770841072-f978cf4d019e?auto=format&fit=crop&w=600&q=80'
   }
 ]
 
-const CARD_OFFSET_X = 280
+const CARD_OFFSET_X = 260
 const CARD_DEPTH_Z = 80
 const FRONT_Z = 100
-const ROTATION = 28
+const ROTATION = 19
 const EASING = 'cubic-bezier(0.25, 1, 0.5, 1)'
 
 const getCardStyle = (index, activeIndex) => {
@@ -47,7 +47,7 @@ const getCardStyle = (index, activeIndex) => {
     }
   }
 
-  const sign = offset > 0 ? 1 : -1
+  const sign = offset < 0 ? 1 : -1
   const x = offset * CARD_OFFSET_X
   const z = absOffset === 1 ? -CARD_DEPTH_Z : -CARD_DEPTH_Z * 2
   const brightness = absOffset === 1 ? 0.7 : 0.5
@@ -62,20 +62,19 @@ const getCardStyle = (index, activeIndex) => {
   }
 }
 
-const CoverflowCard = ({ section, isActive, onClick, style }) => (
+const CoverflowCard = ({ section, isActive, onMouseEnter, style }) => (
   <div
     className={`coverflow-card ${isActive ? 'coverflow-card-active' : ''}`}
-    onClick={onClick}
+    onMouseEnter={onMouseEnter}
     style={style}
     role="button"
     tabIndex={0}
-    onKeyDown={(e) => e.key === 'Enter' && onClick()}
     aria-label={`View: ${section.title}`}
   >
     <div className="coverflow-card-inner">
       <div className="coverflow-card-img-wrap">
         <img src={section.image} alt="" className="coverflow-card-img" loading="lazy" />
-        <button type="button" className="coverflow-card-close" aria-hidden="true">✕</button>
+        <span className="coverflow-card-close" aria-hidden="true">✕</span>
       </div>
       <div className="coverflow-card-content">
         <h3>{section.title}</h3>
@@ -112,7 +111,7 @@ const About = () => {
                   key={section.title}
                   section={section}
                   isActive={i === activeIndex}
-                  onClick={() => setActiveIndex(i)}
+                  onMouseEnter={() => setActiveIndex(i)}
                   style={getCardStyle(i, activeIndex)}
                 />
               ))}
