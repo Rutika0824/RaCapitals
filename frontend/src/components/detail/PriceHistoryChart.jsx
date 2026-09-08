@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useTheme } from '../../context/ThemeContext'
 import Chart from 'react-apexcharts'
 import { formatINR } from '../../utils/format'
@@ -14,12 +14,31 @@ const PriceHistoryChart = ({ priceHistory }) => {
   const [paper2, setPaper2] = useState(() =>
     getComputedStyle(document.documentElement).getPropertyValue('--paper-2').trim() || '#E5E7EB'
   )
+  const [resetKey, setResetKey] = useState(0)
+  const wrapRef = useRef(null)
 
   useEffect(() => {
     setBrass(getComputedStyle(document.documentElement).getPropertyValue('--brass').trim() || '#B08D57')
     setMuted(getComputedStyle(document.documentElement).getPropertyValue('--muted').trim() || '#6B7280')
     setPaper2(getComputedStyle(document.documentElement).getPropertyValue('--paper-2').trim() || '#E5E7EB')
   }, [theme])
+
+  useEffect(() => {
+    const node = wrapRef.current
+    if (!node) return
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setResetKey((k) => k + 1)
+          }
+        })
+      },
+      { threshold: 0.2 }
+    )
+    observer.observe(node)
+    return () => observer.disconnect()
+  }, [])
 
   const points = Array.isArray(priceHistory) ? priceHistory : []
 
@@ -116,8 +135,9 @@ const PriceHistoryChart = ({ priceHistory }) => {
   }
 
   return (
-    <div className="chart-wrap">
+    <div className="chart-wrap" ref={wrapRef}>
       <Chart
+        key={resetKey}
         options={options}
         series={series}
         type="area"

@@ -1140,37 +1140,47 @@ a:hover {
 }
 
 /* Contact */
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-  gap: 1rem;
+.contact-info-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  justify-content: center;
 }
 
-.contact-card {
+.contact-card-compact {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
   background: var(--card-bg);
-  padding: 1.25rem 1.4rem;
   border: 1px solid var(--paper-2);
   border-radius: 4px;
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+  min-width: 0;
+  flex: 1 1 220px;
+  max-width: 320px;
 }
 
-.contact-card-icon {
-  display: block;
-  margin-bottom: 0.6rem;
+.contact-card-compact .contact-card-icon {
+  flex-shrink: 0;
+  margin-bottom: 0;
   color: var(--brass);
 }
 
-.contact-card h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 0.85rem;
+.contact-card-body h3 {
+  margin: 0 0 0.25rem 0;
+  font-size: 0.75rem;
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.08em;
   color: var(--muted);
+  font-weight: 600;
 }
 
-.contact-card p {
+.contact-card-body p {
   margin: 0;
   color: var(--ink);
+  font-size: 0.9rem;
+  line-height: 1.35;
 }
 
 .contact-card-long-text {
@@ -2989,24 +2999,16 @@ a:hover {
 }
 
 /* ----- Contact ----- */
-@media (min-width: 600px) and (max-width: 1023px) {
-  .contact-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-}
-
 @media (max-width: 599px) {
-  .contact-grid {
-    grid-template-columns: 1fr;
+  .contact-info-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .contact-card-compact {
+    max-width: 100%;
   }
   .contact-form-section {
     max-width: 100%;
-  }
-}
-
-@media (max-width: 479px) {
-  .contact-card {
-    padding: 1rem 1.1rem;
   }
 }
 
@@ -3463,7 +3465,7 @@ a:hover {
 .page-wrap .preview-card,
 .page-wrap .step-card,
 .page-wrap .stat-card,
-.page-wrap .contact-card,
+.page-wrap .contact-card-compact,
 .page-wrap .company-logo,
 .page-wrap .chart-wrap,
 .page-wrap .catalog-card,
@@ -3704,7 +3706,7 @@ a:hover {
 
 /* Catch-all: any base rule that used var(--ink) for text on public pages
    now resolves to page-text inside .page-wrap */
-.page-wrap .contact-card p,
+.page-wrap .contact-card-compact p,
 .page-wrap .form-label,
 .page-wrap .form-input,
 .page-wrap .form-error {
@@ -4498,7 +4500,7 @@ a:hover {
 .catalog-card,
 .stat-card,
 .step-card,
-.contact-card,
+.contact-card-compact,
 .detail-logo-preview,
 .chart-wrap,
 .admin-detail-card,
@@ -4512,7 +4514,7 @@ a:hover {
 .catalog-card:hover,
 .stat-card:hover,
 .step-card:hover,
-.contact-card:hover,
+.contact-card-compact:hover,
 .admin-detail-card:hover,
 .admin-card:hover {
   transform: translateY(-2px);
@@ -5166,6 +5168,127 @@ h1, h2, h3, h4, h5, h6 {
     background-clip: unset;
     -webkit-text-fill-color: unset;
   }
+}
+
+/* About */
+.about-section {
+  margin-top: 2rem;
+}
+.about-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+.about-card {
+  background: var(--card-bg);
+  border: 1px solid var(--paper-2);
+  border-radius: 4px;
+  padding: 1.25rem 1.4rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+.about-card h3 {
+  margin: 0 0 0.75rem 0;
+  font-size: 1rem;
+  color: var(--brass);
+}
+.about-card p {
+  margin: 0;
+  color: var(--ink);
+  line-height: 1.6;
+}
+.about-cta-section {
+  margin-top: 2rem;
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Admin contacts */
+.admin-contacts-list {
+  display: grid;
+  gap: 1rem;
+}
+.admin-contact-card {
+  background: var(--card-bg);
+  border: 1px solid var(--paper-2);
+  border-radius: 4px;
+  padding: 1rem 1.25rem;
+}
+.admin-contact-card-new {
+  border-left: 3px solid var(--brass);
+}
+.admin-contact-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 0.5rem;
+}
+.admin-contact-card-email {
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+.admin-contact-card-message {
+  margin: 0 0 0.75rem 0;
+  color: var(--ink);
+  line-height: 1.5;
+  white-space: pre-wrap;
+}
+.admin-contact-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+/* Admin header notification */
+.admin-header-bar-notif {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ink);
+  text-decoration: none;
+  padding: 0.25rem;
+}
+.admin-header-bar-badge {
+  position: absolute;
+  top: -2px;
+  right: -6px;
+  background: var(--brass);
+  color: var(--page-bg);
+  font-size: 0.65rem;
+  font-weight: 700;
+  line-height: 1;
+  padding: 1px 4px;
+  border-radius: 999px;
+  min-width: 16px;
+  text-align: center;
+}
+
+/* Admin sidebar badge */
+.admin-sidebar-badge {
+  margin-left: 0.5rem;
+  background: var(--brass);
+  color: var(--page-bg);
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 1px 6px;
+  border-radius: 999px;
+  min-width: 18px;
+  text-align: center;
+}
+
+/* Contact form success */
+.form-success {
+  color: #166534;
+  background: #dcfce7;
+  border: 1px solid #86efac;
+  padding: 0.75rem 1rem;
+  border-radius: 4px;
+  margin-bottom: 1rem;
 }
 
 

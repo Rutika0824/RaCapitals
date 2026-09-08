@@ -20,10 +20,12 @@ app.get('/api/health', (req, res) => {
 import companyRoutes from './routes/companyRoutes.js'
 import priceRoutes from './routes/priceRoutes.js'
 import authRoutes from './routes/authRoutes.js'
+import contactRoutes from './routes/contactRoutes.js'
 
 app.use('/api/auth', authRoutes)
 app.use('/api/companies', companyRoutes)
 app.use('/api/prices', priceRoutes)
+app.use('/api/contact', contactRoutes)
 
 const PORT = process.env.PORT || 5000
 

@@ -44,7 +44,8 @@ const Navbar = () => {
         >
           <NavLink to="/" end onClick={closeMenu}>Home</NavLink>
           <NavLink to="/catalog" onClick={closeMenu}>Price List</NavLink>
-          <NavLink to="/contact" onClick={closeMenu}>Contact</NavLink>
+          <NavLink to="/about" onClick={closeMenu}>About us</NavLink>
+          <NavLink to="/contact" onClick={closeMenu}>Contact us</NavLink>
           {onAdmin ? (
             <NavLink to="/admin" onClick={closeMenu}>
               {isAuthenticated ? 'Dashboard' : 'Login'}
