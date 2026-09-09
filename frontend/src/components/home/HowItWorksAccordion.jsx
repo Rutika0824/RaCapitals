@@ -22,6 +22,13 @@ const STEPS = [
 const HowItWorksAccordion = () => {
   const [openIndex, setOpenIndex] = useState(0)
   const sectionRef = useScrollReveal()
+  const isTouchDevice = typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches
+
+  const handleCardClick = (i) => {
+    if (isTouchDevice) {
+      setOpenIndex((prev) => (prev === i ? -1 : i))
+    }
+  }
 
   return (
     <section className="how-it-works reveal" ref={sectionRef}>
@@ -35,8 +42,9 @@ const HowItWorksAccordion = () => {
               key={i}
               type="button"
               className={`accordion-card ${isOpen ? 'accordion-card-open' : ''}`}
-              onMouseEnter={() => setOpenIndex(i)}
-              onMouseLeave={() => setOpenIndex(0)}
+              onMouseEnter={() => !isTouchDevice && setOpenIndex(i)}
+              onMouseLeave={() => !isTouchDevice && setOpenIndex(0)}
+              onClick={() => handleCardClick(i)}
               aria-expanded={isOpen}
             >
                 <div className="accordion-card-inner">

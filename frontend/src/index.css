@@ -3084,6 +3084,16 @@ a:hover {
   }
 }
 
+@media (max-width: 479px) {
+  .contact-form-section {
+    padding: 16px;
+  }
+  .contact-form-submit {
+    width: 100%;
+    padding: 14px 16px;
+  }
+}
+
 /* ----- Legal pages ----- */
 @media (max-width: 767px) {
   .legal-page {
@@ -3170,11 +3180,28 @@ a:hover {
     padding: 0.4rem 0.75rem;
     font-size: 0.78rem;
   }
+  .admin-header-bar-right {
+    gap: 0.6rem;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .admin-header-bar-notif {
+    padding: 0.4rem;
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 
 @media (max-width: 360px) {
   .admin-header-bar-user {
     display: none;
+  }
+  .admin-header-bar-right {
+    gap: 0.5rem;
+  }
+  .admin-logout-btn {
+    padding: 0.35rem 0.6rem;
+    font-size: 0.72rem;
   }
 }
 
@@ -3269,6 +3296,37 @@ a:hover {
     justify-content: center;
     padding: 0.45rem 0.75rem;
     font-size: 0.78rem;
+  }
+}
+
+/* ----- Admin Contacts: cards on mobile ----- */
+@media (max-width: 767px) {
+  .admin-contact-card {
+    background: var(--card-bg);
+    border: 1px solid var(--paper-2);
+    border-top: 3px solid var(--brass);
+    border-radius: 4px;
+    padding: 1rem 1.1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+  .admin-contact-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.25rem;
+  }
+  .admin-contact-card-email {
+    font-size: 0.85rem;
+  }
+  .admin-contact-card-footer {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+  .admin-contact-card-footer .secondary-btn {
+    width: 100%;
+    min-height: 40px;
   }
 }
 
@@ -4481,6 +4539,7 @@ a:hover {
   display: flex;
   flex-direction: column;
   min-width: 170px;
+  max-width: min(170px, calc(100vw - 32px));
   padding: 4px;
   background: var(--card-bg);
   border: 1px solid var(--paper-2);
@@ -4513,6 +4572,22 @@ a:hover {
   text-align: left;
   transition: background-color 0.15s ease, color 0.15s ease;
   border: 2px solid transparent;
+}
+
+@media (max-width: 767px) {
+  .theme-option {
+    min-height: 44px;
+    padding: 0.65rem 0.85rem;
+    font-size: 0.9rem;
+  }
+}
+
+@media (max-width: 360px) {
+  .theme-toggle-panel {
+    right: auto;
+    left: 0;
+    max-width: calc(100vw - 24px);
+  }
 }
 
 .theme-option:hover {
@@ -5032,6 +5107,30 @@ h1, h2, h3, h4, h5, h6 {
   color: #1a1a1a;
 }
 
+@media (max-width: 767px) {
+  .accordion-bg {
+    padding: 1.25rem;
+  }
+  .accordion-cards {
+    flex-direction: column;
+    height: auto;
+    gap: 0.75rem;
+  }
+  .accordion-card {
+    flex: none;
+    min-height: 44px;
+  }
+  .accordion-card-open {
+    flex: none;
+  }
+  .accordion-card-open .accordion-desc-wrap {
+    max-height: 200px;
+  }
+  .accordion-title {
+    font-size: 14px;
+  }
+}
+
 /* ============================================================
    Ambient floating particles — decorative background
    ============================================================ */
@@ -5054,6 +5153,22 @@ h1, h2, h3, h4, h5, h6 {
   animation: floatDrift 16s ease-in-out infinite alternate;
   z-index: 0;
   pointer-events: none;
+}
+
+@media (max-width: 599px) {
+  .floating-particle {
+    filter: blur(24px);
+  }
+}
+
+@media (max-width: 360px) {
+  .floating-particle {
+    filter: blur(16px);
+  }
+  .particles-container .floating-particle:nth-child(5),
+  .particles-container .floating-particle:nth-child(7) {
+    display: none;
+  }
 }
 
 @keyframes floatDrift {
@@ -5138,6 +5253,15 @@ h1, h2, h3, h4, h5, h6 {
     -webkit-background-clip: unset;
     background-clip: unset;
     -webkit-text-fill-color: unset;
+  }
+}
+
+@media (max-width: 479px) {
+  .animated-word,
+  .clip-reveal,
+  .line-3d,
+  .shimmer-line {
+    font-size: 1.35rem;
   }
 }
 

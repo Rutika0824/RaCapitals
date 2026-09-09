@@ -123,7 +123,39 @@ const PriceHistoryChart = ({ priceHistory }) => {
         formatter: (val) => formatINR(val)
       }
     },
-    dataLabels: { enabled: false }
+    dataLabels: { enabled: false },
+    responsive: [
+      {
+        breakpoint: 600,
+        options: {
+          chart: { height: 260 },
+          xaxis: {
+            labels: {
+              rotate: -45,
+              style: { fontSize: '10px' }
+            }
+          },
+          grid: {
+            padding: { left: 5, right: 0, bottom: 20 }
+          }
+        }
+      },
+      {
+        breakpoint: 400,
+        options: {
+          chart: { height: 220 },
+          xaxis: {
+            labels: {
+              rotate: -50,
+              style: { fontSize: '9px' }
+            }
+          },
+          grid: {
+            padding: { left: 0, right: 0, bottom: 25 }
+          }
+        }
+      }
+    ]
   }), [brass, muted, paper2, series, categories])
 
   if (points.length < 2) {

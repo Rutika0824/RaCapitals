@@ -52,9 +52,11 @@ const ThemeToggle = () => {
       if (e.key === 'Escape') closePanel()
     }
     document.addEventListener('mousedown', handleClickOutside)
+    document.addEventListener('touchstart', handleClickOutside)
     document.addEventListener('keydown', handleEsc)
     return () => {
       document.removeEventListener('mousedown', handleClickOutside)
+      document.removeEventListener('touchstart', handleClickOutside)
       document.removeEventListener('keydown', handleEsc)
     }
   }, [open])
