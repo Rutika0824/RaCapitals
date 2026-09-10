@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
-import TrustSeal from './TrustSeal'
 import ThemeToggle from './ThemeToggle'
+import logo from '../../assets/logo-taurus-magnus.png'
 
 const Navbar = () => {
   const { isAuthenticated } = useAuth()
@@ -21,8 +21,7 @@ const Navbar = () => {
     <header className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="wordmark" onClick={closeMenu}>
-          <TrustSeal size={36} showSubText={false} className="brand-logo" />
-          <span className="wordmark-text">RA CAPITALS</span>
+          <img src={logo} alt="Taurus Magnus" style={{ height: '38px', width: 'auto' }} />
         </Link>
 
         <button

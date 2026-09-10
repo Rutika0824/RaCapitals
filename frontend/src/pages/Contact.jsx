@@ -33,7 +33,7 @@ const ContactBriefcaseIcon = () => (
   </svg>
 )
 
-const CONTACT_EMAIL = 'contact@racapitals.example'
+const CONTACT_EMAIL = 'contact@taurusmagnus.example'
 
 const Contact = () => {
   const [form, setForm] = useState({ name: '', email: '', message: '' })
@@ -88,7 +88,7 @@ const Contact = () => {
         </div>
         <header className="page-header">
           <p className="eyebrow">Contact us</p>
-          <h1>Get in touch with RA Capitals</h1>
+          <h1>Get in touch with Taurus Magnus</h1>
           <p className="muted">
             We respond to every WhatsApp and email enquiry within one business day.
           </p>
@@ -99,7 +99,7 @@ const Contact = () => {
             <ContactBriefcaseIcon />
             <div className="contact-card-body">
               <h3>Company</h3>
-              <p>RA Capitals</p>
+              <p>Taurus Magnus</p>
             </div>
           </div>
           <div className="contact-card contact-card-compact">

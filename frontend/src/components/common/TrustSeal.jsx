@@ -23,7 +23,7 @@ const TrustSeal = ({ size = 280, showSubText = true, showRingText = false, class
       width={size}
       height={size}
       role="img"
-      aria-label="RA Capitals trust seal"
+      aria-label="Taurus Magnus trust seal"
     >
       <defs>
         <path
@@ -37,7 +37,7 @@ const TrustSeal = ({ size = 280, showSubText = true, showRingText = false, class
           <circle cx={cx} cy={cy} r={outerR} fill="none" stroke="var(--brass)" strokeWidth="1" />
           <text className="trust-seal-ring-text" fontSize={ringFontSize}>
             <textPath href={`#${arcPathId}`} startOffset="50%" textAnchor="middle">
-              RA CAPITALS • OFFLINE TRACK RECORD • SINCE 2021
+              TAURUS MAGNUS • OFFLINE TRACK RECORD • SINCE 2021
             </textPath>
           </text>
         </g>

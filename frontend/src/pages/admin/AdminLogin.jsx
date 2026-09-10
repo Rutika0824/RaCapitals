@@ -56,7 +56,7 @@ const AdminLogin = () => {
   return (
     <div className="admin-login-wrap">
       <div className="admin-login-card">
-        <h1 className="admin-login-title">RA Capitals Admin</h1>
+        <h1 className="admin-login-title">Taurus Magnus Admin</h1>
         <p className="muted">Sign in to manage the price list.</p>
         <form onSubmit={handleSubmit} className="admin-form" noValidate>
           <label className="form-label">

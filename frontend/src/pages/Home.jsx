@@ -2,31 +2,22 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import ComplianceRibbon from '../components/common/ComplianceRibbon'
-import CompanyPreviewCard from '../components/home/CompanyPreviewCard'
 import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
-import TrustSeal from '../components/common/TrustSeal'
-import useScrollReveal from '../hooks/useScrollReveal'
-import FloatingParticles from '../components/common/FloatingParticles'
-import { useTheme } from '../context/ThemeContext'
-import HowItWorksAccordion from '../components/home/HowItWorksAccordion'
-import AnimatedHeadline from '../components/home/AnimatedHeadline'
+import { formatINR } from '../utils/format'
+import Chart from 'react-apexcharts'
 
-const SECTORS = ['All', 'Fintech', 'Energy', 'Logistics', 'Consumer', 'Healthcare']
-const PREVIEW_LIMIT = 6
+const PREVIEW_LIMIT = 12
+const MARQUEE_DURATION = 22
 
 const Home = () => {
   const [companies, setCompanies] = useState([])
   const [loading, setLoading] = useState(true)
   const [search, setSearch] = useState('')
   const [sector, setSector] = useState('All')
-  const { theme } = useTheme()
-
-  const previewRef = useScrollReveal()
-  const trustRef = useScrollReveal()
-  const howRef = useScrollReveal()
-  const gridRef = useRef(null)
+  const [faqOpen, setFaqOpen] = useState(-1)
+  const [heroChartData, setHeroChartData] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -34,7 +25,29 @@ const Home = () => {
       setLoading(true)
       try {
         const res = await api.get('/companies', { params: { limit: PREVIEW_LIMIT } })
-        if (!cancelled) setCompanies(res.data || [])
+        if (!cancelled) {
+          setCompanies(res.data || [])
+          if (res.data && res.data.length > 0) {
+            const firstCompany = res.data[0]
+            const history = firstCompany.priceHistory || []
+            if (history.length >= 2) {
+              const labels = history.map(h => {
+                const d = new Date(h.date)
+                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
+              })
+              const prices = history.map(h => h.price)
+              const firstPrice = prices[0]
+              const lastPrice = prices[prices.length - 1]
+              const pctChange = firstPrice ? ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1) : 0
+              setHeroChartData({
+                labels,
+                prices,
+                companyName: firstCompany.name,
+                pctChange
+              })
+            }
+          }
+        }
       } catch (err) {
         if (!cancelled) setCompanies([])
       } finally {
@@ -59,175 +72,272 @@ const Home = () => {
       .slice(0, PREVIEW_LIMIT)
   }, [companies, sector, search])
 
-  useEffect(() => {
-    const reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    if (reduced || !gridRef.current) return
-    const nodes = gridRef.current.querySelectorAll('.reveal:not(.reveal-visible)')
-    if (!nodes.length) return
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('reveal-visible')
-            observer.unobserve(entry.target)
-          }
-        })
-      },
-      { threshold: 0.15 }
-    )
-    nodes.forEach((n) => observer.observe(n))
-    return () => observer.disconnect()
-  }, [visible])
+  const toggleFaq = (index) => {
+    setFaqOpen(prev => prev === index ? -1 : index)
+  }
+
+  const chartOptions = heroChartData ? {
+    chart: {
+      type: 'line',
+      height: 180,
+      sparkline: { enabled: true },
+      animations: { enabled: true, easing: 'easeinout', speed: 1200 },
+      toolbar: { show: false },
+      fontFamily: 'Inter, system-ui, sans-serif'
+    },
+    series: [{ name: 'Price', data: heroChartData.prices }],
+    xaxis: {
+      categories: heroChartData.labels,
+      labels: { show: false },
+      axisBorder: { show: false },
+      axisTicks: { show: false }
+    },
+    yaxis: { labels: { show: false } },
+    stroke: { curve: 'smooth', width: 2, colors: ['#2563eb'] },
+    fill: {
+      type: 'gradient',
+      gradient: {
+        shadeIntensity: 1,
+        opacityFrom: 0.25,
+        opacityTo: 0,
+        stops: [0, 100],
+        colorStops: [
+          { offset: 0, color: '#2563eb', opacity: 0.3 },
+          { offset: 100, color: '#2563eb', opacity: 0 }
+        ]
+      }
+    },
+    grid: { show: false, padding: { top: 0, right: 0, bottom: 0, left: 0 } },
+    tooltip: {
+      enabled: true,
+      x: { show: true },
+      y: { formatter: (val) => formatINR(val) },
+      style: { fontSize: '12px', fontFamily: 'Inter, system-ui, sans-serif' }
+    },
+    colors: ['#2563eb']
+  } : null
 
   return (
-    <div className="page-wrap">
+    <div className="home-page-wrap">
       <Navbar />
       <ComplianceRibbon />
-      <main className="page-main">
-        <section className="hero hero-polished">
-          <div className="particles-container">
-            <FloatingParticles />
-          </div>
-          <div className="hero-glow hero-glow-brass" aria-hidden="true" />
-          <div className="hero-glow hero-glow-ink" aria-hidden="true" />
-          <div className="hero-grid">
-            <div className="hero-text">
-              <p className="eyebrow fade-in-up">Unlisted &amp; Pre-IPO Shares</p>
-              <h1 className="hero-headline fade-in-up delay-1"><AnimatedHeadline text="Own tomorrow's listed companies, today." /></h1>
-              <p className="hero-body fade-in-up delay-2">
-                RA Capitals has spent the last five years helping investors access unlisted and pre-IPO equity
+      <main className="home-page-main">
+        <section className="home-hero">
+          <div className="home-hero-inner">
+            <div className="home-hero-content">
+              <p className="home-eyebrow">Unlisted & Pre-IPO Shares</p>
+              <h1 className="home-hero-headline">Own tomorrow's listed companies, today.</h1>
+              <p className="home-hero-body">
+                Taurus Magnus has spent the last five years helping investors access unlisted and pre-IPO equity
                 through an offline network built on trust, diligence, and direct relationships. This platform
                 brings that research and access online — clearly, transparently, and without the noise of a
                 live trading terminal.
               </p>
-              <Link to="/catalog" className="primary-btn fade-in-up delay-3">Browse the Price List</Link>
-              <ul className="hero-stats fade-in-up delay-3">
-                <li className="hero-stat">
-                  <span className="hero-stat-num">01</span>
-                  <span className="hero-stat-label">Researched Listings</span>
-                </li>
-                <li className="hero-stat">
-                  <span className="hero-stat-num">02</span>
-                  <span className="hero-stat-label">Direct WhatsApp Access</span>
-                </li>
-                <li className="hero-stat">
-                  <span className="hero-stat-num">03</span>
-                  <span className="hero-stat-label">Demat-to-Demat Transfer</span>
-                </li>
-              </ul>
+              <Link to="/catalog" className="home-hero-cta">Browse the price list</Link>
             </div>
-            <div className="hero-logo-wrap fade-in-logo" aria-hidden="true">
-              <TrustSeal size={280} showSubText showRingText className="hero-trust-seal" />
-            </div>
-          </div>
-        </section>
-
-        <section className="home-preview reveal" ref={previewRef}>
-          <div className="particles-container">
-            <FloatingParticles />
-          </div>
-          <div className="home-preview-header">
-            <div>
-              <p className="eyebrow">Live Catalog</p>
-              <h2 className="section-title">A taste of the price list</h2>
-            </div>
-            <Link to="/catalog" className="secondary-btn home-preview-cta">View Full Price List →</Link>
-          </div>
-
-          <div className="home-preview-controls">
-            <input
-              type="text"
-              placeholder="Search by name…"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="search-input"
-            />
-            <div className="sector-chips">
-              {sectorsAvailable.map((s) => (
-                <button
-                  key={s}
-                  type="button"
-                  className={`chip ${sector === s ? 'chip-active' : ''}`}
-                  onClick={() => setSector(s)}
-                >
-                  {s}
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {loading ? (
-            <p className="muted">Loading listings…</p>
-          ) : visible.length === 0 ? (
-            <p className="muted">
-              {companies.length === 0
-                ? 'No listings are available yet — please check back soon.'
-                : 'No listings match your search.'}
-            </p>
-          ) : (
-            <div className="preview-grid" ref={gridRef}>
-              {visible.map((c, i) => (
-                <div key={c._id} className={`reveal reveal-stagger-${Math.min(i, 6)}`}>
-                  <CompanyPreviewCard company={c} />
+            {heroChartData && (
+              <div className="home-hero-chart-card" aria-label={`${heroChartData.companyName} price chart`}>
+                <div className="home-hero-chart-header">
+                  <span className="home-hero-chart-company">{heroChartData.companyName}</span>
+                  <span className="home-hero-chart-change positive">{heroChartData.pctChange}%</span>
                 </div>
-              ))}
-            </div>
-          )}
-
-          {!loading && companies.length > 0 && (
-            <div className="home-preview-cta-row">
-              <EnquireButton companyName="RA Capitals" />
-            </div>
-          )}
-        </section>
-
-        <section className="trust-band reveal" ref={trustRef}>
-          <div className="trust-band-inner">
-            <h2 className="trust-band-heading">Research you can rely on, access you can trust.</h2>
-            <ul className="trust-band-points">
-              <li>
-                <span className="trust-band-num mono">5+</span>
-                <span className="trust-band-label">Years Offline Track Record</span>
-                <p>Five years of operating in the unlisted and pre-IPO space through direct, offline relationships.</p>
-              </li>
-              <li>
-                <span className="trust-band-num mono">1:1</span>
-                <span className="trust-band-label">Direct, Personal Follow-up</span>
-                <p>Every enquiry is handled by a person on our team — no ticket queues, no auto-replies.</p>
-              </li>
-              <li>
-                <span className="trust-band-num mono">D2D</span>
-                <span className="trust-band-label">Demat-to-Demat Transfer</span>
-                <p>Shares move securely between demat accounts with full documentation once a deal is confirmed.</p>
-              </li>
-            </ul>
+                <div className="home-hero-chart-wrapper">
+                  <Chart options={chartOptions} series={chartOptions.series} type="line" width="100%" height={180} />
+                </div>
+              </div>
+            )}
           </div>
         </section>
 
-        {theme === 'indigo-light' ? (
-          <HowItWorksAccordion />
-        ) : (
-          <section className="how-it-works" ref={howRef}>
-            <h2 className="section-title fade-in-up">How it works</h2>
-            <div className="steps-grid">
-              <div className="step-card fade-in-up">
-                <div className="step-number">01</div>
-                <h3>Discover a company</h3>
-                <p>Browse our indicative price list across sectors and shortlist opportunities that fit your thesis.</p>
-              </div>
-              <div className="step-card fade-in-up delay-1">
-                <div className="step-number">02</div>
-                <h3>Enquire, we follow up on WhatsApp</h3>
-                <p>Tap enquire on any listing. Our team responds personally with current availability and lot details.</p>
-              </div>
-              <div className="step-card fade-in-up delay-2">
-                <div className="step-number">03</div>
-                <h3>Shares reach your demat account</h3>
-                <p>Once confirmed, shares are transferred securely into your demat account with full documentation.</p>
-              </div>
+        <section className="home-marquee-section" aria-label="Live catalog ticker">
+          <div className="home-marquee-header">
+            <div>
+              <p className="home-eyebrow">Live Catalog</p>
+              <h2 className="home-section-title">A taste of the price list</h2>
             </div>
-          </section>
-        )}
+            <Link to="/catalog" className="home-marquee-cta">View Full Price List →</Link>
+          </div>
+          <div className="home-marquee-track" role="region" aria-label="Scrolling company cards">
+            <div className="home-marquee-content">
+              {loading ? (
+                Array.from({ length: 8 }).map((_, i) => (
+                  <div key={`skeleton-${i}`} className="home-marquee-card skeleton" />
+                ))
+              ) : visible.length === 0 ? (
+                <div className="home-marquee-empty">No listings match your search.</div>
+              ) : (
+                [...visible, ...visible].map((c, i) => (
+                  <article key={`${c._id}-${i}`} className="home-marquee-card">
+                    <div className="home-marquee-card-top">
+                      <h3 className="home-marquee-card-name">{c.name}</h3>
+                      {c.sector && <span className="home-marquee-card-sector">{c.sector}</span>}
+                    </div>
+                    <div className="home-marquee-card-mid">
+                      <span className="home-marquee-card-price-label">Indicative Price</span>
+                      <span className="home-marquee-card-price mono">{formatINR(c.latestPrice)}</span>
+                    </div>
+                    {(c.high52 != null && c.low52 != null && c.priceHistory && c.priceHistory.length >= 2) && (
+                      <div className="home-marquee-card-delta">
+                        {(() => {
+                          const history = c.priceHistory
+                          const last = history[history.length - 1].price
+                          const prev = history[history.length - 2].price
+                          const diff = last - prev
+                          const pct = prev ? ((diff / prev) * 100).toFixed(2) : 0
+                          const isPositive = diff >= 0
+                          return (
+                            <span className={`home-marquee-delta ${isPositive ? 'positive' : 'negative'}`}>
+                              {isPositive ? '▲' : '▼'} {Math.abs(pct)}%
+                            </span>
+                          )
+                        })()}
+                      </div>
+                    )}
+                  </article>
+                ))
+              )}
+            </div>
+          </div>
+          <style jsx>{`
+            .home-marquee-track {
+              overflow: hidden;
+              position: relative;
+            }
+            .home-marquee-content {
+              display: flex;
+              gap: 1rem;
+              animation: marqueeScroll ${MARQUEE_DURATION}s linear infinite;
+              width: max-content;
+            }
+            @keyframes marqueeScroll {
+              0% { transform: translateX(0); }
+              100% { transform: translateX(-50%); }
+            }
+          `}</style>
+        </section>
+
+        <section className="home-faq-section" aria-labelledby="faq-heading">
+          <div className="home-section-header">
+            <h2 id="faq-heading" className="home-section-title">Frequently Asked Questions</h2>
+          </div>
+          <div className="home-faq-grid">
+            <article className="home-faq-card">
+              <button
+                type="button"
+                className="home-faq-question"
+                onClick={() => toggleFaq(0)}
+                aria-expanded={faqOpen === 0}
+                aria-controls="faq-answer-0"
+              >
+                <span>What are unlisted shares?</span>
+                <span className="home-faq-icon" aria-hidden="true">
+                  {faqOpen === 0 ? '−' : '+'}
+                </span>
+              </button>
+              <div id="faq-answer-0" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 0}>
+                <p>Unlisted shares are equity shares of a company that are not listed on a recognised stock exchange (such as NSE or BSE). They are typically held by promoters, early investors, employees, or private equity funds. Transactions occur privately, often through intermediaries, and prices are negotiated rather than discovered on a public order book.</p>
+              </div>
+            </article>
+            <article className="home-faq-card">
+              <button
+                type="button"
+                className="home-faq-question"
+                onClick={() => toggleFaq(1)}
+                aria-expanded={faqOpen === 1}
+                aria-controls="faq-answer-1"
+              >
+                <span>Why buy before a company's IPO?</span>
+                <span className="home-faq-icon" aria-hidden="true">
+                  {faqOpen === 1 ? '−' : '+'}
+                </span>
+              </button>
+              <div id="faq-answer-1" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 1}>
+                <p>Investing before an IPO can provide access to companies at earlier growth stages, often at lower valuations than the eventual public offering price. However, it carries higher illiquidity risk, longer holding periods, and less regulatory oversight. Investors should assess their risk tolerance and investment horizon carefully.</p>
+              </div>
+            </article>
+            <article className="home-faq-card">
+              <button
+                type="button"
+                className="home-faq-question"
+                onClick={() => toggleFaq(2)}
+                aria-expanded={faqOpen === 2}
+                aria-controls="faq-answer-2"
+              >
+                <span>How does a purchase actually work?</span>
+                <span className="home-faq-icon" aria-hidden="true">
+                  {faqOpen === 2 ? '−' : '+'}
+                </span>
+              </button>
+              <div id="faq-answer-2" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 2}>
+                <p>Browse the price list, shortlist companies, and tap Enquire on any listing. Our team responds personally on WhatsApp or email within one business day with current availability, lot size, and next steps. Once terms are agreed, shares are transferred via demat-to-demat transfer with full documentation.</p>
+              </div>
+            </article>
+            <article className="home-faq-card">
+              <button
+                type="button"
+                className="home-faq-question"
+                onClick={() => toggleFaq(3)}
+                aria-expanded={faqOpen === 3}
+                aria-controls="faq-answer-3"
+              >
+                <span>Is this SEBI-regulated?</span>
+                <span className="home-faq-icon" aria-hidden="true">
+                  {faqOpen === 3 ? '−' : '+'}
+                </span>
+              </button>
+              <div id="faq-answer-3" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 3}>
+                <p>Taurus Magnus is an information platform for unlisted and pre-IPO shares — not a stock exchange, broker, or investment adviser. We do not execute trades, hold client funds, or offer regulated investment services. All transactions are private, bilateral arrangements between buyers and sellers. Investors should seek independent financial and legal advice before transacting.</p>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section className="home-trust-section" aria-labelledby="trust-heading">
+          <h2 id="trust-heading" className="home-section-title">Research you can rely on</h2>
+          <div className="home-trust-grid">
+            <article className="home-trust-card">
+              <div className="home-trust-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                </svg>
+              </div>
+              <h3 className="home-trust-title">Research-driven</h3>
+              <p className="home-trust-desc">Every listing is backed by documented due diligence and direct verification with company management.</p>
+            </article>
+            <article className="home-trust-card">
+              <div className="home-trust-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                </svg>
+              </div>
+              <h3 className="home-trust-title">Bank-level security</h3>
+              <p className="home-trust-desc">Data encrypted in transit and at rest. Demat-to-demat transfers with full audit trails.</p>
+            </article>
+            <article className="home-trust-card">
+              <div className="home-trust-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="10" />
+                  <path d="M12 6v6l4 2" />
+                </svg>
+              </div>
+              <h3 className="home-trust-title">Low ticket size</h3>
+              <p className="home-trust-desc">Accessible lot sizes let you build a diversified pre-IPO portfolio without outsized capital.</p>
+            </article>
+            <article className="home-trust-card">
+              <div className="home-trust-icon" aria-hidden="true">
+                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                  <circle cx="9" cy="7" r="4" />
+                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                </svg>
+              </div>
+              <h3 className="home-trust-title">Personal follow-up</h3>
+              <p className="home-trust-desc">Every enquiry is handled by a person on our team — no ticket queues, no auto-replies.</p>
+            </article>
+          </div>
+        </section>
       </main>
       <Footer />
     </div>

@@ -6,7 +6,7 @@ import FloatingParticles from '../components/common/FloatingParticles'
 const ABOUT_SECTIONS = [
   {
     title: 'Who we are',
-    body: 'RA Capitals is a research-focused intermediary for unlisted and pre-IPO shares in India. We work directly with company management, early investors, and promoters to verify fundamentals before any listing is presented to clients.'
+    body: 'Taurus Magnus is a research-focused intermediary for unlisted and pre-IPO shares in India. We work directly with company management, early investors, and promoters to verify fundamentals before any listing is presented to clients.'
   },
   {
     title: 'What we do',
@@ -34,7 +34,7 @@ const About = () => {
           <p className="eyebrow">About us</p>
           <h1>Research-driven access to unlisted and pre-IPO equity</h1>
           <p className="muted">
-            RA Capitals has spent the last five years helping investors access unlisted and pre-IPO equity
+            Taurus Magnus has spent the last five years helping investors access unlisted and pre-IPO equity
             through an offline network built on trust, diligence, and direct relationships.
           </p>
         </header>

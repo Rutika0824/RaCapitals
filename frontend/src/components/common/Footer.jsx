@@ -1,3 +1,4 @@
+import logo from '../../assets/logo-taurus-magnus.png'
 import { Link } from 'react-router-dom'
 
 const Footer = () => {
@@ -5,11 +6,11 @@ const Footer = () => {
     <footer className="footer">
       <div className="footer-inner">
         <div className="footer-brand">
-          <img src="/logo.svg" alt="RA Capitals" className="footer-logo" />
+          <img src={logo} alt="Taurus Magnus" className="footer-logo" />
           <div>
-            <p className="footer-brand-name">RA CAPITALS</p>
+            <p className="footer-brand-name">TAURUS MAGNUS</p>
             <p className="footer-text">
-              RA Capitals is an information platform for unlisted &amp; pre-IPO shares — not a stock exchange or broker.
+              Taurus Magnus is an information platform for unlisted & pre-IPO shares — not a stock exchange or broker.
             </p>
           </div>
         </div>
@@ -26,12 +27,12 @@ const Footer = () => {
         </div>
         <div className="footer-col">
           <h4>Connect</h4>
-          <a href="mailto:contact@racapitals.example">Email Us</a>
+          <a href="mailto:contact@taurusmagnus.example">Email Us</a>
           <a href="https://wa.me/919999999999" target="_blank" rel="noopener noreferrer">WhatsApp</a>
         </div>
       </div>
       <div className="footer-bottom">
-        <p>© {new Date().getFullYear()} RA Capitals. All rights reserved.</p>
+        <p>© {new Date().getFullYear()} Taurus Magnus. All rights reserved.</p>
       </div>
     </footer>
   )

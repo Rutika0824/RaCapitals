@@ -23,7 +23,7 @@
   --paper-3: #0A1623;
   --border: var(--paper-2);
   --white: #FFFFFF;
-  --font-display: 'Fraunces', serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -59,8 +59,8 @@
   --paper-2: #E5E7EB;
   --paper-3: #D1D5DB;
   --white: #FFFFFF;
-  --font-display: 'Fraunces', serif;
-  --font-display-style: italic;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 }
@@ -88,7 +88,7 @@
   --paper-2: #DCDED3;
   --paper-3: #C8D0C5;
   --white: #FFFFFF;
-  --font-display: 'Newsreader', serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -117,7 +117,7 @@
   --paper-2: #D9E0DA;
   --paper-3: #C5D0C6;
   --white: #FFFFFF;
-  --font-display: 'Fraunces', serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -146,7 +146,7 @@
   --paper-2: #E5E7EB;
   --paper-3: #D1D5DB;
   --white: #FFFFFF;
-  --font-display: 'Fraunces', serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -175,7 +175,7 @@
   --paper-2: #142340;
   --paper-3: #0A1623;
   --white: #FFFFFF;
-  --font-display: 'Fraunces', serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -204,7 +204,7 @@
   --paper-2: #152B30;
   --paper-3: #0C1D14;
   --white: #FFFFFF;
-  --font-display: 'Fraunces', serif;
+  --font-display: 'Playfair Display', Georgia, serif;
   --font-display-style: normal;
   --font-body: 'Inter', system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
@@ -374,6 +374,21 @@ a:hover {
   opacity: 0.85;
 }
 
+.wordmark img {
+  height: 38px;
+  width: auto;
+  display: block;
+}
+
+/* Dark theme logo background chip for Navbar */
+[data-theme="black"] .wordmark img,
+[data-theme="evergreen"] .wordmark img,
+[data-theme="forest-ledger"] .wordmark img {
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
+}
+
 .brand-logo {
   width: 36px;
   height: 36px;
@@ -438,9 +453,18 @@ a:hover {
 }
 
 .footer-logo {
-  width: 48px;
-  height: 48px;
+  height: 32px;
+  width: auto;
   flex-shrink: 0;
+}
+
+/* Dark theme logo background chip for Footer */
+[data-theme="black"] .footer-logo,
+[data-theme="evergreen"] .footer-logo,
+[data-theme="forest-ledger"] .footer-logo {
+  background: #fff;
+  padding: 4px 8px;
+  border-radius: 6px;
 }
 
 .footer-brand-name {
@@ -759,6 +783,463 @@ a:hover {
   color: var(--ink-soft);
   margin: 0 0 1.5rem 0;
   max-width: 60ch;
+}
+
+/* ============================================================
+   Home Page — Fixed Blue/Black/White Theme
+   Overrides the 6-theme system for this page only
+   ============================================================ */
+
+.home-page-wrap {
+  background: #f7f7f3;
+  color: #111827;
+  min-height: 100vh;
+}
+
+.home-page-main {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 0 1.5rem 4rem 1.5rem;
+}
+
+/* Hero */
+.home-hero {
+  padding: 4rem 0 3rem 0;
+  position: relative;
+}
+
+.home-hero-inner {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 340px;
+  align-items: center;
+  gap: 3rem;
+}
+
+.home-hero-content {
+  max-width: 640px;
+}
+
+.home-eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #2563eb;
+  margin: 0 0 1rem 0;
+}
+
+.home-hero-headline {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(2.2rem, 5vw, 3.2rem);
+  line-height: 1.15;
+  margin: 0 0 1.25rem 0;
+  color: #111827;
+  font-weight: 600;
+}
+
+.home-hero-body {
+  font-size: 1.05rem;
+  color: #4b5563;
+  margin: 0 0 2rem 0;
+  max-width: 60ch;
+  line-height: 1.7;
+}
+
+.home-hero-cta {
+  display: inline-block;
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  padding: 0.85rem 1.75rem;
+  font-family: inherit;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  border-radius: 2px;
+  letter-spacing: 0.02em;
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  text-decoration: none;
+}
+
+.home-hero-cta:hover {
+  background: #1d4ed8;
+  transform: translateY(-1px);
+  text-decoration: none;
+}
+
+.home-hero-chart-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  padding: 1.25rem;
+  box-shadow: 0 4px 24px rgba(17, 24, 39, 0.06);
+}
+
+.home-hero-chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.home-hero-chart-company {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #111827;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+
+.home-hero-chart-change {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.home-hero-chart-change.positive {
+  color: #16a34a;
+}
+
+.home-hero-chart-wrapper {
+  height: 180px;
+}
+
+/* Marquee Section */
+.home-marquee-section {
+  padding: 3rem 0;
+  background: #fff;
+  border-top: 1px solid #e5e7eb;
+  border-bottom: 1px solid #e5e7eb;
+  margin: 0 -1.5rem;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+.home-marquee-header {
+  max-width: 1180px;
+  margin: 0 auto 1.5rem auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.home-section-title {
+  font-size: 1.5rem;
+  margin: 0.25rem 0 0 0;
+  color: #111827;
+  font-weight: 600;
+}
+
+.home-marquee-cta {
+  color: #2563eb;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.15s ease;
+}
+
+.home-marquee-cta:hover {
+  border-bottom-color: #2563eb;
+  text-decoration: none;
+}
+
+.home-marquee-track {
+  max-width: 1180px;
+  margin: 0 auto;
+  overflow: hidden;
+}
+
+.home-marquee-content {
+  display: flex;
+  gap: 1rem;
+  animation: marqueeScroll 22s linear infinite;
+  width: max-content;
+}
+
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+.home-marquee-card {
+  flex: 0 0 260px;
+  background: #111827;
+  border-radius: 10px;
+  padding: 1.25rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  color: #fff;
+  box-shadow: 0 8px 32px rgba(17, 24, 39, 0.15);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.home-marquee-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 48px rgba(17, 24, 39, 0.2);
+}
+
+.home-marquee-card.skeleton {
+  background: #1a1a2e;
+  animation: skeletonPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes skeletonPulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.home-marquee-card-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.5rem;
+}
+
+.home-marquee-card-name {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #fff;
+  line-height: 1.3;
+}
+
+.home-marquee-card-sector {
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: #9ca3af;
+  background: rgba(255,255,255,0.08);
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.home-marquee-card-mid {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.home-marquee-card-price-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+}
+
+.home-marquee-card-price {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: #fff;
+}
+
+.home-marquee-card-delta {
+  margin-top: 0.25rem;
+}
+
+.home-marquee-delta {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 0.15rem 0.5rem;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.home-marquee-delta.positive {
+  color: #22c55e;
+  background: rgba(34, 197, 94, 0.15);
+}
+
+.home-marquee-delta.negative {
+  color: #ef4444;
+  background: rgba(239, 68, 68, 0.15);
+}
+
+.home-marquee-empty {
+  text-align: center;
+  color: #9ca3af;
+  padding: 3rem;
+  grid-column: 1 / -1;
+}
+
+/* FAQ Section */
+.home-faq-section {
+  padding: 4rem 0;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.home-section-header {
+  margin-bottom: 2rem;
+}
+
+.home-faq-grid {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.home-faq-card {
+  background: #fff;
+  border: 1px solid #e5e7eb;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.home-faq-question {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.15rem 1.25rem;
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: 1rem;
+  font-weight: 500;
+  color: #111827;
+  transition: background-color 0.15s ease;
+}
+
+.home-faq-question:hover {
+  background: #f9fafb;
+}
+
+.home-faq-question:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: -2px;
+}
+
+.home-faq-icon {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2563eb;
+  flex-shrink: 0;
+  margin-left: 1rem;
+  line-height: 1;
+}
+
+.home-faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+}
+
+.home-faq-answer[aria-hidden="false"] {
+  max-height: 500px;
+  padding: 0 1.25rem 1.25rem 1.25rem;
+}
+
+.home-faq-answer p {
+  margin: 0;
+  color: #4b5563;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* Trust Section */
+.home-trust-section {
+  padding: 4rem 0;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.home-trust-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.5rem;
+}
+
+.home-trust-card {
+  background: #f7f7f3;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1.75rem 1.5rem;
+  text-align: center;
+  transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.home-trust-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 16px 48px rgba(17, 24, 39, 0.1);
+  border-color: #d1d5db;
+}
+
+.home-trust-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 56px;
+  height: 56px;
+  background: #eff6ff;
+  border-radius: 12px;
+  color: #2563eb;
+  margin-bottom: 1rem;
+}
+
+.home-trust-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #111827;
+}
+
+.home-trust-desc {
+  margin: 0;
+  font-size: 0.9rem;
+  color: #6b7280;
+  line-height: 1.55;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  .home-hero-inner {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+  .home-hero-chart-card {
+    max-width: 400px;
+    margin: 0 auto;
+  }
+  .home-trust-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 768px) {
+  .home-page-main {
+    padding: 0 1rem 3rem 1rem;
+  }
+  .home-hero {
+    padding: 3rem 0 2rem 0;
+  }
+  .home-hero-headline {
+    font-size: 2rem;
+  }
+  .home-trust-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-marquee-card {
+    flex: 0 0 240px;
+  }
+  .home-section-title {
+    font-size: 1.25rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-marquee-card {
+    flex: 0 0 220px;
+  }
 }
 
 .how-it-works {

@@ -54,8 +54,8 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
             <span className="admin-hamburger-bar" />
           </button>
           <Link to="/admin" className="admin-header-bar-brand">
-            <img src="/logo.svg" alt="RA Capitals" className="admin-header-bar-logo" />
-            <span className="admin-header-bar-brand-text">RA Capitals</span>
+            <img src="/logo.svg" alt="Taurus Magnus" className="admin-header-bar-logo" />
+            <span className="admin-header-bar-brand-text">Taurus Magnus</span>
           </Link>
         </div>
         <div className="admin-header-bar-right">
