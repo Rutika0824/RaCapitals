@@ -1,12 +1,12 @@
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import ComplianceRibbon from '../components/common/ComplianceRibbon'
 import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
+import HeroChart from '../components/home/HeroChart'
 import { formatINR } from '../utils/format'
-import Chart from 'react-apexcharts'
 
 const PREVIEW_LIMIT = 12
 const MARQUEE_DURATION = 22
@@ -31,19 +31,13 @@ const Home = () => {
             const firstCompany = res.data[0]
             const history = firstCompany.priceHistory || []
             if (history.length >= 2) {
-              const labels = history.map(h => {
-                const d = new Date(h.date)
-                return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' })
-              })
-              const prices = history.map(h => h.price)
-              const firstPrice = prices[0]
-              const lastPrice = prices[prices.length - 1]
+              const firstPrice = history[0].price
+              const lastPrice = history[history.length - 1].price
               const pctChange = firstPrice ? ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1) : 0
               setHeroChartData({
-                labels,
-                prices,
                 companyName: firstCompany.name,
-                pctChange
+                latestPrice: lastPrice,
+                pctChange: pctChange >= 0 ? `+${pctChange}%` : `${pctChange}%`
               })
             }
           }
@@ -76,47 +70,6 @@ const Home = () => {
     setFaqOpen(prev => prev === index ? -1 : index)
   }
 
-  const chartOptions = heroChartData ? {
-    chart: {
-      type: 'line',
-      height: 180,
-      sparkline: { enabled: true },
-      animations: { enabled: true, easing: 'easeinout', speed: 1200 },
-      toolbar: { show: false },
-      fontFamily: 'Inter, system-ui, sans-serif'
-    },
-    series: [{ name: 'Price', data: heroChartData.prices }],
-    xaxis: {
-      categories: heroChartData.labels,
-      labels: { show: false },
-      axisBorder: { show: false },
-      axisTicks: { show: false }
-    },
-    yaxis: { labels: { show: false } },
-    stroke: { curve: 'smooth', width: 2, colors: ['#2563eb'] },
-    fill: {
-      type: 'gradient',
-      gradient: {
-        shadeIntensity: 1,
-        opacityFrom: 0.25,
-        opacityTo: 0,
-        stops: [0, 100],
-        colorStops: [
-          { offset: 0, color: '#2563eb', opacity: 0.3 },
-          { offset: 100, color: '#2563eb', opacity: 0 }
-        ]
-      }
-    },
-    grid: { show: false, padding: { top: 0, right: 0, bottom: 0, left: 0 } },
-    tooltip: {
-      enabled: true,
-      x: { show: true },
-      y: { formatter: (val) => formatINR(val) },
-      style: { fontSize: '12px', fontFamily: 'Inter, system-ui, sans-serif' }
-    },
-    colors: ['#2563eb']
-  } : null
-
   return (
     <div className="home-page-wrap">
       <Navbar />
@@ -136,15 +89,11 @@ const Home = () => {
               <Link to="/catalog" className="home-hero-cta">Browse the price list</Link>
             </div>
             {heroChartData && (
-              <div className="home-hero-chart-card" aria-label={`${heroChartData.companyName} price chart`}>
-                <div className="home-hero-chart-header">
-                  <span className="home-hero-chart-company">{heroChartData.companyName}</span>
-                  <span className="home-hero-chart-change positive">{heroChartData.pctChange}%</span>
-                </div>
-                <div className="home-hero-chart-wrapper">
-                  <Chart options={chartOptions} series={chartOptions.series} type="line" width="100%" height={180} />
-                </div>
-              </div>
+              <HeroChart
+                companyName={heroChartData.companyName}
+                latestPrice={heroChartData.latestPrice}
+                pctChange={heroChartData.pctChange}
+              />
             )}
           </div>
         </section>
