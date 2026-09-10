@@ -5,7 +5,6 @@ import ComplianceRibbon from '../components/common/ComplianceRibbon'
 import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
-import HeroChart from '../components/home/HeroChart'
 import { formatINR } from '../utils/format'
 
 const PREVIEW_LIMIT = 12
@@ -17,7 +16,6 @@ const Home = () => {
   const [search, setSearch] = useState('')
   const [sector, setSector] = useState('All')
   const [faqOpen, setFaqOpen] = useState(-1)
-  const [heroChartData, setHeroChartData] = useState(null)
 
   useEffect(() => {
     let cancelled = false
@@ -27,20 +25,6 @@ const Home = () => {
         const res = await api.get('/companies', { params: { limit: PREVIEW_LIMIT } })
         if (!cancelled) {
           setCompanies(res.data || [])
-          if (res.data && res.data.length > 0) {
-            const firstCompany = res.data[0]
-            const history = firstCompany.priceHistory || []
-            if (history.length >= 2) {
-              const firstPrice = history[0].price
-              const lastPrice = history[history.length - 1].price
-              const pctChange = firstPrice ? ((lastPrice - firstPrice) / firstPrice * 100).toFixed(1) : 0
-              setHeroChartData({
-                companyName: firstCompany.name,
-                latestPrice: lastPrice,
-                pctChange: pctChange >= 0 ? `+${pctChange}%` : `${pctChange}%`
-              })
-            }
-          }
         }
       } catch (err) {
         if (!cancelled) setCompanies([])
@@ -88,13 +72,57 @@ const Home = () => {
               </p>
               <Link to="/catalog" className="home-hero-cta">Browse the price list</Link>
             </div>
-            {heroChartData && (
-              <HeroChart
-                companyName={heroChartData.companyName}
-                latestPrice={heroChartData.latestPrice}
-                pctChange={heroChartData.pctChange}
-              />
-            )}
+            <div className="home-hero-chart-card" aria-label="Indicative price chart">
+              <div className="home-hero-chart-header">
+                <span className="home-hero-chart-sub">Indicative Price History</span>
+                <span className="home-hero-chart-live">
+                  <span className="home-hero-chart-dot" />
+                  Live Feed
+                </span>
+              </div>
+              <div className="home-hero-chart-price-row">
+                <span className="home-hero-chart-current-price">₹5.75</span>
+                <span className="home-hero-chart-gain">▲ +310.71% <span>over Max</span></span>
+              </div>
+              <div className="home-hero-chart-wrapper">
+                <svg className="home-hero-chart-svg" viewBox="0 0 500 220" preserveAspectRatio="none" role="img" aria-label="Upward trending price chart with volume bars">
+                  <defs>
+                    <linearGradient id="hero-blue-gradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stopColor="#2563eb" stopOpacity="0.25" />
+                      <stop offset="100%" stopColor="#2563eb" stopOpacity="0" />
+                    </linearGradient>
+                  </defs>
+                  <line className="hero-grid-line" x1="0" y1="50" x2="500" y2="50" />
+                  <line className="hero-grid-line" x1="0" y1="110" x2="500" y2="110" />
+                  <line className="hero-grid-line" x1="0" y1="170" x2="500" y2="170" />
+                  <g className="hero-volume-bars">
+                    <rect x="12" y="180" width="16" height="45" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="52" y="165" width="16" height="60" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="92" y="150" width="16" height="75" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="132" y="170" width="16" height="55" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="172" y="130" width="16" height="95" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="212" y="160" width="16" height="65" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="252" y="140" width="16" height="85" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="292" y="115" width="16" height="110" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="332" y="155" width="16" height="70" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="372" y="100" width="16" height="125" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="412" y="80" width="16" height="145" rx="3" fill="#2563eb" opacity="0.12" />
+                    <rect x="452" y="45" width="16" height="180" rx="3" fill="#2563eb" opacity="0.12" />
+                  </g>
+                  <path className="hero-chart-area" d="M 20,185 L 60,175 L 100,145 L 140,160 L 180,115 L 220,135 L 260,85 L 300,105 L 340,75 L 380,55 L 420,30 L 460,10 L 460,225 L 20,225 Z" fill="url(#hero-blue-gradient)" />
+                  <path className="hero-chart-line" d="M 20,185 L 60,175 L 100,145 L 140,160 L 180,115 L 220,135 L 260,85 L 300,105 L 340,75 L 380,55 L 420,30 L 460,10" />
+                </svg>
+              </div>
+              <div className="home-hero-chart-controls">
+                <div className="home-timeframe-group">
+                  <button className="home-tf-btn">1M</button>
+                  <button className="home-tf-btn">6M</button>
+                  <button className="home-tf-btn">1Y</button>
+                  <button className="home-tf-btn">3Y</button>
+                  <button className="home-tf-btn active">MAX</button>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
