@@ -1160,8 +1160,8 @@ a:hover {
 /* Marquee Section */
 .home-marquee-section {
   padding: 3rem 0;
-  background: linear-gradient(135deg, #f3f4f6, #ffff(240, 49%, 61%));
-  border-top: 1px solid #f1f3f8;
+  background: #f7f7f3;
+  border-top: 1px solid #e5e7eb;
   border-bottom: 1px solid #e5e7eb;
   margin: 0 -1.5rem;
   padding-left: 1.5rem;
@@ -1176,7 +1176,6 @@ a:hover {
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 1rem;
-  background: lab(95.72% 1 0.34);
 }
 
 .home-section-title {
@@ -1204,6 +1203,8 @@ a:hover {
   max-width: 1180px;
   margin: 0 auto;
   overflow: hidden;
+  padding-top: 8px;
+  padding-bottom: 16px;
 }
 
 .home-marquee-content {
@@ -1220,17 +1221,19 @@ a:hover {
 
 .home-marquee-card {
   flex: 0 0 260px;
-  background: rgba(255, 255, 255, 0.55);
+  background: rgba(219, 234, 254, 0.55);
   backdrop-filter: blur(12px) saturate(160%);
   -webkit-backdrop-filter: blur(12px) saturate(160%);
-  border: 1px solid rgba(0, 0, 0, 0.06);
+  border: 1px solid rgba(147, 165, 245, 0.25);
   border-radius: 10px;
-  padding: 1.25rem 1rem;
+  padding: 1.5rem 1.25rem;
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  justify-content: space-between;
+  gap: 0.4rem;
+  min-height: 170px;
   color: #111827;
-  box-shadow: 0 12px 28px rgba(204, 211, 222, 0.12);
+  box-shadow: 0 12px 28px rgba(31, 41, 55, 0.15);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
