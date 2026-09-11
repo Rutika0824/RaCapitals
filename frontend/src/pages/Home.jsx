@@ -63,7 +63,13 @@ const Home = () => {
           <div className="home-hero-inner">
             <div className="home-hero-content">
               <p className="home-eyebrow">Unlisted & Pre-IPO Shares</p>
-              <h1 className="home-hero-headline">Own tomorrow's listed companies, today.</h1>
+              <h1 className="home-hero-headline">
+                <span className="word">Own</span>{' '}
+                <span className="word">tomorrow's</span>{' '}
+                <span className="word">listed</span>{' '}
+                <span className="word">companies,</span>{' '}
+                <span className="word">today.</span>
+              </h1>
               <p className="home-hero-body">
                 Taurus Magnus has spent the last five years helping investors access unlisted and pre-IPO equity
                 through an offline network built on trust, diligence, and direct relationships. This platform
@@ -109,9 +115,11 @@ const Home = () => {
                     <rect x="412" y="80" width="16" height="145" rx="3" fill="#2563eb" opacity="0.12" />
                     <rect x="452" y="45" width="16" height="180" rx="3" fill="#2563eb" opacity="0.12" />
                   </g>
-                  <path className="hero-chart-area" d="M 20,185 L 60,175 L 100,145 L 140,160 L 180,115 L 220,135 L 260,85 L 300,105 L 340,75 L 380,55 L 420,30 L 460,10 L 460,225 L 20,225 Z" fill="url(#hero-blue-gradient)" />
-                  <path className="hero-chart-line" d="M 20,185 L 60,175 L 100,145 L 140,160 L 180,115 L 220,135 L 260,85 L 300,105 L 340,75 L 380,55 L 420,30 L 460,10" />
+                  <line className="hero-chart-ref-line" x1="20" y1="225" x2="20" y2="209" />
+                  <path className="hero-chart-area" d="M 20,209 L 43,209 L 66,207 L 90,207 L 113,207 L 136,205 L 159,202 L 182,198 L 205,88 L 228,143 L 251,176 L 274,121 L 297,172 L 320,128 L 343,187 L 367,154 L 390,128 L 413,99 L 436,114 L 459,88 L 459,225 L 20,225 Z" fill="url(#hero-blue-gradient)" />
+                  <path className="hero-chart-line" d="M 20,209 L 43,209 L 66,207 L 90,207 L 113,207 L 136,205 L 159,202 L 182,198 L 205,88 L 228,143 L 251,176 L 274,121 L 297,172 L 320,128 L 343,187 L 367,154 L 390,128 L 413,99 L 436,114 L 459,88" />
                 </svg>
+                <div className="hero-chart-tooltip" role="status" aria-label="Sample price point">₹1.19 · Apr 2022</div>
               </div>
               <div className="home-hero-chart-controls">
                 <div className="home-timeframe-group">
