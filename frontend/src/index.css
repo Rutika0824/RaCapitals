@@ -1160,11 +1160,8 @@ a:hover {
 /* Marquee Section */
 .home-marquee-section {
   padding: 3rem 0;
-  background:
-    radial-gradient(circle at 25% 30%, rgba(37, 99, 235, 0.04) 0%, transparent 50%),
-    radial-gradient(circle at 80% 65%, rgba(37, 99, 235, 0.03) 0%, transparent 50%),
-    #fff;
-  border-top: 1px solid #e5e7eb;
+  background: linear-gradient(135deg, #f3f4f6, #ffff(240, 49%, 61%));
+  border-top: 1px solid #f1f3f8;
   border-bottom: 1px solid #e5e7eb;
   margin: 0 -1.5rem;
   padding-left: 1.5rem;
@@ -1179,6 +1176,7 @@ a:hover {
   align-items: flex-end;
   flex-wrap: wrap;
   gap: 1rem;
+  background: lab(95.72% 1 0.34);
 }
 
 .home-section-title {
@@ -1232,7 +1230,7 @@ a:hover {
   flex-direction: column;
   gap: 0.75rem;
   color: #111827;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 12px 28px rgba(204, 211, 222, 0.12);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
