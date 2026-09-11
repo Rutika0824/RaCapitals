@@ -8,10 +8,13 @@ import AdminLogin from './pages/admin/AdminLogin'
 import AdminOverview from './pages/admin/AdminOverview'
 import AdminListings from './pages/admin/AdminListings'
 import AdminCompanyDetail from './pages/admin/AdminCompanyDetail'
+import AdminEvents from './pages/admin/AdminEvents'
 import AdminContacts from './pages/admin/AdminContacts'
 import Disclaimer from './pages/legal/Disclaimer'
 import Terms from './pages/legal/Terms'
 import Privacy from './pages/legal/Privacy'
+import DrhpFiled from './pages/DrhpFiled'
+import Events from './pages/Events'
 import ProtectedRoute from './components/common/ProtectedRoute'
 import AdminLayout from './components/admin/AdminLayout'
 
@@ -27,6 +30,8 @@ function App() {
         <Route path="/disclaimer" element={<Disclaimer />} />
         <Route path="/terms" element={<Terms />} />
         <Route path="/privacy" element={<Privacy />} />
+        <Route path="/drhp-filed" element={<DrhpFiled />} />
+        <Route path="/events" element={<Events />} />
         <Route path="/admin/login" element={<AdminLogin />} />
         <Route
           path="/admin"
@@ -68,6 +73,16 @@ function App() {
             <ProtectedRoute>
               <AdminLayout>
                 <AdminContacts />
+              </AdminLayout>
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/admin/events"
+          element={
+            <ProtectedRoute>
+              <AdminLayout>
+                <AdminEvents />
               </AdminLayout>
             </ProtectedRoute>
           }

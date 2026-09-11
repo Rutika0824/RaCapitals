@@ -39,14 +39,21 @@ const AdminSidebar = ({ isOpen = false, onNavigate }) => {
         >
           Listings
         </NavLink>
-        <NavLink
-          to="/admin/contacts"
-          className={({ isActive }) => `${base} ${isActive ? 'active' : ''}`}
-          onClick={handleClick}
-        >
-          Contact Submissions
-          {unread > 0 && <span className="admin-sidebar-badge">{unread}</span>}
-        </NavLink>
+<NavLink
+           to="/admin/contacts"
+           className={({ isActive }) => `${base} ${isActive ? 'active' : ''}`}
+           onClick={handleClick}
+         >
+           Contact Submissions
+           {unread > 0 && <span className="admin-sidebar-badge">{unread}</span>}
+         </NavLink>
+         <NavLink
+           to="/admin/events"
+           className={({ isActive }) => `${base} ${isActive ? 'active' : ''}`}
+           onClick={handleClick}
+         >
+           Events
+         </NavLink>
       </nav>
     </aside>
   )

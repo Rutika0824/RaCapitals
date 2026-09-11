@@ -5,10 +5,68 @@ import ComplianceRibbon from '../components/common/ComplianceRibbon'
 import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
-import { formatINR } from '../utils/format'
+import { formatINR, formatShortDate } from '../utils/format'
 
 const PREVIEW_LIMIT = 12
 const MARQUEE_DURATION = 22
+
+const eventTypeClass = (type) => {
+  switch (type) {
+    case 'DRHP': return 'event-tag-drhp'
+    case 'Funding': return 'event-tag-funding'
+    case 'Leadership Change': return 'event-tag-leadership'
+    default: return 'event-tag-other'
+  }
+}
+
+const PM_CARDS = [
+  {
+    key: 'what',
+    label: 'What',
+    question: 'What are unlisted shares?',
+    answer: (
+      <p>Unlisted shares are equity shares of a company that are not listed on a recognised stock exchange (such as NSE or BSE). They are typically held by promoters, early investors, employees, or private equity funds. Transactions occur privately, often through intermediaries, and prices are negotiated rather than discovered on a public order book.</p>
+    ),
+  },
+  {
+    key: 'why',
+    label: 'Why',
+    question: 'Why invest before an IPO?',
+    answer: (
+      <p>Investing before an IPO can provide access to companies at earlier growth stages, often at lower valuations than the eventual public offering price. However, it carries higher illiquidity risk, longer holding periods, and less regulatory oversight. Investors should assess their risk tolerance and investment horizon carefully.</p>
+    ),
+  },
+  {
+    key: 'how',
+    label: 'How',
+    question: 'How does a purchase actually work?',
+    answer: (
+      <div>
+        <p>It is a simple three-step process:</p>
+        <ul>
+          <li>Browse the price list, shortlist companies, and tap Enquire on any listing.</li>
+          <li>Our team responds personally on WhatsApp or email within one business day with current availability, lot size, and next steps.</li>
+          <li>Once terms are agreed, shares are transferred via demat-to-demat transfer with full documentation.</li>
+        </ul>
+      </div>
+    ),
+  },
+  {
+    key: 'legal',
+    label: 'Legal',
+    question: 'Is this SEBI-regulated?',
+    answer: (
+      <div>
+        <p>Taurus Magnus is an information platform for unlisted and pre-IPO shares — not a stock exchange, broker, or investment adviser. We do not execute trades, hold client funds, or offer regulated investment services. All transactions are private, bilateral arrangements between buyers and sellers. Investors should seek independent financial and legal advice before transacting.</p>
+        <p><strong>Capital gains tax at a glance:</strong></p>
+        <ul>
+          <li><strong>Short-Term Capital Gains:</strong> Shares held for 36 months or less are taxed at your applicable income tax slab rate.</li>
+          <li><strong>Long-Term Capital Gains:</strong> Shares held for more than 36 months are taxed at 20% with the benefit of indexation (cost inflation index) to adjust the purchase cost for inflation.</li>
+        </ul>
+      </div>
+    ),
+  },
+]
 
 const Home = () => {
   const [companies, setCompanies] = useState([])
@@ -16,6 +74,9 @@ const Home = () => {
   const [search, setSearch] = useState('')
   const [sector, setSector] = useState('All')
   const [faqOpen, setFaqOpen] = useState(-1)
+  const [pmOpen, setPmOpen] = useState(null)
+  const [drhpCompanies, setDrhpCompanies] = useState([])
+  const [events, setEvents] = useState([])
 
   useEffect(() => {
     let cancelled = false
@@ -30,6 +91,29 @@ const Home = () => {
         if (!cancelled) setCompanies([])
       } finally {
         if (!cancelled) setLoading(false)
+      }
+    }
+    load()
+    return () => { cancelled = true }
+  }, [])
+
+  useEffect(() => {
+    let cancelled = false
+    const load = async () => {
+      try {
+        const [drhpRes, eventsRes] = await Promise.all([
+          api.get('/companies/drhp-filed'),
+          api.get('/events')
+        ])
+        if (!cancelled) {
+          setDrhpCompanies(drhpRes.data || [])
+          setEvents(eventsRes.data || [])
+        }
+      } catch {
+        if (!cancelled) {
+          setDrhpCompanies([])
+          setEvents([])
+        }
       }
     }
     load()
@@ -52,6 +136,10 @@ const Home = () => {
 
   const toggleFaq = (index) => {
     setFaqOpen(prev => prev === index ? -1 : index)
+  }
+
+  const togglePm = (key) => {
+    setPmOpen(prev => (prev === key ? null : key))
   }
 
   return (
@@ -277,6 +365,45 @@ const Home = () => {
           </div>
         </section>
 
+        <section className="home-pm-section" aria-labelledby="pm-heading">
+          <div className="home-section-header">
+            <h2 id="pm-heading" className="home-section-title">Let's talk about private markets</h2>
+          </div>
+          <div className="home-pm-grid">
+            {PM_CARDS.map((card) => {
+              const isOpen = pmOpen === card.key
+              return (
+                <article
+                  key={card.key}
+                  className={`home-pm-card${isOpen ? ' is-open' : ''}`}
+                >
+                  <button
+                    type="button"
+                    className="home-pm-card-btn"
+                    onClick={() => togglePm(card.key)}
+                    aria-expanded={isOpen}
+                    aria-controls={`pm-answer-${card.key}`}
+                  >
+                    <span className="home-pm-label">{card.label}</span>
+                    <span className="home-pm-icon" aria-hidden="true">
+                      {isOpen ? '✕' : '+'}
+                    </span>
+                  </button>
+                  <div
+                    id={`pm-answer-${card.key}`}
+                    className="home-pm-answer"
+                    role="region"
+                    aria-hidden={!isOpen}
+                  >
+                    <h3 className="home-pm-question">{card.question}</h3>
+                    <div className="home-pm-answer-body">{card.answer}</div>
+                  </div>
+                </article>
+              )
+            })}
+          </div>
+        </section>
+
         <section className="home-trust-section" aria-labelledby="trust-heading">
           <h2 id="trust-heading" className="home-section-title">Research you can rely on</h2>
           <div className="home-trust-grid">
@@ -323,6 +450,62 @@ const Home = () => {
             </article>
           </div>
         </section>
+
+        <section className="home-drhp-section" aria-labelledby="drhp-heading">
+          <div className="home-section-header">
+            <h2 id="drhp-heading" className="home-section-title">DRHP Filed</h2>
+            <Link to="/drhp-filed" className="home-marquee-cta">View all →</Link>
+          </div>
+          <div className="home-drhp-grid">
+            {drhpCompanies.length === 0 ? (
+              <div className="chart-empty">No companies have filed a DRHP yet.</div>
+            ) : (
+              drhpCompanies.slice(0, 4).map((c) => (
+                <Link to={`/company/${c._id}`} key={c._id} className="home-drhp-card">
+                  <div className="home-drhp-card-head">
+                    <h3 className="home-drhp-card-name">{c.name}</h3>
+                    {c.drhpFiled && <span className="drhp-badge">DRHP</span>}
+                  </div>
+                  <p className="home-drhp-card-sector">{c.sector || '—'}</p>
+                  <div className="home-drhp-card-foot">
+                    <span className="home-drhp-card-price">
+                      {c.latestPrice != null ? formatINR(c.latestPrice) : '—'}
+                    </span>
+                  </div>
+                </Link>
+              ))
+            )}
+          </div>
+        </section>
+
+        <section className="home-events-section" aria-labelledby="events-heading">
+          <div className="home-section-header">
+            <h2 id="events-heading" className="home-section-title">Events</h2>
+            <Link to="/events" className="home-marquee-cta">View all →</Link>
+          </div>
+          {events.length === 0 ? (
+            <div className="chart-empty">No events have been published yet.</div>
+          ) : (
+            <div className="home-events-list">
+              {events.slice(0, 5).map((ev) => (
+                <div className="home-event-card" key={ev._id}>
+                  <div className="home-event-card-head">
+                    <span className={`event-tag ${eventTypeClass(ev.eventType)}`}>{ev.eventType}</span>
+                    <span className="event-date">{formatShortDate(ev.eventDate)}</span>
+                  </div>
+                  <h3 className="home-event-title">{ev.title}</h3>
+                  {ev.description && <p className="home-event-desc">{ev.description}</p>}
+                  {ev.company && (
+                    <p className="home-event-company">
+                      Company: <Link to={`/company/${ev.company._id}`}>{ev.company.name}</Link>
+                    </p>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+
       </main>
       <Footer />
     </div>

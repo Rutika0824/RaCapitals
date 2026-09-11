@@ -116,7 +116,10 @@ const Catalog = () => {
                     <tr key={c._id} className="catalog-row" onClick={() => navigate(`/company/${c._id}`)}>
                       <td>
                         <div className="company-cell">
-                          <span className="company-name">{c.name}</span>
+                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                            <span className="company-name">{c.name}</span>
+                            {c.drhpFiled && <span className="drhp-badge">DRHP Filed</span>}
+                          </div>
                           {c.sector && <span className="sector-badge">{c.sector}</span>}
                         </div>
                       </td>
@@ -143,7 +146,10 @@ const Catalog = () => {
                   onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); navigate(`/company/${c._id}`) } }}
                 >
                   <header className="catalog-card-head">
-                    <h3 className="catalog-card-name">{c.name}</h3>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
+                      <h3 className="catalog-card-name">{c.name}</h3>
+                      {c.drhpFiled && <span className="drhp-badge">DRHP Filed</span>}
+                    </div>
                     {c.sector && <span className="sector-badge">{c.sector}</span>}
                   </header>
                   <dl className="catalog-card-kv">

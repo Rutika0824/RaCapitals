@@ -12,6 +12,7 @@ const EMPTY_FORM = {
   lotSize: '',
   faceValue: '',
   isin: '',
+  drhpFiled: false,
 }
 
 const SECTORS = ['Fintech', 'Energy', 'Logistics', 'Consumer', 'Healthcare']
@@ -76,6 +77,7 @@ const AdminListings = () => {
       lotSize: company.lotSize ?? '',
       faceValue: company.faceValue ?? '',
       isin: company.isin || '',
+      drhpFiled: Boolean(company.drhpFiled),
     })
     setFormError('')
     setFieldErrors({})
@@ -109,6 +111,7 @@ const AdminListings = () => {
         lotSize: form.lotSize === '' ? undefined : Number(form.lotSize),
         faceValue: form.faceValue === '' ? undefined : Number(form.faceValue),
         isin: form.isin.trim(),
+        drhpFiled: Boolean(form.drhpFiled),
       }
       if (editing) {
         await api.put(`/companies/${editing._id}`, payload)
@@ -322,6 +325,9 @@ const AdminListings = () => {
                       <span className={`status-badge ${c.isActive ? 'status-live' : 'status-off'}`}>
                         {c.isActive ? 'Live' : 'Deactivated'}
                       </span>
+                      {c.drhpFiled && (
+                        <span className="drhp-badge">DRHP</span>
+                      )}
                     </td>
                     <td>{renderActionsForCard(c)}</td>
                   </tr>
@@ -416,12 +422,20 @@ const AdminListings = () => {
                 </label>
               </div>
               <label className="form-label">
-                <InfoTooltip text="International Securities Identification Number — a unique code for the share. Leave blank if not yet assigned.">
-                  ISIN (optional)
-                </InfoTooltip>
-                <input type="text" value={form.isin} onChange={(e) => setForm({ ...form, isin: e.target.value })} className="form-input" />
-              </label>
-              {formError && <p className="form-error">{formError}</p>}
+<InfoTooltip text="International Securities Identification Number — a unique code for the share. Leave blank if not yet assigned.">
+                   ISIN (optional)
+                 </InfoTooltip>
+                 <input type="text" value={form.isin} onChange={(e) => setForm({ ...form, isin: e.target.value })} className="form-input" />
+               </label>
+               <label className="form-label" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                 <input
+                   type="checkbox"
+                   checked={form.drhpFiled}
+                    onChange={(e) => setForm({ ...form, drhpFiled: e.target.checked })}
+                 />
+                 <span>DRHP Filed</span>
+               </label>
+                {formError && <p className="form-error">{formError}</p>}
               <div className="modal-actions">
                 <button type="button" className="secondary-btn" onClick={closeForm}>Cancel</button>
                 <button type="submit" className="primary-btn">{editing ? 'Save Changes' : 'Create Listing'}</button>
