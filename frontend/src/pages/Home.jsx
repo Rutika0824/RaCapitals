@@ -5,6 +5,7 @@ import ComplianceRibbon from '../components/common/ComplianceRibbon'
 import EnquireButton from '../components/common/EnquireButton'
 import Footer from '../components/common/Footer'
 import Navbar from '../components/common/Navbar'
+import useDiamondRoll from '../hooks/useDiamondRoll'
 import { formatINR, formatShortDate } from '../utils/format'
 
 const PREVIEW_LIMIT = 12
@@ -232,6 +233,8 @@ const Home = () => {
   }, [companies, sector, search])
 
   const [ffHover, setFfHover] = useState(null)
+  const ffArenaRef = useRef(null)
+  useDiamondRoll(ffArenaRef)
 
   const toggleFaq = (index) => {
     setFaqOpen(prev => prev === index ? -1 : index)
@@ -441,7 +444,7 @@ const Home = () => {
           </div>
 
           {/* Diamond arrangement */}
-          <div className="ff-arena" role="list">
+          <div className="ff-arena" role="list" ref={ffArenaRef}>
             {PM_CARDS.map((card) => {
               const isActive = pmOpen === card.key
               const isDimmed = pmOpen !== null && !isActive

@@ -1508,29 +1508,31 @@ a:hover {
   margin: 0 auto;
 }
 
-/* The arena is a square-ish container that holds the 4 diamonds
-   via absolute positioning. We use a fixed height so the
-   diamonds can be placed precisely. Reserve extra height so
-   the expanded diamond doesn't cause layout jump. */
+/* The arena holds the 4 diamonds in a single horizontal row
+   with equal spacing. A fixed height reserves room so the
+   expanded diamond doesn't cause a layout jump. */
 .ff-arena {
   position: relative;
   width: 100%;
-  max-width: 680px;
-  height: 640px;
+  max-width: 1180px;
+  height: 520px;
   margin: 0 auto 0 auto;
 }
 
 /* Each diamond is a rotated square button */
 .ff-diamond {
   position: absolute;
-  width: 240px;
-  height: 240px;
+  top: 50px;
+  left: 0;
+  width: min(240px, 24vw);
+  height: min(240px, 24vw);
   background: #dbe4fd;
   border: 1px solid #c3cef9;
   border-radius: 8px;
   cursor: pointer;
-  transform: rotate(45deg);
-  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.38s ease, height 0.38s ease, opacity 0.35s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease, top 0.38s ease, left 0.38s ease, right 0.38s ease, bottom 0.38s ease;
+  transform: translateX(-50%) rotate(45deg);
+  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.38s ease, height 0.38s ease, opacity 0.35s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1547,18 +1549,12 @@ a:hover {
   outline-offset: 4px;
 }
 
-/* Diamond positions — plus/diamond formation with ~25px gaps
-   Arena: max-width 660px, height 560px
-   Diamond size: 200px. Gap between edges ~25px.
-   what:  top=0, centered
-   how:   top=185px, left=0
-   why:   top=185px, right=0
-   legal: bottom=0, centered
-*/
-.ff-diamond--what  { top: 0;     left: 50%; transform: translateX(-50%) rotate(45deg); }
-.ff-diamond--how   { top: 185px; left: 0; }
-.ff-diamond--why   { top: 185px; right: 0; }
-.ff-diamond--legal { bottom: 0;  left: 50%; transform: translateX(-50%) rotate(45deg); }
+/* Horizontal row — 4 cards equally spaced, left to right:
+   What, Why, How, Legal */
+.ff-diamond--what  { left: 15%; }
+.ff-diamond--how   { left: 62%; }
+.ff-diamond--why   { left: 38%; }
+.ff-diamond--legal { left: 85%; }
 
 /* Inner content is counter-rotated so text is upright */
 .ff-diamond-inner {
@@ -1627,7 +1623,7 @@ a:hover {
 .ff-diamond--how.ff-diamond--hovered,
 .ff-diamond--why:hover,
 .ff-diamond--why.ff-diamond--hovered {
-  transform: rotate(45deg) scale(1.05);
+  transform: translateX(-50%) rotate(45deg) scale(1.05);
 }
 
 /* Active (clicked/expanded) state — diamond grows in place, un-rotates */
@@ -1635,8 +1631,8 @@ a:hover {
   background: #ffffff;
   border-color: #2563eb;
   box-shadow: 0 20px 48px rgba(37, 99, 235, 0.22);
-  width: 340px;
-  height: 340px;
+  width: min(340px, 36vw);
+  height: min(340px, 36vw);
   z-index: 10;
   cursor: default;
 }
@@ -1644,8 +1640,8 @@ a:hover {
 /* Un-rotate the active diamond so it's a normal rectangle */
 .ff-diamond--what.ff-diamond--active  { transform: translateX(-50%) rotate(0deg); }
 .ff-diamond--legal.ff-diamond--active { transform: translateX(-50%) rotate(0deg); }
-.ff-diamond--how.ff-diamond--active   { transform: rotate(0deg); }
-.ff-diamond--why.ff-diamond--active   { transform: rotate(0deg); }
+.ff-diamond--how.ff-diamond--active   { transform: translateX(-50%) rotate(0deg); }
+.ff-diamond--why.ff-diamond--active   { transform: translateX(-50%) rotate(0deg); }
 
 /* Un-rotate the inner content when active */
 .ff-diamond--active .ff-diamond-inner {
