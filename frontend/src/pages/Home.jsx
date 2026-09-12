@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../services/api'
 import ComplianceRibbon from '../components/common/ComplianceRibbon'
@@ -67,6 +67,103 @@ const PM_CARDS = [
     ),
   },
 ]
+
+const TRUST_CARDS = [
+  {
+    id: 'research',
+    title: 'Research-driven',
+    desc: 'Every listing is backed by documented due diligence and direct verification with company management.',
+    icon: (
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+        <polyline points="9 12 11 14 15 10" />
+      </svg>
+    ),
+  },
+  {
+    id: 'security',
+    title: 'Bank-level security',
+    desc: 'Data encrypted in transit and at rest. Demat-to-demat transfers with full audit trails.',
+    icon: (
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <rect x="3" y="11" width="18" height="11" rx="2" />
+        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+      </svg>
+    ),
+  },
+  {
+    id: 'ticket',
+    title: 'Low ticket size',
+    desc: 'Accessible lot sizes let you build a diversified pre-IPO portfolio without outsized capital.',
+    icon: (
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <line x1="12" y1="1" x2="12" y2="23" />
+        <path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6" />
+      </svg>
+    ),
+  },
+  {
+    id: 'personal',
+    title: 'Personal follow-up',
+    desc: 'Every enquiry is handled by a person on our team — no ticket queues, no auto-replies.',
+    icon: (
+      <svg viewBox="0 0 24 24" width="26" height="26" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+        <circle cx="9" cy="7" r="4" />
+        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+      </svg>
+    ),
+  },
+]
+
+const TrustCard = ({ card, index }) => {
+  return (
+    <article
+      className="hts-card"
+      style={{ animationDelay: `${index * 120}ms` }}
+    >
+      <div className="hts-card-shimmer" aria-hidden="true" />
+      <div className="hts-icon" aria-hidden="true">{card.icon}</div>
+      <h3 className="hts-title">{card.title}</h3>
+      <p className="hts-desc">{card.desc}</p>
+      <div className="hts-card-line" aria-hidden="true" />
+    </article>
+  )
+}
+
+const TrustSection = () => {
+  const [visible, setVisible] = useState(false)
+  const ref = useRef(null)
+  useEffect(() => {
+    const el = ref.current
+    if (!el) return
+    const obs = new IntersectionObserver(
+      ([entry]) => { if (entry.isIntersecting) { setVisible(true); obs.disconnect() } },
+      { threshold: 0.15 }
+    )
+    obs.observe(el)
+    return () => obs.disconnect()
+  }, [])
+  return (
+    <section
+      ref={ref}
+      className={`hts-section${visible ? ' hts-section--visible' : ''}`}
+      aria-labelledby="trust-heading"
+    >
+      <div className="hts-header">
+        <p className="home-eyebrow">Why trust us</p>
+        <h2 id="trust-heading" className="home-section-title">Research you can rely on</h2>
+        <p className="hts-sub">Five years of offline deal-making, now transparent and online.</p>
+      </div>
+      <div className="hts-grid">
+        {TRUST_CARDS.map((card, i) => (
+          <TrustCard key={card.id} card={card} index={i} />
+        ))}
+      </div>
+    </section>
+  )
+}
 
 const Home = () => {
   const [companies, setCompanies] = useState([])
@@ -292,78 +389,41 @@ const Home = () => {
         </section>
 
         <section className="home-faq-section" aria-labelledby="faq-heading">
-          <div className="home-section-header">
+          <div className="home-faq-header">
+            <p className="home-eyebrow">Need to know</p>
             <h2 id="faq-heading" className="home-section-title">Frequently Asked Questions</h2>
           </div>
           <div className="home-faq-grid">
-            <article className="home-faq-card">
-              <button
-                type="button"
-                className="home-faq-question"
-                onClick={() => toggleFaq(0)}
-                aria-expanded={faqOpen === 0}
-                aria-controls="faq-answer-0"
+            {[
+              { q: 'What are unlisted shares?', a: 'Unlisted shares are equity shares of a company that are not listed on a recognised stock exchange (such as NSE or BSE). They are typically held by promoters, early investors, employees, or private equity funds. Transactions occur privately, often through intermediaries, and prices are negotiated rather than discovered on a public order book.' },
+              { q: "Why buy before a company's IPO?", a: 'Investing before an IPO can provide access to companies at earlier growth stages, often at lower valuations than the eventual public offering price. However, it carries higher illiquidity risk, longer holding periods, and less regulatory oversight. Investors should assess their risk tolerance and investment horizon carefully.' },
+              { q: 'How does a purchase actually work?', a: 'Browse the price list, shortlist companies, and tap Enquire on any listing. Our team responds personally on WhatsApp or email within one business day with current availability, lot size, and next steps. Once terms are agreed, shares are transferred via demat-to-demat transfer with full documentation.' },
+              { q: 'Is this SEBI-regulated?', a: 'Taurus Magnus is an information platform for unlisted and pre-IPO shares — not a stock exchange, broker, or investment adviser. We do not execute trades, hold client funds, or offer regulated investment services. All transactions are private, bilateral arrangements between buyers and sellers. Investors should seek independent financial and legal advice before transacting.' },
+            ].map((item, i) => (
+              <article
+                key={i}
+                className={`home-faq-card${faqOpen === i ? ' home-faq-card--open' : ''}`}
               >
-                <span>What are unlisted shares?</span>
-                <span className="home-faq-icon" aria-hidden="true">
-                  {faqOpen === 0 ? '−' : '+'}
-                </span>
-              </button>
-              <div id="faq-answer-0" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 0}>
-                <p>Unlisted shares are equity shares of a company that are not listed on a recognised stock exchange (such as NSE or BSE). They are typically held by promoters, early investors, employees, or private equity funds. Transactions occur privately, often through intermediaries, and prices are negotiated rather than discovered on a public order book.</p>
-              </div>
-            </article>
-            <article className="home-faq-card">
-              <button
-                type="button"
-                className="home-faq-question"
-                onClick={() => toggleFaq(1)}
-                aria-expanded={faqOpen === 1}
-                aria-controls="faq-answer-1"
-              >
-                <span>Why buy before a company's IPO?</span>
-                <span className="home-faq-icon" aria-hidden="true">
-                  {faqOpen === 1 ? '−' : '+'}
-                </span>
-              </button>
-              <div id="faq-answer-1" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 1}>
-                <p>Investing before an IPO can provide access to companies at earlier growth stages, often at lower valuations than the eventual public offering price. However, it carries higher illiquidity risk, longer holding periods, and less regulatory oversight. Investors should assess their risk tolerance and investment horizon carefully.</p>
-              </div>
-            </article>
-            <article className="home-faq-card">
-              <button
-                type="button"
-                className="home-faq-question"
-                onClick={() => toggleFaq(2)}
-                aria-expanded={faqOpen === 2}
-                aria-controls="faq-answer-2"
-              >
-                <span>How does a purchase actually work?</span>
-                <span className="home-faq-icon" aria-hidden="true">
-                  {faqOpen === 2 ? '−' : '+'}
-                </span>
-              </button>
-              <div id="faq-answer-2" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 2}>
-                <p>Browse the price list, shortlist companies, and tap Enquire on any listing. Our team responds personally on WhatsApp or email within one business day with current availability, lot size, and next steps. Once terms are agreed, shares are transferred via demat-to-demat transfer with full documentation.</p>
-              </div>
-            </article>
-            <article className="home-faq-card">
-              <button
-                type="button"
-                className="home-faq-question"
-                onClick={() => toggleFaq(3)}
-                aria-expanded={faqOpen === 3}
-                aria-controls="faq-answer-3"
-              >
-                <span>Is this SEBI-regulated?</span>
-                <span className="home-faq-icon" aria-hidden="true">
-                  {faqOpen === 3 ? '−' : '+'}
-                </span>
-              </button>
-              <div id="faq-answer-3" className="home-faq-answer" role="region" aria-hidden={faqOpen !== 3}>
-                <p>Taurus Magnus is an information platform for unlisted and pre-IPO shares — not a stock exchange, broker, or investment adviser. We do not execute trades, hold client funds, or offer regulated investment services. All transactions are private, bilateral arrangements between buyers and sellers. Investors should seek independent financial and legal advice before transacting.</p>
-              </div>
-            </article>
+                <button
+                  type="button"
+                  className="home-faq-question"
+                  onClick={() => toggleFaq(i)}
+                  aria-expanded={faqOpen === i}
+                  aria-controls={`faq-answer-${i}`}
+                >
+                  <span className="home-faq-num" aria-hidden="true">{String(i + 1).padStart(2, '0')}</span>
+                  <span className="home-faq-q-text">{item.q}</span>
+                  <span className="home-faq-chevron" aria-hidden="true">
+                    <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path d="M4.5 6.75L9 11.25L13.5 6.75" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </span>
+                </button>
+                <div id={`faq-answer-${i}`} className="home-faq-answer" role="region" aria-hidden={faqOpen !== i}>
+                  <p>{item.a}</p>
+                </div>
+              </article>
+            ))}
           </div>
         </section>
 
@@ -453,52 +513,7 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="home-trust-section" aria-labelledby="trust-heading">
-          <h2 id="trust-heading" className="home-section-title">Research you can rely on</h2>
-          <div className="home-trust-grid">
-            <article className="home-trust-card">
-              <div className="home-trust-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-                </svg>
-              </div>
-              <h3 className="home-trust-title">Research-driven</h3>
-              <p className="home-trust-desc">Every listing is backed by documented due diligence and direct verification with company management.</p>
-            </article>
-            <article className="home-trust-card">
-              <div className="home-trust-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-                  <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-                </svg>
-              </div>
-              <h3 className="home-trust-title">Bank-level security</h3>
-              <p className="home-trust-desc">Data encrypted in transit and at rest. Demat-to-demat transfers with full audit trails.</p>
-            </article>
-            <article className="home-trust-card">
-              <div className="home-trust-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <circle cx="12" cy="12" r="10" />
-                  <path d="M12 6v6l4 2" />
-                </svg>
-              </div>
-              <h3 className="home-trust-title">Low ticket size</h3>
-              <p className="home-trust-desc">Accessible lot sizes let you build a diversified pre-IPO portfolio without outsized capital.</p>
-            </article>
-            <article className="home-trust-card">
-              <div className="home-trust-icon" aria-hidden="true">
-                <svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-                  <circle cx="9" cy="7" r="4" />
-                  <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-                  <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                </svg>
-              </div>
-              <h3 className="home-trust-title">Personal follow-up</h3>
-              <p className="home-trust-desc">Every enquiry is handled by a person on our team — no ticket queues, no auto-replies.</p>
-            </article>
-          </div>
-        </section>
+        <TrustSection />
 
         <section className="home-drhp-section" aria-labelledby="drhp-heading">
           <div className="home-section-header">
