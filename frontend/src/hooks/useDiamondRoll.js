@@ -1,82 +1,143 @@
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
   window.matchMedia('(prefers-reduced-motion: reduce)').matches
 
-const easeOutCubic = (t) => 1 - Math.pow(1 - t, 3)
+const clamp = (v, min, max) => Math.max(min, Math.min(max, v))
 
 export default function useDiamondRoll(arenaRef) {
+  const mediaQueryListener = useRef(null)
+
   useEffect(() => {
     const arena = arenaRef.current
-    if (!arena || prefersReducedMotion()) return
+    if (!arena) return
+    let diamonds = []
 
-    const diamonds = Array.from(arena.querySelectorAll('.ff-diamond'))
-    const n = diamonds.length
-    if (n === 0) return
+    const apply = () => {
+      if (prefersReducedMotion()) {
+        reset()
+        return
+      }
+      diamonds = Array.from(arena.querySelectorAll('.ff-diamond'))
+      if (diamonds.length === 0) return
+      run()
+    }
 
-    const STAGGER = 0.12
     const MARGIN = 100
-    const RANGE = 480
-    const TRAVEL = -90
+    const RANGE = 1400
     const TURN = 360
 
-    const reset = () =>
-      diamonds.forEach((d) => {
-        d.style.removeProperty('transform')
-        d.style.removeProperty('transition')
-      })
+    const getTravel = (diamond) => {
+      const r = diamond.getBoundingClientRect()
+      return Math.min(60, (r.right - r.left) * 0.4)
+    }
 
-    const update = () => {
+    const reset = () => {
+      if (!diamonds.length) return
+      diamonds.forEach((d) => {
+        d.style.removeProperty('--ff-roll-r')
+        d.style.removeProperty('--ff-roll-x')
+        d.style.removeProperty('transition')
+        const inner = d.querySelector('.ff-diamond-inner')
+        if (inner) {
+          inner.style.removeProperty('transform')
+          inner.style.removeProperty('transition')
+        }
+      })
+    }
+
+    let scheduled = false
+    const run = () => {
       const rect = arena.getBoundingClientRect()
       if (rect.height === 0 || rect.width === 0) {
         reset()
         return
       }
       const vh = window.innerHeight
-      let p = (vh - rect.top + MARGIN) / (rect.height + RANGE)
-      p = Math.max(0, Math.min(1, p))
+      let p = (vh + MARGIN - rect.top) / RANGE
+      p = clamp(p, 0, 1)
+
       if (p === 0) {
         reset()
         return
       }
 
-      diamonds.forEach((diamond, i) => {
-        const start = i * STAGGER
-        const end = 1 - (n - 1 - i) * STAGGER
-        let local = (p - start) / (end - start)
-        local = Math.max(0, Math.min(1, local))
-        const eased = easeOutCubic(local)
-        const inv = 1 - eased
-        const tx = inv * TRAVEL
-        const rot = inv * -TURN
-        if (tx === 0 && rot === 0) {
-          diamond.style.removeProperty('transform')
-          diamond.style.removeProperty('transition')
-        } else {
-          diamond.style.transition = 'none'
-          diamond.style.transform = `translateX(calc(-50% + ${tx}px)) rotate(${45 + rot}deg)`
+      const rot = p * TURN
+      const travelX = Math.min(60, 40 * p)
+
+      diamonds.forEach((d, i) => {
+        if (d.classList.contains('ff-diamond--active')) {
+          d.style.removeProperty('--ff-roll-r')
+          d.style.removeProperty('--ff-roll-x')
+          d.style.removeProperty('transition')
+          const inner = d.querySelector('.ff-diamond-inner')
+          if (inner) {
+            inner.style.removeProperty('transform')
+            inner.style.removeProperty('transition')
+          }
+          return
+        }
+
+        if (p === 0) {
+          d.style.removeProperty('--ff-roll-r')
+          d.style.removeProperty('--ff-roll-x')
+          d.style.removeProperty('transition')
+          const inner = d.querySelector('.ff-diamond-inner')
+          if (inner) {
+            inner.style.removeProperty('transform')
+            inner.style.removeProperty('transition')
+          }
+          return
+        }
+
+        const travel = getTravel(d)
+        const tx = travel * Math.sin(p * Math.PI)
+
+        d.style.transition = 'none'
+        d.style.setProperty('--ff-roll-r', `${rot}deg`)
+        d.style.setProperty('--ff-roll-x', `${tx}px`)
+
+        const inner = d.querySelector('.ff-diamond-inner')
+        if (inner) {
+          inner.style.transition = 'none'
+          inner.style.transform = `rotate(${-45 - rot}deg)`
         }
       })
     }
 
-    let scheduled = false
     const onScroll = () => {
       if (scheduled) return
       scheduled = true
       requestAnimationFrame(() => {
-        update()
+        run()
         scheduled = false
       })
     }
 
+    const onChange = (e) => {
+      if (e.matches) {
+        reset()
+      } else {
+        run()
+      }
+    }
+
+    apply()
+
+    mediaQueryListener.current =
+      window.matchMedia('(prefers-reduced-motion: reduce)')
+    mediaQueryListener.current.addEventListener('change', onChange)
+
     window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('resize', onScroll)
-    update()
 
     return () => {
       window.removeEventListener('scroll', onScroll)
       window.removeEventListener('resize', onScroll)
+      if (mediaQueryListener.current) {
+        mediaQueryListener.current.removeEventListener('change', onChange)
+      }
       reset()
     }
   }, [arenaRef])

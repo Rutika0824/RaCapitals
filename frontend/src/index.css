@@ -1515,29 +1515,33 @@ a:hover {
   position: relative;
   width: 100%;
   max-width: 1180px;
-  height: 520px;
+  height: 350px;
   margin: 0 auto 0 auto;
+  transform: none;
 }
 
-/* Each diamond is a rotated square button */
+/* Each diamond is a rotated square button.
+   Base transform uses CSS custom properties driven by useDiamondRoll:
+   --ff-roll-r = extra clockwise rotation (deg)
+   --ff-roll-x = horizontal travel offset (px)
+   When the roll hook is idle these stay at 0deg / 0px. */
 .ff-diamond {
   position: absolute;
   top: 50px;
   left: 0;
-  width: min(240px, 24vw);
-  height: min(240px, 24vw);
+  width: min(240px, 20vw);
+  height: min(240px, 20vw);
   background: #dbe4fd;
   border: 1px solid #c3cef9;
   border-radius: 8px;
   cursor: pointer;
-  transform: translateX(-50%) rotate(45deg);
+  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg)));
   transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.38s ease, height 0.38s ease, opacity 0.35s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   will-change: transform;
   display: flex;
   align-items: center;
   justify-content: center;
   box-shadow: 0 20px 40px rgba(37, 99, 235, 0.14);
-  /* Remove default button styles */
   font-family: inherit;
   padding: 0;
   outline: none;
@@ -1551,12 +1555,13 @@ a:hover {
 
 /* Horizontal row — 4 cards equally spaced, left to right:
    What, Why, How, Legal */
-.ff-diamond--what  { left: 15%; }
-.ff-diamond--how   { left: 62%; }
-.ff-diamond--why   { left: 38%; }
+.ff-diamond--what  { left: 10%; }
+.ff-diamond--how   { left: 60%; }
+.ff-diamond--why   { left: 35%; }
 .ff-diamond--legal { left: 85%; }
 
-/* Inner content is counter-rotated so text is upright */
+/* Inner content is counter-rotated so text is upright.
+   Base is -45deg to offset the diamond's 45deg rotation. */
 .ff-diamond-inner {
   transform: rotate(-45deg);
   display: flex;
@@ -1570,11 +1575,6 @@ a:hover {
   width: 100%;
   padding: 0 1rem;
   box-sizing: border-box;
-}
-
-.ff-diamond--how .ff-diamond-inner,
-.ff-diamond--why .ff-diamond-inner {
-  transform: rotate(-45deg);
 }
 
 .ff-diamond-label {
@@ -1613,17 +1613,17 @@ a:hover {
 
 .ff-diamond--what:hover,
 .ff-diamond--what.ff-diamond--hovered {
-  transform: translateX(-50%) rotate(45deg) scale(1.05);
+  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg))) scale(1.05);
 }
 .ff-diamond--legal:hover,
 .ff-diamond--legal.ff-diamond--hovered {
-  transform: translateX(-50%) rotate(45deg) scale(1.05);
+  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg))) scale(1.05);
 }
 .ff-diamond--how:hover,
 .ff-diamond--how.ff-diamond--hovered,
 .ff-diamond--why:hover,
 .ff-diamond--why.ff-diamond--hovered {
-  transform: translateX(-50%) rotate(45deg) scale(1.05);
+  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg))) scale(1.05);
 }
 
 /* Active (clicked/expanded) state — diamond grows in place, un-rotates */
@@ -1631,21 +1631,27 @@ a:hover {
   background: #ffffff;
   border-color: #2563eb;
   box-shadow: 0 20px 48px rgba(37, 99, 235, 0.22);
-  width: min(340px, 36vw);
-  height: min(340px, 36vw);
+  width: min(340px, 30vw);
+  height: min(340px, 30vw);
   z-index: 10;
   cursor: default;
 }
 
 /* Un-rotate the active diamond so it's a normal rectangle */
-.ff-diamond--what.ff-diamond--active  { transform: translateX(-50%) rotate(0deg); }
-.ff-diamond--legal.ff-diamond--active { transform: translateX(-50%) rotate(0deg); }
-.ff-diamond--how.ff-diamond--active   { transform: translateX(-50%) rotate(0deg); }
-.ff-diamond--why.ff-diamond--active   { transform: translateX(-50%) rotate(0deg); }
+.ff-diamond--what.ff-diamond--active  { transform: translateX(-50%) rotate(0deg) !important; }
+.ff-diamond--legal.ff-diamond--active { transform: translateX(-50%) rotate(0deg) !important; }
+.ff-diamond--how.ff-diamond--active   { transform: translateX(-50%) rotate(0deg) !important; }
+.ff-diamond--why.ff-diamond--active   { transform: translateX(-50%) rotate(0deg) !important; }
+
+/* Clear roll offsets on active card */
+.ff-diamond--active {
+  --ff-roll-r: 0deg;
+  --ff-roll-x: 0px;
+}
 
 /* Un-rotate the inner content when active */
 .ff-diamond--active .ff-diamond-inner {
-  transform: rotate(0deg);
+  transform: rotate(0deg) !important;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 0;
