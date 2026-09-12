@@ -134,6 +134,8 @@ const Home = () => {
       .slice(0, PREVIEW_LIMIT)
   }, [companies, sector, search])
 
+  const [ffHover, setFfHover] = useState(null)
+
   const toggleFaq = (index) => {
     setFaqOpen(prev => prev === index ? -1 : index)
   }
@@ -365,40 +367,87 @@ const Home = () => {
           </div>
         </section>
 
-        <section className="home-pm-section" aria-labelledby="pm-heading">
+        <section
+          className="ff-section"
+          aria-labelledby="ff-heading"
+          onClick={(e) => {
+            if (e.target === e.currentTarget || e.target.closest('.ff-section') === e.currentTarget && !e.target.closest('.ff-diamond') && !e.target.closest('.ff-expanded-panel')) {
+              setPmOpen(null)
+            }
+          }}
+        >
           <div className="home-section-header">
-            <h2 id="pm-heading" className="home-section-title">Let's talk about private markets</h2>
+            <h2 id="ff-heading" className="home-section-title">Let's talk about private markets</h2>
           </div>
-          <div className="home-pm-grid">
+
+          {/* Diamond arrangement */}
+          <div className="ff-arena" role="list">
+            {PM_CARDS.map((card) => {
+              const isActive = pmOpen === card.key
+              const isDimmed = pmOpen !== null && !isActive
+              const isHovered = ffHover === card.key && pmOpen === null
+              return (
+                <button
+                  key={card.key}
+                  type="button"
+                  role="listitem"
+                  className={[
+                    'ff-diamond',
+                    `ff-diamond--${card.key}`,
+                    isActive ? 'ff-diamond--active' : '',
+                    isDimmed ? 'ff-diamond--dimmed' : '',
+                    isHovered ? 'ff-diamond--hovered' : '',
+                  ].filter(Boolean).join(' ')}
+                  onClick={(e) => { e.stopPropagation(); setPmOpen(prev => prev === card.key ? null : card.key) }}
+                  onMouseEnter={() => !isActive && setFfHover(card.key)}
+                  onMouseLeave={() => setFfHover(null)}
+                  aria-expanded={isActive}
+                  aria-label={card.label}
+                >
+                  <span className="ff-diamond-inner">
+                    {isActive ? (
+                      <>
+                        <span className="ff-diamond-label-row">
+                          <span className="ff-diamond-label">{card.label}</span>
+                          <span className="ff-diamond-icon" aria-hidden="true">✕</span>
+                        </span>
+                        <span className="ff-diamond-expanded-content">
+                          <span className="ff-diamond-exp-question">{card.question}</span>
+                          <span className="ff-diamond-exp-body">{card.answer}</span>
+                        </span>
+                      </>
+                    ) : (
+                      <>
+                        <span className="ff-diamond-label">{card.label}</span>
+                        <span className="ff-diamond-icon" aria-hidden="true">+</span>
+                      </>
+                    )}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Mobile fallback — stacked accordion list */}
+          <div className="ff-mobile-list">
             {PM_CARDS.map((card) => {
               const isOpen = pmOpen === card.key
               return (
-                <article
-                  key={card.key}
-                  className={`home-pm-card${isOpen ? ' is-open' : ''}`}
-                >
+                <div key={card.key} className={`ff-mobile-card${isOpen ? ' is-open' : ''}`}>
                   <button
                     type="button"
-                    className="home-pm-card-btn"
-                    onClick={() => togglePm(card.key)}
+                    className="ff-mobile-btn"
+                    onClick={(e) => { e.stopPropagation(); setPmOpen(prev => prev === card.key ? null : card.key) }}
                     aria-expanded={isOpen}
-                    aria-controls={`pm-answer-${card.key}`}
                   >
-                    <span className="home-pm-label">{card.label}</span>
-                    <span className="home-pm-icon" aria-hidden="true">
-                      {isOpen ? '✕' : '+'}
-                    </span>
+                    <span className="ff-mobile-btn-label">{card.label}</span>
+                    <span className="ff-mobile-btn-icon" aria-hidden="true">{isOpen ? '✕' : '+'}</span>
                   </button>
-                  <div
-                    id={`pm-answer-${card.key}`}
-                    className="home-pm-answer"
-                    role="region"
-                    aria-hidden={!isOpen}
-                  >
-                    <h3 className="home-pm-question">{card.question}</h3>
-                    <div className="home-pm-answer-body">{card.answer}</div>
+                  <div className="ff-mobile-answer" aria-hidden={!isOpen}>
+                    <h3 className="ff-mobile-question">{card.question}</h3>
+                    <div className="ff-mobile-body">{card.answer}</div>
                   </div>
-                </article>
+                </div>
               )
             })}
           </div>
