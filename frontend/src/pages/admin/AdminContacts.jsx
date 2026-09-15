@@ -36,6 +36,7 @@ const AdminContacts = () => {
     <div className="admin-wrap">
       <div className="admin-page-header">
         <h1>Contact Submissions</h1>
+        <p className="page-subtitle">Manage messages from the contact form.</p>
       </div>
 
       {loading ? (
@@ -43,7 +44,7 @@ const AdminContacts = () => {
       ) : error ? (
         <p className="form-error">{error}</p>
       ) : submissions.length === 0 ? (
-        <p className="muted">No contact submissions yet.</p>
+        <div className="chart-empty">No contact submissions yet.</div>
       ) : (
         <div className="admin-contacts-list">
           {submissions.map((s) => (
@@ -52,18 +53,24 @@ const AdminContacts = () => {
               className={`admin-contact-card ${s.status === 'new' ? 'admin-contact-card-new' : ''}`}
             >
               <div className="admin-contact-card-header">
-                <strong>{s.name}</strong>
+                <div className="admin-contact-card-header-left">
+                  <strong className="contact-name">{s.name}</strong>
+                  {s.status === 'new' && <span className="contact-new-badge">• NEW</span>}
+                </div>
                 <span className="admin-contact-card-email mono">{s.email}</span>
               </div>
               <p className="admin-contact-card-message">{s.message}</p>
               <div className="admin-contact-card-footer">
-                <span className="muted">
-                  {new Date(s.createdAt).toLocaleString('en-IN')}
+                <span className="contact-date">
+                  {new Date(s.createdAt).toLocaleString('en-IN', {
+                    day: 'numeric', month: 'short', year: 'numeric',
+                    hour: '2-digit', minute: '2-digit'
+                  })}
                 </span>
                 {s.status === 'new' && (
                   <button
                     type="button"
-                    className="secondary-btn"
+                    className="contact-read-btn"
                     onClick={() => handleMarkRead(s._id)}
                   >
                     Mark as read
