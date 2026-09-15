@@ -2089,11 +2089,24 @@ a:hover {
   .home-section-title {
     font-size: 1.25rem;
   }
+  .home-hero-chart-card {
+    max-width: 100%;
+    margin: 0 auto;
+  }
 }
 
 @media (max-width: 480px) {
   .home-marquee-card {
     flex: 0 0 220px;
+  }
+  .home-hero-body {
+    font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .home-marquee-card {
+    flex: 0 0 200px;
   }
 }
 
@@ -7079,5 +7092,41 @@ h1, h2, h3, h4, h5, h6 {
 @media (max-width: 768px) {
   .home-events-list {
     max-width: 100%;
+  }
+  .home-event-card {
+    padding: 1rem 1.25rem;
+  }
+  .home-event-title {
+    font-size: 0.95rem;
+  }
+  .home-drhp-grid {
+    grid-template-columns: 1fr;
+  }
+  .home-drhp-card {
+    padding: 1.25rem;
+  }
+  .home-section-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .home-marquee-section {
+    margin: 0;
+    padding-left: 1rem;
+    padding-right: 1rem;
+  }
+  .home-marquee-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
+  }
+  .home-hero-headline {
+    font-size: 1.75rem;
+  }
+  .home-hero-body {
+    font-size: 0.9rem;
   }
 }
