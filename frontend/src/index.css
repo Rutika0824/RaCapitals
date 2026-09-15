@@ -7070,25 +7070,44 @@ h1, h2, h3, h4, h5, h6 {
   color: #111827;
 }
 
-.home-events-list {
+/* ============================================================
+   Events Section Styles
+   ============================================================ */
+.home-events-section {
+  padding: 4.5rem 0;
+  max-width: 1180px;
+  margin: 0 auto;
+}
+
+.home-events-list, .events-timeline {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-top: 1.5rem;
+}
+
+.home-event-card, .event-card {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
-  max-width: 720px;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
 }
 
-.home-event-card {
-  background: #fff;
-  border: 1px solid #e5e7eb;
-  border-radius: 10px;
-  padding: 1.25rem 1.5rem;
+.home-event-card:hover, .event-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.08);
+  border-color: #c7d4fc;
 }
 
-.home-event-card-head {
+.home-event-card-head, .event-card-head {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.5rem;
+  margin-bottom: 1rem;
 }
 
 .event-tag {
@@ -7096,7 +7115,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.06em;
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.6rem;
   border-radius: 999px;
 }
 
@@ -7106,39 +7125,189 @@ h1, h2, h3, h4, h5, h6 {
 .event-tag-other { background: #f3f4f6; color: #374151; }
 
 .event-date {
-  font-size: 0.78rem;
+  font-size: 0.85rem;
   color: #6b7280;
   font-weight: 500;
 }
 
-.home-event-title {
-  font-size: 1.05rem;
+.home-event-title, .event-title {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.35rem;
   font-weight: 600;
   color: #111827;
-  margin: 0 0 0.4rem 0;
-}
-
-.home-event-desc {
-  font-size: 0.9rem;
-  color: #4b5563;
   margin: 0 0 0.5rem 0;
-  line-height: 1.55;
 }
 
-.home-event-company {
-  font-size: 0.82rem;
+.home-event-desc, .event-desc {
+  font-size: 0.95rem;
+  color: #4b5563;
+  margin: 0 0 1rem 0;
+  line-height: 1.6;
+}
+
+.home-event-company, .event-company {
+  font-size: 0.9rem;
   color: #6b7280;
-  margin: 0.5rem 0 0 0;
+  margin: auto 0 0 0;
+  padding-top: 1rem;
+  border-top: 1px solid #f3f4f6;
 }
 
-.home-event-company a {
+.home-event-company a, .event-company a {
   color: #2563eb;
   text-decoration: none;
-  font-weight: 500;
+  font-weight: 600;
 }
 
-.home-event-company a:hover {
-  text-decoration: underline;
+.home-event-company a:hover, .event-company a:hover {
+  color: #1d4ed8;
+}
+
+/* ============================================================
+   Dedicated Events Timeline Styles
+   ============================================================ */
+.events-timeline-wrap {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 3rem;
+}
+
+.timeline-group {
+  display: flex;
+  flex-direction: column;
+}
+
+.timeline-month-header {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 1.8rem;
+  color: #111827;
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid #e5e7eb;
+}
+
+.timeline-list {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.timeline-row {
+  display: flex;
+  align-items: stretch;
+  gap: 1.5rem;
+}
+
+.timeline-date-col {
+  width: 60px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 0.5rem;
+}
+
+.timeline-day {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #111827;
+  line-height: 1;
+}
+
+.timeline-month {
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #6b7280;
+  margin-top: 0.2rem;
+}
+
+.timeline-dot-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timeline-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #2563eb;
+  margin-top: 1rem;
+  z-index: 2;
+}
+
+.timeline-line {
+  width: 2px;
+  background: #e5e7eb;
+  flex-grow: 1;
+  margin-top: 0.5rem;
+}
+
+.event-timeline-card {
+  flex-grow: 1;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+}
+
+.event-timeline-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.08);
+  border-color: #c7d4fc;
+}
+
+.event-timeline-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.75rem;
+}
+
+.event-company-name {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #4b5563;
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.event-company-name:hover {
+  color: #2563eb;
+}
+
+.event-company-name::before {
+  content: '🏢';
+  font-size: 1rem;
+}
+
+.event-timeline-card-foot {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px dashed #e5e7eb;
+}
+
+.timeline-view-doc {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2563eb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.timeline-view-doc:hover {
+  color: #1d4ed8;
 }
 
 /* ============================================================
