@@ -3,7 +3,7 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 import api from '../../services/api'
 import ConfirmDialog from '../common/ConfirmDialog'
-import ThemeToggle from '../common/ThemeToggle'
+import logo from '../../assets/logo-taurus-magnus.png'
 
 const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
   const { username, isAuthenticated, logout } = useAuth()
@@ -54,8 +54,7 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
             <span className="admin-hamburger-bar" />
           </button>
           <Link to="/admin" className="admin-header-bar-brand">
-            <img src="/logo.svg" alt="Taurus Magnus" className="admin-header-bar-logo" />
-            <span className="admin-header-bar-brand-text">Taurus Magnus</span>
+            <img src={logo} alt="Taurus Magnus" className="admin-header-bar-logo" style={{ height: '32px', width: 'auto' }} />
           </Link>
         </div>
         <div className="admin-header-bar-right">
@@ -70,7 +69,6 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
             <span className="admin-header-bar-user-label">Signed in as </span>
             <span className="mono">{username}</span>
           </span>
-          <ThemeToggle />
           <button
             type="button"
             className="admin-logout-btn"
