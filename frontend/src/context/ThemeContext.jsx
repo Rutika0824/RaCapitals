@@ -1,19 +1,12 @@
 import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 
-const THEMES = [
-  'indigo-light',
-  'sage-editorial',
-  'forest-ledger',
-  'white',
-  'black',
-  'evergreen',
-]
+const THEMES = ['indigo-light']
 
 const ThemeContext = createContext(null)
 
 const STORAGE_KEY = 'ra_theme'
-const DEFAULT_THEME = 'black'
+const DEFAULT_THEME = 'indigo-light'
 
 const prefersReducedMotion = () =>
   typeof window !== 'undefined' &&
