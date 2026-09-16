@@ -7132,16 +7132,16 @@ h1, h2, h3, h4, h5, h6 {
 
 .home-event-title, .event-title {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.35rem;
+  font-size: 1.2rem;
   font-weight: 600;
   color: #111827;
-  margin: 0 0 0.5rem 0;
+  margin: 0 0 0.25rem 0;
 }
 
 .home-event-desc, .event-desc {
   font-size: 0.95rem;
   color: #4b5563;
-  margin: 0 0 1rem 0;
+  margin: 0 0 0.5rem 0;
   line-height: 1.6;
 }
 
@@ -7250,7 +7250,7 @@ h1, h2, h3, h4, h5, h6 {
   background: #ffffff;
   border: 1px solid #e5e7eb;
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
@@ -7267,7 +7267,7 @@ h1, h2, h3, h4, h5, h6 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  margin-bottom: 0.75rem;
+  margin-bottom: 0.5rem;
 }
 
 .event-company-name {
@@ -7290,8 +7290,8 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .event-timeline-card-foot {
-  margin-top: 1rem;
-  padding-top: 1rem;
+  margin-top: 0.75rem;
+  padding-top: 0.75rem;
   border-top: 1px dashed #e5e7eb;
 }
 
@@ -7410,23 +7410,25 @@ h1, h2, h3, h4, h5, h6 {
    ============================================================ */
 .drhp-list-wrap {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1.25rem;
   margin-top: 1.5rem;
 }
 
 .drhp-row-card {
-  background: #ffffff;
-  border: 1px solid #e5e7eb;
+  background: rgba(255, 255, 255, 0.35);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: flex-start;
-  gap: 1.5rem;
+  gap: 1rem;
   transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
 }
 
 .drhp-row-card:hover {
@@ -7444,7 +7446,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .drhp-row-name {
   font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 600;
   color: #111827;
   text-decoration: none;
