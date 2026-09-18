@@ -47,6 +47,34 @@ async function seedEvents() {
         eventType: "Other",
         eventDate: new Date(Date.now() - 40 * 24 * 60 * 60 * 1000), // 40 days ago
         company: companies[0]?._id
+      },
+      {
+        title: "Acquired Competitor Startup",
+        description: "Successfully finalized the acquisition of a leading tech startup to consolidate market position and acquire top talent.",
+        eventType: "Other",
+        eventDate: new Date(Date.now() - 5 * 24 * 60 * 60 * 1000), // 5 days ago
+        company: companies[1]?._id
+      },
+      {
+        title: "Expanded Operations to Europe",
+        description: "Opened new headquarters in London, marking a significant milestone in our global expansion strategy.",
+        eventType: "Other",
+        eventDate: new Date(Date.now() - 15 * 24 * 60 * 60 * 1000), // 15 days ago
+        company: companies[2]?._id
+      },
+      {
+        title: "Reported Record Q3 Profits",
+        description: "Announced a 150% year-over-year increase in net profits for the third quarter, exceeding all analyst expectations.",
+        eventType: "Other",
+        eventDate: new Date(Date.now() - 1 * 24 * 60 * 60 * 1000), // 1 day ago
+        company: companies[0]?._id
+      },
+      {
+        title: "Partnered with Tech Giant",
+        description: "Signed a multi-year strategic partnership to co-develop cutting edge AI solutions.",
+        eventType: "Other",
+        eventDate: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000), // 30 days ago
+        company: companies[1]?._id
       }
     ];
 
