@@ -339,6 +339,14 @@ const AdminCompanyDetail = () => {
                 </InfoTooltip>
                 <input type="text" value={editForm.isin} onChange={(e) => setEditForm({ ...editForm, isin: e.target.value })} className="form-input" />
               </label>
+              <label className="form-label" style={{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '0.5rem', cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={editForm.drhpFiled || false}
+                  onChange={(e) => setEditForm({ ...editForm, drhpFiled: e.target.checked })}
+                />
+                <span>DRHP Filed</span>
+              </label>
               {editError && <p className="form-error">{editError}</p>}
               <div className="modal-actions">
                 <button type="button" className="secondary-btn" onClick={() => setEditModalOpen(false)}>Cancel</button>

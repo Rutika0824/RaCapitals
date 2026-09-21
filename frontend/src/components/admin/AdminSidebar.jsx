@@ -24,6 +24,13 @@ const AdminSidebar = ({ isOpen = false, onNavigate }) => {
 
   return (
     <aside className={`admin-sidebar ${isOpen ? 'open' : ''}`}>
+      <button 
+        className="admin-sidebar-close" 
+        onClick={handleClick} 
+        aria-label="Close sidebar"
+      >
+        ×
+      </button>
       <nav className="admin-sidebar-nav">
         <NavLink
           to="/admin/dashboard"

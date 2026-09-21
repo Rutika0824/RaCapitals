@@ -32,6 +32,7 @@ const AdminListings = () => {
   const [priceError, setPriceError] = useState('')
   const [flash, setFlash] = useState('')
   const [deactivateTarget, setDeactivateTarget] = useState(null)
+  const [reactivateTarget, setReactivateTarget] = useState(null)
 
   const fetchCompanies = async (sectorOverride, searchOverride) => {
     const activeSector = sectorOverride !== undefined ? sectorOverride : sector
@@ -128,13 +129,20 @@ const AdminListings = () => {
   }
 
   const toggleActive = async (company) => {
+    if (company.isActive) {
+      setDeactivateTarget(company)
+    } else {
+      setReactivateTarget(company)
+    }
+  }
+
+  const confirmReactivate = async () => {
+    if (!reactivateTarget) return
+    const target = reactivateTarget
+    setReactivateTarget(null)
     try {
-      if (company.isActive) {
-        setDeactivateTarget(company)
-        return
-      }
-      await api.patch(`/companies/${company._id}/activate`)
-      setFlash(`Activated "${company.name}"`)
+      await api.patch(`/companies/${target._id}/activate`)
+      setFlash(`Reactivated "${target.name}"`)
       await fetchCompanies()
     } catch (err) {
       setFlash(err?.response?.data?.message || 'Action failed')
@@ -458,6 +466,21 @@ const AdminListings = () => {
         variant="danger"
         onConfirm={confirmDeactivate}
         onCancel={() => setDeactivateTarget(null)}
+      />
+
+      <ConfirmDialog
+        isOpen={Boolean(reactivateTarget)}
+        title="Reactivate listing?"
+        message={
+          reactivateTarget
+            ? `This will make "${reactivateTarget.name}" visible on the public price list again.`
+            : ''
+        }
+        confirmLabel="Reactivate"
+        cancelLabel="Cancel"
+        variant="primary"
+        onConfirm={confirmReactivate}
+        onCancel={() => setReactivateTarget(null)}
       />
 
       {priceModal && (
