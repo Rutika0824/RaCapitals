@@ -1552,10 +1552,10 @@ a:hover {
 }
 
 /* 2x2 Grid arrangement */
-.ff-diamond--what  { left: 38%; top: 15px; }
-.ff-diamond--why   { left: 62%; top: 15px; }
-.ff-diamond--how   { left: 38%; top: 95px; }
-.ff-diamond--legal { left: 62%; top: 95px; }
+.ff-diamond--what  { left: 34%; top: 15px; }
+.ff-diamond--why   { left: 66%; top: 15px; }
+.ff-diamond--how   { left: 34%; top: 95px; }
+.ff-diamond--legal { left: 66%; top: 95px; }
 
 /* Inner content is counter-rotated so text is upright.
    Base is -45deg to offset the diamond's 45deg rotation. */
@@ -1795,7 +1795,6 @@ a:hover {
     max-height: 0;
     overflow: hidden;
     opacity: 0;
-    transition: max-height 0.4s ease, opacity 0.3s ease, padding 0.3s ease;
     padding: 0 1.25rem;
   }
 
@@ -5613,7 +5612,7 @@ a:hover {
 }
 
 .admin-layout .primary-btn:hover {
-  background: var(--paper);
+  background: var(--page-text);
   color: var(--page-bg);
   border-color: var(--page-text);
 }
@@ -5748,7 +5747,7 @@ a:hover {
 }
 
 .admin-login-wrap .primary-btn:hover {
-  background: var(--paper);
+  background: var(--page-text);
   color: var(--page-bg);
   border-color: var(--page-text);
 }

@@ -328,7 +328,7 @@ const Home = () => {
           <div className="home-marquee-header">
             <div>
               <p className="home-eyebrow">Live Catalog</p>
-              <h2 className="home-section-title">A taste of the price list</h2>
+              <h2 className="home-section-title">Featured Unlisted Shares</h2>
             </div>
             <Link to="/catalog" className="home-marquee-cta">View Full Price List →</Link>
           </div>
