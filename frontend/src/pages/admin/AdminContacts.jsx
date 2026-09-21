@@ -6,6 +6,12 @@ const AdminContacts = () => {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  const [searchTerm, setSearchTerm] = useState('')
+  const [startDate, setStartDate] = useState('')
+  const [endDate, setEndDate] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 6
+
   useEffect(() => {
     const fetchSubmissions = async () => {
       setLoading(true)
@@ -32,6 +38,43 @@ const AdminContacts = () => {
     }
   }
 
+  // Derived state for filters
+  const filteredSubmissions = submissions.filter((s) => {
+    const matchSearch =
+      s.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      s.name.toLowerCase().includes(searchTerm.toLowerCase())
+    
+    let matchDate = true
+    if (startDate || endDate) {
+      const sDate = new Date(s.createdAt)
+      const sDateWithoutTime = new Date(sDate.getFullYear(), sDate.getMonth(), sDate.getDate())
+      
+      if (startDate) {
+        const start = new Date(startDate)
+        if (sDateWithoutTime < start) matchDate = false
+      }
+      if (endDate) {
+        const end = new Date(endDate)
+        if (sDateWithoutTime > end) matchDate = false
+      }
+    }
+
+    return matchSearch && matchDate
+  })
+
+  // Pagination logic
+  const totalPages = Math.ceil(filteredSubmissions.length / itemsPerPage)
+  const paginatedSubmissions = filteredSubmissions.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages)
+    }
+  }, [totalPages, currentPage])
+
   return (
     <div className="admin-wrap">
       <div className="admin-page-header">
@@ -39,47 +82,111 @@ const AdminContacts = () => {
         <p className="page-subtitle">Manage messages from the contact form.</p>
       </div>
 
+      <div className="admin-filters" style={{ display: 'flex', gap: '1rem', marginBottom: '1.5rem', flexWrap: 'wrap' }}>
+        <input
+          type="text"
+          placeholder="Search by name or email..."
+          value={searchTerm}
+          onChange={(e) => setSearchTerm(e.target.value)}
+          className="form-input"
+          style={{ flex: 1, minWidth: '200px' }}
+        />
+        <input
+          type="date"
+          value={startDate}
+          onChange={(e) => setStartDate(e.target.value)}
+          className="form-input"
+          placeholder="Start Date"
+        />
+        <input
+          type="date"
+          value={endDate}
+          onChange={(e) => setEndDate(e.target.value)}
+          className="form-input"
+          placeholder="End Date"
+        />
+      </div>
+
       {loading ? (
         <p className="muted">Loading submissions…</p>
       ) : error ? (
         <p className="form-error">{error}</p>
-      ) : submissions.length === 0 ? (
-        <div className="chart-empty">No contact submissions yet.</div>
+      ) : filteredSubmissions.length === 0 ? (
+        <div className="chart-empty">No contact submissions found.</div>
       ) : (
-        <div className="admin-contacts-list">
-          {submissions.map((s) => (
-            <div
-              key={s._id}
-              className={`admin-contact-card ${s.status === 'new' ? 'admin-contact-card-new' : ''}`}
-            >
-              <div className="admin-contact-card-header">
-                <div className="admin-contact-card-header-left">
-                  <strong className="contact-name">{s.name}</strong>
-                  {s.status === 'new' && <span className="contact-new-badge">• NEW</span>}
-                </div>
-                <span className="admin-contact-card-email mono">{s.email}</span>
-              </div>
-              <p className="admin-contact-card-message">{s.message}</p>
-              <div className="admin-contact-card-footer">
-                <span className="contact-date">
-                  {new Date(s.createdAt).toLocaleString('en-IN', {
-                    day: 'numeric', month: 'short', year: 'numeric',
-                    hour: '2-digit', minute: '2-digit'
-                  })}
-                </span>
-                {s.status === 'new' && (
-                  <button
-                    type="button"
-                    className="contact-read-btn"
-                    onClick={() => handleMarkRead(s._id)}
-                  >
-                    Mark as read
-                  </button>
-                )}
-              </div>
+        <>
+          <div className="admin-table-wrap" style={{ overflowX: 'auto' }}>
+            <table className="admin-table" style={{ width: '100%' }}>
+              <thead>
+                <tr>
+                  <th>Sr No</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedSubmissions.map((s, idx) => (
+                  <tr key={s._id} style={{ background: s.status === 'new' ? 'var(--surface-3)' : 'transparent' }}>
+                    <td>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                    <td>
+                      <strong>{s.name}</strong>
+                      {s.status === 'new' && <span className="contact-new-badge" style={{ marginLeft: '8px', fontSize: '0.75em', padding: '2px 6px', background: 'var(--brass)', color: 'var(--ink)', borderRadius: '4px' }}>NEW</span>}
+                    </td>
+                    <td className="mono">{s.email}</td>
+                    <td style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={s.message}>
+                      {s.message}
+                    </td>
+                    <td>
+                      {new Date(s.createdAt).toLocaleString('en-IN', {
+                        day: 'numeric', month: 'short', year: 'numeric',
+                        hour: '2-digit', minute: '2-digit'
+                      })}
+                    </td>
+                    <td>
+                      {s.status === 'new' && (
+                        <button
+                          type="button"
+                          className="btn-primary"
+                          style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem' }}
+                          onClick={() => handleMarkRead(s._id)}
+                        >
+                          Mark Read
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          {totalPages > 1 && (
+            <div className="pagination" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
+              <button
+                className="btn-outline"
+                style={{ padding: '0.25rem 0.75rem' }}
+                disabled={currentPage === 1}
+                onClick={() => setCurrentPage((prev) => prev - 1)}
+              >
+                Prev
+              </button>
+              <span style={{ display: 'flex', alignItems: 'center' }}>
+                Page {currentPage} of {totalPages}
+              </span>
+              <button
+                className="btn-outline"
+                style={{ padding: '0.25rem 0.75rem' }}
+                disabled={currentPage === totalPages}
+                onClick={() => setCurrentPage((prev) => prev + 1)}
+              >
+                Next
+              </button>
             </div>
-          ))}
-        </div>
+          )}
+        </>
       )}
     </div>
   )
