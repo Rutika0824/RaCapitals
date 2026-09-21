@@ -20,7 +20,7 @@ const Navbar = () => {
     <header className="navbar">
       <div className="navbar-inner">
         <Link to="/" className="wordmark" onClick={closeMenu}>
-          <img src={logo} alt="Taurus Magnus" style={{ height: '70px', width: 'auto' }} />
+          <img src={logo} alt="Taurus Magnus" style={{ height: '85px', width: 'auto' }} />
         </Link>
 
         <button
