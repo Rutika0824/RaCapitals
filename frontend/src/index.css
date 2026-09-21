@@ -235,6 +235,13 @@ html, body, #root {
 
 *, *::before, *::after {
   box-sizing: border-box;
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera globally */
+::-webkit-scrollbar {
+  display: none;
 }
 
 h1, h2, h3, h4, h5, h6,
@@ -433,7 +440,7 @@ a:hover {
 .footer {
   background: var(--surface-3);
   color: var(--page-text);
-  padding: 2.5rem 1.5rem 0 1rem;
+  padding: 1.5rem 1.5rem 0 1.5rem;
   margin-top: auto;
 }
 
@@ -453,7 +460,7 @@ a:hover {
 }
 
 .footer-logo {
-  height: 64px;
+  height: 90px;
   width: auto;
   flex-shrink: 0;
 }
@@ -511,7 +518,7 @@ a:hover {
 
 .footer-bottom {
   max-width: 1180px;
-  margin: 2rem auto 0 auto;
+  margin: 1.5rem auto 0 auto;
   padding: 1rem 0;
   border-top: 1px solid rgba(236, 238, 241, 0.12);
 }
@@ -4152,10 +4159,18 @@ a:hover {
     z-index: 30;
   }
   .nav-links.open {
-    max-height: 360px;
+    max-height: 500px;
+    overflow-y: auto;
+    /* Hide scrollbar for Firefox and IE/Edge */
+    scrollbar-width: none;
+    -ms-overflow-style: none;
     visibility: visible;
     opacity: 1;
     transition: max-height 0.25s ease, opacity 0.2s ease;
+  }
+  /* Hide scrollbar for Chrome, Safari, and Opera */
+  .nav-links.open::-webkit-scrollbar {
+    display: none;
   }
   .nav-links a {
     padding: 0.85rem 1.25rem;
@@ -4300,14 +4315,15 @@ a:hover {
 /* ----- Footer ----- */
 @media (max-width: 767px) {
   .footer {
-    padding: 2rem 1rem 0 1rem;
+    padding: 1.5rem 1rem 0 1rem;
   }
   .footer-inner {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0.75rem;
   }
   .footer-brand {
-    flex-direction: row;
+    grid-column: 1 / -1;
+    flex-direction: column;
     align-items: flex-start;
   }
   .footer-bottom {
