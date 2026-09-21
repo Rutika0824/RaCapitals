@@ -1503,7 +1503,7 @@ a:hover {
    Focal Focus — diamond arrangement
    ============================================================ */
 .ff-section {
-  padding: 4.5rem 0;
+  padding: 4.5rem 0 3rem 0;
   max-width: 1180px;
   margin: 0 auto;
 }
@@ -1515,8 +1515,8 @@ a:hover {
   position: relative;
   width: 100%;
   max-width: 1180px;
-  height: 350px;
-  margin: 0 auto 0 auto;
+  height: 170px; /* Increased height to accommodate taller pills */
+  margin: 0 auto;
   transform: none;
 }
 
@@ -1527,25 +1527,23 @@ a:hover {
    When the roll hook is idle these stay at 0deg / 0px. */
 .ff-diamond {
   position: absolute;
-  top: 50px;
   left: 0;
-  width: min(240px, 20vw);
-  height: min(240px, 20vw);
-  background: #dbe4fd;
-  border: 1px solid #c3cef9;
-  border-radius: 8px;
+  width: auto;
+  height: auto;
+  min-width: 210px;
+  padding: 16px 40px;
+  background: #f4f6fe;
+  border: 1px solid #dbe4fd;
+  border-radius: 999px; /* Pill shape */
   cursor: pointer;
-  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg)));
-  transition: transform 0.38s cubic-bezier(0.34, 1.56, 0.64, 1), width 0.38s ease, height 0.38s ease, opacity 0.35s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
-  will-change: transform;
+  transform: translateX(-50%);
+  transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 20px 40px rgba(37, 99, 235, 0.14);
+  box-shadow: 0 8px 24px rgba(37, 99, 235, 0.12); /* Soft shadow */
   font-family: inherit;
-  padding: 0;
   outline: none;
-  overflow: hidden;
 }
 
 .ff-diamond:focus-visible {
@@ -1553,33 +1551,31 @@ a:hover {
   outline-offset: 4px;
 }
 
-/* Horizontal row — 4 cards equally spaced, left to right:
-   What, Why, How, Legal */
-.ff-diamond--what  { left: 10%; }
-.ff-diamond--how   { left: 60%; }
-.ff-diamond--why   { left: 35%; }
-.ff-diamond--legal { left: 85%; }
+/* 2x2 Grid arrangement */
+.ff-diamond--what  { left: 38%; top: 15px; }
+.ff-diamond--why   { left: 62%; top: 15px; }
+.ff-diamond--how   { left: 38%; top: 95px; }
+.ff-diamond--legal { left: 62%; top: 95px; }
 
 /* Inner content is counter-rotated so text is upright.
    Base is -45deg to offset the diamond's 45deg rotation. */
 .ff-diamond-inner {
-  transform: rotate(-45deg);
+  transform: none; /* No more rotation */
   display: flex;
-  flex-direction: column;
+  flex-direction: row; /* Horizontal text and icon */
   align-items: center;
   justify-content: center;
-  gap: 10px;
+  gap: 8px;
   pointer-events: none;
   user-select: none;
-  transition: transform 0.38s ease;
   width: 100%;
-  padding: 0 1rem;
+  padding: 0;
   box-sizing: border-box;
 }
 
 .ff-diamond-label {
-  font-family: 'Playfair Display', Georgia, serif;
-  font-size: 1.7rem;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.1rem;
   font-weight: 600;
   color: #111827;
   line-height: 1;
@@ -1587,43 +1583,23 @@ a:hover {
 }
 
 .ff-diamond-icon {
-  width: 36px;
-  height: 36px;
+  width: 20px;
+  height: 20px;
   border-radius: 50%;
   background: #ffffff;
   border: 1px solid #d1d5db;
   color: #111827;
-  font-family: 'IBM Plex Mono', monospace;
-  font-size: 1.25rem;
+  font-size: 0.9rem;
   font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
   line-height: 1;
-  transition: transform 0.3s ease;
 }
 
-/* Hover state — enlarge + white bg + stronger shadow */
 .ff-diamond:hover,
 .ff-diamond--hovered {
-  background: #c7d4fc;
-  border-color: #a5b8f8;
-  box-shadow: 0 28px 52px rgba(37, 99, 235, 0.22);
-}
-
-.ff-diamond--what:hover,
-.ff-diamond--what.ff-diamond--hovered {
-  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg))) scale(1.05);
-}
-.ff-diamond--legal:hover,
-.ff-diamond--legal.ff-diamond--hovered {
-  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg))) scale(1.05);
-}
-.ff-diamond--how:hover,
-.ff-diamond--how.ff-diamond--hovered,
-.ff-diamond--why:hover,
-.ff-diamond--why.ff-diamond--hovered {
-  transform: translateX(calc(-50% + var(--ff-roll-x, 0px))) rotate(calc(45deg + var(--ff-roll-r, 0deg))) scale(1.05);
+  background: #e2e8f0;
 }
 
 /* Active (clicked/expanded) state — diamond grows in place, un-rotates */
@@ -1631,27 +1607,23 @@ a:hover {
   background: #ffffff;
   border-color: #2563eb;
   box-shadow: 0 20px 48px rgba(37, 99, 235, 0.22);
-  width: min(340px, 30vw);
-  height: min(340px, 30vw);
+  width: min(340px, 90vw);
+  height: auto;
+  border-radius: 16px; /* Expanded state is a standard card */
   z-index: 10;
   cursor: default;
+  top: 40px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  padding: 0; /* Remove outer pill padding when expanded */
 }
 
 /* Un-rotate the active diamond so it's a normal rectangle */
-.ff-diamond--what.ff-diamond--active  { transform: translateX(-50%) rotate(0deg) !important; }
-.ff-diamond--legal.ff-diamond--active { transform: translateX(-50%) rotate(0deg) !important; }
-.ff-diamond--how.ff-diamond--active   { transform: translateX(-50%) rotate(0deg) !important; }
-.ff-diamond--why.ff-diamond--active   { transform: translateX(-50%) rotate(0deg) !important; }
-
-/* Clear roll offsets on active card */
-.ff-diamond--active {
-  --ff-roll-r: 0deg;
-  --ff-roll-x: 0px;
-}
+/* Clear transform for active state */
 
 /* Un-rotate the inner content when active */
 .ff-diamond--active .ff-diamond-inner {
-  transform: rotate(0deg) !important;
+  flex-direction: column;
   align-items: flex-start;
   justify-content: flex-start;
   gap: 0;
@@ -1739,46 +1711,33 @@ a:hover {
   .ff-mobile-list {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    grid-template-rows: 1fr 1fr;
-    gap: 1rem;
+    gap: 0.75rem;
     position: relative;
+    width: 100%;
+    max-width: 400px;
+    margin: 0 auto;
   }
 
   .ff-mobile-card {
-    background: #dbe4fd;
-    border: 1px solid #c3cef9;
-    border-radius: 12px;
+    background: #f4f6fe;
+    border: 1px solid #dbe4fd;
+    border-radius: 999px; /* Pill shape */
     overflow: hidden;
     display: flex;
     flex-direction: column;
-    transition: all 0.3s ease;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
     box-shadow: 0 4px 15px rgba(37, 99, 235, 0.05);
-  }
-
-  .ff-mobile-card:nth-child(1) { grid-area: 1 / 1 / 2 / 2; }
-  .ff-mobile-card:nth-child(2) { grid-area: 1 / 2 / 2 / 3; }
-  .ff-mobile-card:nth-child(3) { grid-area: 2 / 1 / 3 / 2; }
-  .ff-mobile-card:nth-child(4) { grid-area: 2 / 2 / 3 / 3; }
-
-  /* Make it roughly square when closed */
-  .ff-mobile-card:not(.is-open) {
-    aspect-ratio: 1 / 1;
+    width: 100%;
+    max-width: none;
   }
 
   .ff-mobile-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 18px rgba(37, 99, 235, 0.12);
-    background: #c7d4fc;
-    border-color: #a5b8f8;
+    background: #e2e8f0;
   }
 
   .ff-mobile-card.is-open {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: 10;
+    grid-column: 1 / -1; /* Full width when open */
+    border-radius: 16px; /* Expand to card */
     background: #ffffff;
     border-color: #2563eb;
     box-shadow: 0 12px 30px rgba(37, 99, 235, 0.15);
@@ -1786,49 +1745,43 @@ a:hover {
 
   .ff-mobile-btn {
     width: 100%;
-    flex: 1;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
     justify-content: center;
     align-items: center;
-    gap: 0.75rem;
-    padding: 1.25rem;
+    gap: 6px;
+    padding: 12px 8px;
     background: transparent;
     border: none;
     cursor: pointer;
     font-family: inherit;
-    text-align: center;
   }
 
   .ff-mobile-card.is-open .ff-mobile-btn {
-    flex-direction: row;
     justify-content: space-between;
-    flex: none;
-    padding: 1.25rem 1.25rem 0.5rem 1.25rem;
+    padding: 16px;
   }
 
   .ff-mobile-btn-label {
-    font-family: 'Playfair Display', Georgia, serif;
-    font-size: 1.25rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.95rem;
     font-weight: 600;
     color: #111827;
   }
 
   .ff-mobile-btn-icon {
-    width: 36px;
-    height: 36px;
+    width: 16px;
+    height: 16px;
     border-radius: 50%;
     background: #ffffff;
     border: 1px solid #d1d5db;
     color: #111827;
-    font-family: 'IBM Plex Mono', monospace;
-    font-size: 1.15rem;
+    font-size: 0.75rem;
     font-weight: 700;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-shrink: 0;
-    transition: transform 0.3s ease, background 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+    line-height: 1;
   }
 
   .ff-mobile-card.is-open .ff-mobile-btn-icon {
@@ -1945,7 +1898,7 @@ a:hover {
    Home Trust Section — bento grid with count-up + shimmer
    ============================================================ */
 .hts-section {
-  padding: 5rem 0;
+  padding: 3rem 0 5rem 0;
   max-width: 1180px;
   margin: 0 auto;
 }
@@ -7017,6 +6970,7 @@ h1, h2, h3, h4, h5, h6 {
 .home-drhp-card:hover {
   transform: translateY(-3px);
   box-shadow: 0 12px 28px rgba(37, 99, 235, 0.12);
+  text-decoration: none !important;
 }
 
 .home-drhp-card-head {
@@ -7360,6 +7314,7 @@ h1, h2, h3, h4, h5, h6 {
   transform: translateY(-2px);
   box-shadow: 0 10px 25px -5px rgba(37, 99, 235, 0.1);
   border-color: #c7d4fc;
+  text-decoration: none !important;
 }
 
 .home-drhp-card-head {
