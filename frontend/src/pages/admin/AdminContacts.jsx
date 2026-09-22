@@ -12,6 +12,21 @@ const AdminContacts = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const itemsPerPage = 6
 
+  const [selectedMessage, setSelectedMessage] = useState(null)
+
+  const truncateMessage = (text) => {
+    if (!text) return ''
+    let truncated = text
+    const words = text.split(' ')
+    if (words.length > 4) {
+      truncated = words.slice(0, 4).join(' ') + ' ...'
+    }
+    if (truncated.length > 40) {
+      return truncated.slice(0, 40) + '...'
+    }
+    return truncated
+  }
+
   useEffect(() => {
     const fetchSubmissions = async () => {
       setLoading(true)
@@ -33,6 +48,7 @@ const AdminContacts = () => {
       setSubmissions((prev) =>
         prev.map((s) => (s._id === id ? { ...s, status: 'read' } : s))
       )
+      window.dispatchEvent(new Event('contactRead'))
     } catch {
       // ignore
     }
@@ -106,6 +122,11 @@ const AdminContacts = () => {
           placeholder="End Date"
         />
       </div>
+      {startDate && endDate && new Date(startDate) > new Date(endDate) && (
+        <p className="form-error" style={{ marginTop: '-1rem', marginBottom: '1.5rem', fontSize: '0.85rem' }}>
+          Start date cannot be after the end date.
+        </p>
+      )}
 
       {loading ? (
         <p className="muted">Loading submissions…</p>
@@ -137,7 +158,7 @@ const AdminContacts = () => {
                     </td>
                     <td className="mono">{s.email}</td>
                     <td style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={s.message}>
-                      {s.message}
+                      {truncateMessage(s.message)}
                     </td>
                     <td>
                       {new Date(s.createdAt).toLocaleString('en-IN', {
@@ -146,16 +167,19 @@ const AdminContacts = () => {
                       })}
                     </td>
                     <td>
-                      {s.status === 'new' && (
+                      <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button
                           type="button"
-                          className="btn-primary"
+                          className="btn-outline"
                           style={{ padding: '0.25rem 0.5rem', fontSize: '0.85rem' }}
-                          onClick={() => handleMarkRead(s._id)}
+                          onClick={() => {
+                            setSelectedMessage(s)
+                            if (s.status === 'new') handleMarkRead(s._id)
+                          }}
                         >
-                          Mark Read
+                          View
                         </button>
-                      )}
+                      </div>
                     </td>
                   </tr>
                 ))}
@@ -187,6 +211,47 @@ const AdminContacts = () => {
             </div>
           )}
         </>
+      )}
+
+      {/* Modal for full message view */}
+      {selectedMessage && (
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          backgroundColor: 'rgba(0,0,0,0.5)',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+          zIndex: 1000
+        }}>
+          <div style={{
+            background: 'var(--surface-1, #fff)',
+            padding: '2rem',
+            borderRadius: '8px',
+            maxWidth: '500px',
+            width: '90%',
+            position: 'relative'
+          }}>
+            <h2 style={{ marginTop: 0, marginBottom: '1rem' }}>Message Details</h2>
+            <p style={{ margin: '0.5rem 0' }}><strong>Name:</strong> {selectedMessage.name}</p>
+            <p style={{ margin: '0.5rem 0' }}><strong>Email:</strong> {selectedMessage.email}</p>
+            <div style={{ marginTop: '1rem', padding: '1rem', background: 'var(--surface-2, #f5f5f5)', borderRadius: '4px' }}>
+              <p style={{ margin: 0, whiteSpace: 'pre-wrap', wordBreak: 'break-all' }}>{selectedMessage.message}</p>
+            </div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginTop: '1.5rem' }}>
+              <button
+                className="btn-outline"
+                style={{ padding: '0.5rem 2rem' }}
+                onClick={() => setSelectedMessage(null)}
+              >
+                Close
+              </button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   )

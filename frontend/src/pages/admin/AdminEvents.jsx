@@ -213,6 +213,7 @@ const AdminEvents = () => {
 
       {confirmId && (
         <ConfirmDialog
+          isOpen={true}
           title="Delete Event"
           message="Are you sure you want to permanently delete this event?"
           confirmLabel="Delete"

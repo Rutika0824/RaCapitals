@@ -23,7 +23,12 @@ const AdminHeader = ({ onToggleSidebar, isSidebarOpen }) => {
     }
     fetchUnread()
     const interval = setInterval(fetchUnread, 30000)
-    return () => clearInterval(interval)
+    window.addEventListener('contactRead', fetchUnread)
+    
+    return () => {
+      clearInterval(interval)
+      window.removeEventListener('contactRead', fetchUnread)
+    }
   }, [])
 
   const openLogoutConfirm = () => setShowLogoutConfirm(true)
