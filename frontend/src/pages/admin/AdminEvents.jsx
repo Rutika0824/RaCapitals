@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../services/api'
 import ConfirmDialog from '../../components/common/ConfirmDialog.jsx'
+import Pagination from '../../components/admin/Pagination'
 
 const EMPTY_FORM = {
   title: '',
@@ -32,6 +33,8 @@ const AdminEvents = () => {
   const [formError, setFormError] = useState('')
   const [saving, setSaving] = useState(false)
   const [confirmId, setConfirmId] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   const fetchAll = async () => {
     try {
@@ -116,8 +119,21 @@ const AdminEvents = () => {
     }
   }
 
+  // Pagination logic
+  const totalPages = Math.ceil(events.length / itemsPerPage)
+  const paginatedEvents = events.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages)
+    }
+  }, [totalPages, currentPage])
+
   return (
-    <div className="admin-wrap">
+    <div className="dashboard-wrap">
       <div className="admin-page-header">
         <h1>Events</h1>
         <button className="primary-btn" onClick={openCreate}>+ Add New Event</button>
@@ -128,32 +144,38 @@ const AdminEvents = () => {
       ) : events.length === 0 ? (
         <div className="chart-empty">No events yet. Click "+ Add New Event" to create one.</div>
       ) : (
-        <div className="admin-table-wrap">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th>Title</th>
-                <th>Company</th>
-                <th>Date</th>
-                <th>Type</th>
-                <th className="th-actions">Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {events.map((ev) => (
-                <tr key={ev._id}>
-                  <td>{ev.title}</td>
-                  <td>
+        <div className="dashboard-content-card">
+          <div className="card-header">
+            <h3>Event History</h3>
+          </div>
+          <div className="card-body" style={{ padding: 0, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', margin: 0, textAlign: 'left' }}>
+              <thead style={{ background: 'var(--surface-2)' }}>
+                <tr>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Title</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Company</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Type</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {paginatedEvents.map((ev) => (
+                  <tr key={ev._id} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '0.6rem 1rem', fontWeight: 600 }}>{ev.title}</td>
+                  <td style={{ padding: '0.6rem 1rem' }}>
                     {ev.company ? (
                       <Link to={`/admin/companies/${ev.company._id}`}>{ev.company.name}</Link>
                     ) : (
                       <span className="muted">—</span>
                     )}
                   </td>
-                  <td>{new Date(ev.eventDate).toLocaleDateString()}</td>
-                  <td><span className={`event-tag ${eventTypeClass(ev.eventType)}`}>{ev.eventType}</span></td>
-                  <td>
-                    <div className="actions-cell">
+                  <td style={{ padding: '0.6rem 1rem' }}>{new Date(ev.eventDate).toLocaleDateString()}</td>
+                  <td style={{ padding: '0.6rem 1rem' }}>
+                    <span className={`event-tag ${eventTypeClass(ev.eventType)}`}>{ev.eventType}</span>
+                  </td>
+                  <td style={{ padding: '0.6rem 1rem' }}>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                       <button className="row-action-btn" onClick={() => openEdit(ev)}>Edit</button>
                       <button className="row-action-btn delete-btn" onClick={() => setConfirmId(ev._id)}>Delete</button>
                     </div>
@@ -163,11 +185,19 @@ const AdminEvents = () => {
             </tbody>
           </table>
         </div>
+        </div>
       )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {formOpen && (
         <div className="modal-backdrop event-modal-backdrop" onClick={closeForm}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" type="button" onClick={closeForm}>&times;</button>
             <h2>{editing ? 'Edit Event' : 'Add New Event'}</h2>
             <form className="admin-form" onSubmit={handleSubmit}>
               <label className="form-label">

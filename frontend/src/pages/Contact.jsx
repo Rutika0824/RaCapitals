@@ -128,7 +128,18 @@ const Contact = () => {
         <section className="contact-form-section">
           <h2 className="section-title">Send us a message</h2>
           {success && (
-            <p className="form-success">Thank you! Your message has been sent. We will get back to you Soon</p>
+            <div className="form-success" style={{ position: 'relative', paddingRight: '2.5rem' }}>
+              Thank you! Your message has been sent. We will get back to you Soon
+              <button 
+                type="button"
+                className="modal-close-btn"
+                onClick={() => setSuccess(false)}
+                style={{ top: '50%', transform: 'translateY(-50%)', right: '0.5rem' }}
+                aria-label="Close message"
+              >
+                &times;
+              </button>
+            </div>
           )}
           {errors.form && <p className="form-error">{errors.form}</p>}
           <form className="admin-form contact-form" onSubmit={handleSubmit} noValidate>

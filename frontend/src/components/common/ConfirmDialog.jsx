@@ -36,6 +36,7 @@ const ConfirmDialog = ({
         className="modal confirm-dialog"
         onClick={(e) => e.stopPropagation()}
       >
+        <button className="modal-close-btn" type="button" onClick={onCancel}>&times;</button>
         <h2 id="confirm-dialog-title" className="confirm-dialog-title">{title}</h2>
         <p className="confirm-dialog-message">{message}</p>
         <div className="modal-actions">

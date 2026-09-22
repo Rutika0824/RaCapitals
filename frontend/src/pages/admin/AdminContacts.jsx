@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react'
+import { createPortal } from 'react-dom'
 import api from '../../services/api'
+import Pagination from '../../components/admin/Pagination'
 
 const AdminContacts = () => {
   const [submissions, setSubmissions] = useState([])
@@ -10,7 +12,7 @@ const AdminContacts = () => {
   const [startDate, setStartDate] = useState('')
   const [endDate, setEndDate] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const itemsPerPage = 6
+  const itemsPerPage = 10
 
   const [selectedMessage, setSelectedMessage] = useState(null)
 
@@ -92,7 +94,7 @@ const AdminContacts = () => {
   }, [totalPages, currentPage])
 
   return (
-    <div className="admin-wrap">
+    <div className="dashboard-wrap">
       <div className="admin-page-header">
         <h1>Contact Submissions</h1>
         <p className="page-subtitle">Manage messages from the contact form.</p>
@@ -135,38 +137,41 @@ const AdminContacts = () => {
       ) : filteredSubmissions.length === 0 ? (
         <div className="chart-empty">No contact submissions found.</div>
       ) : (
-        <>
-          <div className="admin-table-wrap" style={{ overflowX: 'auto' }}>
-            <table className="admin-table" style={{ width: '100%' }}>
-              <thead>
+        <div className="dashboard-content-card">
+          <div className="card-header">
+            <h3>Submissions</h3>
+          </div>
+          <div className="card-body" style={{ padding: 0, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', margin: 0, textAlign: 'left' }}>
+              <thead style={{ background: 'var(--surface-2)' }}>
                 <tr>
-                  <th>Sr No</th>
-                  <th>Name</th>
-                  <th>Email</th>
-                  <th>Message</th>
-                  <th>Date</th>
-                  <th>Actions</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sr No</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Name</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Email</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Message</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Date</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
                 {paginatedSubmissions.map((s, idx) => (
                   <tr key={s._id} style={{ background: s.status === 'new' ? 'var(--surface-3)' : 'transparent' }}>
-                    <td>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
-                    <td>
+                    <td style={{ padding: '0.6rem 1rem' }}>{(currentPage - 1) * itemsPerPage + idx + 1}</td>
+                    <td style={{ padding: '0.6rem 1rem' }}>
                       <strong>{s.name}</strong>
                       {s.status === 'new' && <span className="contact-new-badge" style={{ marginLeft: '8px', fontSize: '0.75em', padding: '2px 6px', background: 'var(--brass)', color: 'var(--ink)', borderRadius: '4px' }}>NEW</span>}
                     </td>
-                    <td className="mono">{s.email}</td>
-                    <td style={{ maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={s.message}>
+                    <td className="mono" style={{ padding: '0.6rem 1rem' }}>{s.email}</td>
+                    <td style={{ padding: '0.6rem 1rem', maxWidth: '300px', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }} title={s.message}>
                       {truncateMessage(s.message)}
                     </td>
-                    <td>
+                    <td style={{ padding: '0.6rem 1rem' }}>
                       {new Date(s.createdAt).toLocaleString('en-IN', {
                         day: 'numeric', month: 'short', year: 'numeric',
                         hour: '2-digit', minute: '2-digit'
                       })}
                     </td>
-                    <td>
+                    <td style={{ padding: '0.6rem 1rem' }}>
                       <div style={{ display: 'flex', gap: '0.5rem' }}>
                         <button
                           type="button"
@@ -186,35 +191,17 @@ const AdminContacts = () => {
               </tbody>
             </table>
           </div>
-
-          {totalPages > 1 && (
-            <div className="pagination" style={{ display: 'flex', justifyContent: 'center', gap: '0.5rem', marginTop: '1.5rem' }}>
-              <button
-                className="btn-outline"
-                style={{ padding: '0.25rem 0.75rem' }}
-                disabled={currentPage === 1}
-                onClick={() => setCurrentPage((prev) => prev - 1)}
-              >
-                Prev
-              </button>
-              <span style={{ display: 'flex', alignItems: 'center' }}>
-                Page {currentPage} of {totalPages}
-              </span>
-              <button
-                className="btn-outline"
-                style={{ padding: '0.25rem 0.75rem' }}
-                disabled={currentPage === totalPages}
-                onClick={() => setCurrentPage((prev) => prev + 1)}
-              >
-                Next
-              </button>
-            </div>
-          )}
-        </>
+        </div>
       )}
 
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
+
       {/* Modal for full message view */}
-      {selectedMessage && (
+      {selectedMessage && createPortal(
         <div style={{
           position: 'fixed',
           top: 0,
@@ -225,7 +212,7 @@ const AdminContacts = () => {
           display: 'flex',
           justifyContent: 'center',
           alignItems: 'center',
-          zIndex: 1000
+          zIndex: 9999
         }}>
           <div style={{
             background: 'var(--surface-1, #fff)',
@@ -235,6 +222,7 @@ const AdminContacts = () => {
             width: '90%',
             position: 'relative'
           }}>
+            <button className="modal-close-btn" onClick={() => setSelectedMessage(null)}>&times;</button>
             <h2 style={{ marginTop: 0, marginBottom: '1rem' }}>Message Details</h2>
             <p style={{ margin: '0.5rem 0' }}><strong>Name:</strong> {selectedMessage.name}</p>
             <p style={{ margin: '0.5rem 0' }}><strong>Email:</strong> {selectedMessage.email}</p>
@@ -251,7 +239,8 @@ const AdminContacts = () => {
               </button>
             </div>
           </div>
-        </div>
+        </div>,
+        document.body
       )}
     </div>
   )

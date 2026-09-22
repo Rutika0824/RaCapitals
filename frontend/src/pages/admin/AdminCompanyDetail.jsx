@@ -295,6 +295,7 @@ const AdminCompanyDetail = () => {
       {priceModalOpen && (
         <div className="modal-backdrop" onClick={() => setPriceModalOpen(false)}>
           <div className="modal small" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" type="button" onClick={() => setPriceModalOpen(false)}>&times;</button>
             <h2>Update Price — {company.name}</h2>
             <form onSubmit={submitPrice} className="admin-form">
               <label className="form-label">
@@ -322,6 +323,7 @@ const AdminCompanyDetail = () => {
       {editModalOpen && (
         <div className="modal-backdrop" onClick={() => setEditModalOpen(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" type="button" onClick={() => setEditModalOpen(false)}>&times;</button>
             <h2>Edit — {company.name}</h2>
             <form onSubmit={submitEdit} className="admin-form">
               <label className="form-label">

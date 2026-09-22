@@ -4,6 +4,7 @@ import api from '../../services/api'
 import { apiBaseWithoutApi, formatINR } from '../../utils/format'
 import ConfirmDialog from '../../components/common/ConfirmDialog'
 import InfoTooltip from '../../components/common/InfoTooltip'
+import Pagination from '../../components/admin/Pagination'
 
 const EMPTY_FORM = {
   name: '',
@@ -33,6 +34,8 @@ const AdminListings = () => {
   const [flash, setFlash] = useState('')
   const [deactivateTarget, setDeactivateTarget] = useState(null)
   const [reactivateTarget, setReactivateTarget] = useState(null)
+  const [currentPage, setCurrentPage] = useState(1)
+  const itemsPerPage = 10
 
   const fetchCompanies = async (sectorOverride, searchOverride) => {
     const activeSector = sectorOverride !== undefined ? sectorOverride : sector
@@ -237,8 +240,21 @@ const AdminListings = () => {
     </div>
   )
 
+  // Pagination logic
+  const totalPages = Math.ceil(companies.length / itemsPerPage)
+  const paginatedCompanies = companies.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  )
+
+  useEffect(() => {
+    if (currentPage > totalPages && totalPages > 0) {
+      setCurrentPage(totalPages)
+    }
+  }, [totalPages, currentPage])
+
   return (
-    <div className="admin-wrap admin-wrap-wide">
+    <div className="dashboard-wrap">
       <div className="admin-page-header">
         <div>
           <h1>Listings</h1>
@@ -248,7 +264,7 @@ const AdminListings = () => {
 
       {flash && <div className="flash">{flash}</div>}
 
-      <section className="admin-controls">
+      <section className="admin-controls" style={{ marginBottom: '1.5rem' }}>
         <input
           type="text"
           placeholder="Search by name…"
@@ -272,129 +288,77 @@ const AdminListings = () => {
         <button type="button" className="secondary-btn" onClick={() => fetchCompanies()}>Refresh</button>
       </section>
 
-      <h2 className="section-heading">Company Listings</h2>
-
       {loading ? (
         <p className="muted">Loading listings…</p>
       ) : companies.length === 0 ? (
         <p className="muted">No companies found.</p>
       ) : (
-        <>
-          <div className="admin-table-wrap admin-listings-table-desktop">
-            <table className="admin-table">
-              <thead>
+        <div className="dashboard-content-card">
+          <div className="card-header">
+            <h3>Company Listings</h3>
+          </div>
+          <div className="card-body" style={{ padding: 0, overflowX: 'auto' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', margin: 0, textAlign: 'left' }}>
+              <thead style={{ background: 'var(--surface-2)' }}>
                 <tr>
-                  <th>Logo</th>
-                  <th>Name</th>
-                  <th>
-                    <InfoTooltip text="The industry category this company belongs to, used for filtering the price list.">
-                      Sector
-                    </InfoTooltip>
-                  </th>
-                  <th>
-                    <InfoTooltip text="An estimated price based on our own research — not sourced from a live stock exchange.">
-                      Latest Price
-                    </InfoTooltip>
-                  </th>
-                  <th>
-                    <InfoTooltip text="Live listings appear on the public price list. Deactivated listings are hidden from the public site but remain editable here.">
-                      Status
-                    </InfoTooltip>
-                  </th>
-                  <th className="th-actions">Actions</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Logo</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Name</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Sector</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Latest Price</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Status</th>
+                  <th style={{ padding: '0.75rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Actions</th>
                 </tr>
               </thead>
               <tbody>
-                {companies.map((c) => (
-                  <tr key={c._id}>
-                    <td>
-                      {c.logoUrl ? (
-                        <img src={`${apiBaseWithoutApi()}${c.logoUrl}`} alt={`${c.name} logo`} className="admin-logo-thumb" />
-                      ) : (
-                        <span className="logo-placeholder small">{(c.name || '?').charAt(0).toUpperCase()}</span>
-                      )}
+                {paginatedCompanies.map((c) => (
+                  <tr key={c._id} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '0.6rem 1rem' }}>
+                      <div className="dashboard-hero-logo" style={{ width: '32px', height: '32px', borderRadius: '6px' }}>
+                        {c.logoUrl ? (
+                          <img src={`${apiBaseWithoutApi()}${c.logoUrl}`} alt={`${c.name} logo`} />
+                        ) : (
+                          <span className="logo-placeholder small" style={{ fontSize: '1rem' }}>{(c.name || '?').charAt(0).toUpperCase()}</span>
+                        )}
+                      </div>
                     </td>
-                    <td>{c.name}</td>
-                    <td>{c.sector || '—'}</td>
-                    <td className="mono">
+                    <td style={{ padding: '0.6rem 1rem', fontWeight: 600, fontSize: '0.9rem' }}>{c.name}</td>
+                    <td style={{ padding: '0.6rem 1rem' }}>{c.sector || '—'}</td>
+                    <td className="mono" style={{ padding: '0.6rem 1rem', fontWeight: 600 }}>
                       {c.latestPrice == null ? (
-                        <button
-                          type="button"
-                          className="set-price-link"
-                          onClick={() => openPriceModal(c)}
-                        >
-                          Set price
-                        </button>
+                        <button type="button" className="set-price-link" onClick={() => openPriceModal(c)}>Set price</button>
                       ) : (
                         formatINR(c.latestPrice)
                       )}
                     </td>
-                    <td>
+                    <td style={{ padding: '0.6rem 1rem' }}>
                       <span className={`status-badge ${c.isActive ? 'status-live' : 'status-off'}`}>
                         {c.isActive ? 'Live' : 'Deactivated'}
                       </span>
-                      {c.drhpFiled && (
-                        <span className="drhp-badge">DRHP</span>
-                      )}
+                      {c.drhpFiled && <span className="drhp-badge" style={{ marginLeft: '0.5rem' }}>DRHP</span>}
                     </td>
-                    <td>{renderActionsForCard(c)}</td>
+                    <td style={{ padding: '0.6rem 1rem' }}>
+                      <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
+                        {renderActionsForCard(c)}
+                      </div>
+                    </td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-
-          <div className="admin-cards admin-listings-cards-mobile">
-            {companies.map((c) => (
-              <article key={c._id} className="admin-card">
-                <header className="admin-card-head">
-                  <div className="admin-card-logo">
-                    {c.logoUrl ? (
-                      <img src={`${apiBaseWithoutApi()}${c.logoUrl}`} alt={`${c.name} logo`} className="admin-logo-thumb" />
-                    ) : (
-                      <span className="logo-placeholder small">{(c.name || '?').charAt(0).toUpperCase()}</span>
-                    )}
-                  </div>
-                  <div className="admin-card-head-text">
-                    <h3 className="admin-card-name">{c.name}</h3>
-                    <span className="sector-badge">{c.sector || '—'}</span>
-                  </div>
-                  <span className={`status-badge ${c.isActive ? 'status-live' : 'status-off'}`}>
-                    {c.isActive ? 'Live' : 'Deactivated'}
-                  </span>
-                </header>
-
-                <dl className="admin-card-kv">
-                  <div className="kv-row">
-                    <dt className="kv-label">Latest Price</dt>
-                    <dd className="kv-value">
-                      {c.latestPrice == null ? (
-                        <button
-                          type="button"
-                          className="set-price-link"
-                          onClick={() => openPriceModal(c)}
-                        >
-                          Set price
-                        </button>
-                      ) : (
-                        <span className="mono">{formatINR(c.latestPrice)}</span>
-                      )}
-                    </dd>
-                  </div>
-                </dl>
-
-                <div className="admin-card-actions">
-                  {renderActionsForCard(c)}
-                </div>
-              </article>
-            ))}
-          </div>
-        </>
+        </div>
       )}
+
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
 
       {formOpen && (
         <div className="modal-backdrop" onClick={closeForm}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" type="button" onClick={closeForm}>&times;</button>
             <h2>{editing ? 'Edit Listing' : 'Add New Listing'}</h2>
             <form onSubmit={handleSubmitCompany} className="admin-form">
               <label className="form-label">
@@ -486,6 +450,7 @@ const AdminListings = () => {
       {priceModal && (
         <div className="modal-backdrop" onClick={closePriceModal}>
           <div className="modal small" onClick={(e) => e.stopPropagation()}>
+            <button className="modal-close-btn" type="button" onClick={closePriceModal}>&times;</button>
             <h2>Update Price — {priceModal.name}</h2>
             <form onSubmit={handleSubmitPrice} className="admin-form">
               <label className="form-label">
