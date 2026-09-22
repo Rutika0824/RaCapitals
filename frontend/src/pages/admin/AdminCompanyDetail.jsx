@@ -145,134 +145,151 @@ const AdminCompanyDetail = () => {
   const hasLogo = !!company.logoUrl
 
   return (
-    <div className="admin-wrap admin-wrap-wide">
-      <div className="detail-topbar">
-        <Link to="/admin/listings" className="back-pill">← Back to listings</Link>
-        <h1 className="detail-title">{company.name}</h1>
-        <div className="detail-meta-row">
-          {company.sector && <span className="sector-badge">{company.sector}</span>}
-          <span className={`status-badge ${company.isActive ? 'status-live' : 'status-off'}`}>
-            {company.isActive ? 'Live' : 'Deactivated'}
-          </span>
-        </div>
-      </div>
+    <div className="dashboard-wrap">
+      {flash && <div className="flash" style={{ marginBottom: '1.5rem' }}>{flash}</div>}
 
-      {flash && <div className="flash">{flash}</div>}
-
-      <div className="detail-grid">
-        <div className="detail-main">
-          <section className="detail-section">
-            <h3 className="detail-subhead">Market Data</h3>
-            <div className="detail-hero-price">
-              <span className="detail-hero-price-label">
-                <InfoTooltip text="An estimated price based on our own research — not sourced from a live stock exchange.">
-                  Latest Price
-                </InfoTooltip>
-              </span>
-              {latestPrice == null ? (
-                <button type="button" className="set-price-link" onClick={() => setPriceModalOpen(true)}>
-                  Set price
-                </button>
-              ) : (
-                <span className="detail-hero-price-value mono">{formatINR(latestPrice)}</span>
-              )}
-            </div>
-            <dl className="kv-list">
-              <div className="kv-row">
-                <span className="kv-label">
-                  <InfoTooltip text="Highest and lowest indicative price recorded over the last 12 months.">
-                    52W High
-                  </InfoTooltip>
-                </span>
-                <span className="kv-value mono">{formatINR(company.high52)}</span>
-              </div>
-              <div className="kv-row">
-                <span className="kv-label">
-                  <InfoTooltip text="Highest and lowest indicative price recorded over the last 12 months.">
-                    52W Low
-                  </InfoTooltip>
-                </span>
-                <span className="kv-value mono">{formatINR(company.low52)}</span>
-              </div>
-              <div className="kv-row">
-                <span className="kv-label">
-                  <InfoTooltip text="Minimum number of shares you can enquire about in one transaction.">
-                    Lot Size
-                  </InfoTooltip>
-                </span>
-                <span className="kv-value mono">{company.lotSize ?? '—'}</span>
-              </div>
-              <div className="kv-row">
-                <span className="kv-label">Face Value</span>
-                <span className="kv-value mono">{formatINR(company.faceValue)}</span>
-              </div>
-              <div className="kv-row">
-                <span className="kv-label">ISIN</span>
-                <span className="kv-value mono">{company.isin || '—'}</span>
-              </div>
-            </dl>
-          </section>
-
-          <section className="detail-section">
-            <h3 className="detail-subhead">Description</h3>
-            <p>{company.description || <span className="muted">No description provided.</span>}</p>
-          </section>
-
-          <section className="detail-section">
-            <h3 className="detail-subhead">Price History ({history.length} records)</h3>
-            {history.length === 0 ? (
-              <p className="muted">No price records yet. Use "Update Price" to add the first one.</p>
-            ) : (
-              <table className="detail-history-table">
-                <thead>
-                  <tr>
-                    <th>Recorded At</th>
-                    <th>Price (₹)</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {[...history].reverse().map((p, idx) => (
-                    <tr key={p._id || idx}>
-                      <td className="mono">{new Date(p.recordedAt).toLocaleString('en-IN')}</td>
-                      <td className="mono">{formatINR(p.price)}</td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
-            )}
-          </section>
-        </div>
-
-        <aside className="detail-side">
-          <div className="detail-logo-block">
-            <div className="detail-logo-preview">
+      <div className="dashboard-hero-card">
+        <div className="dashboard-hero-left">
+          <Link to="/admin/listings" className="back-btn-subtle">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+            Back to listings
+          </Link>
+          <div className="dashboard-hero-content">
+            <div className="dashboard-hero-logo">
               {logoSrc ? (
                 <img src={logoSrc} alt={`${company.name} logo`} />
               ) : (
                 <span className="logo-placeholder">{initial}</span>
               )}
+              <label className="upload-overlay" title={hasLogo ? 'Replace Logo' : 'Upload Logo'}>
+                <input
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={(e) => {
+                    const file = e.target.files?.[0]
+                    e.target.value = ''
+                    if (file) handleLogoUpload(file)
+                  }}
+                />
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+              </label>
             </div>
-            <label className="secondary-btn upload-btn-label">
-              {hasLogo ? 'Replace Logo' : 'Upload Logo'}
-              <input
-                type="file"
-                accept="image/*"
-                style={{ display: 'none' }}
-                onChange={(e) => {
-                  const file = e.target.files?.[0]
-                  e.target.value = ''
-                  if (file) handleLogoUpload(file)
-                }}
-              />
-            </label>
+            <div className="dashboard-hero-text">
+              <h1>{company.name}</h1>
+              <div className="dashboard-tags">
+                {company.sector && <span className="tag-sector">{company.sector}</span>}
+                <span className={`tag-status ${company.isActive ? 'live' : 'off'}`}>
+                  {company.isActive ? 'Live' : 'Deactivated'}
+                </span>
+              </div>
+            </div>
           </div>
+        </div>
+        <div className="dashboard-hero-actions">
+          <button type="button" className="secondary-btn" onClick={openEdit}>
+            Edit Details
+          </button>
+        </div>
+      </div>
 
-          <div className="detail-actions-block">
-            <button type="button" className="secondary-btn" onClick={openEdit}>
-              Edit Details
-            </button>
+      <div className="dashboard-metrics-grid">
+        <div className="metric-card metric-primary">
+          <div className="metric-header">
+            <span>Latest Price</span>
+            <InfoTooltip text="An estimated price based on our own research — not sourced from a live stock exchange." />
           </div>
-        </aside>
+          <div className="metric-value">
+            {latestPrice == null ? (
+              <button type="button" className="btn-outline" style={{ fontSize: '0.8rem', padding: '0.2rem 0.6rem' }} onClick={() => setPriceModalOpen(true)}>
+                Set Price
+              </button>
+            ) : (
+              <span className="mono">{formatINR(latestPrice)}</span>
+            )}
+          </div>
+        </div>
+        
+        <div className="metric-card">
+          <div className="metric-header">
+            <span>52W High</span>
+            <InfoTooltip text="Highest indicative price recorded over the last 12 months." />
+          </div>
+          <div className="metric-value mono">{formatINR(company.high52)}</div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-header">
+            <span>52W Low</span>
+            <InfoTooltip text="Lowest indicative price recorded over the last 12 months." />
+          </div>
+          <div className="metric-value mono">{formatINR(company.low52)}</div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-header">
+            <span>Lot Size</span>
+            <InfoTooltip text="Minimum number of shares you can enquire about in one transaction." />
+          </div>
+          <div className="metric-value mono">{company.lotSize ?? '—'}</div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-header">
+            <span>Face Value</span>
+            <InfoTooltip text="The share's original nominal value set at incorporation." />
+          </div>
+          <div className="metric-value mono">{formatINR(company.faceValue)}</div>
+        </div>
+
+        <div className="metric-card">
+          <div className="metric-header">
+            <span>ISIN</span>
+            <InfoTooltip text="International Securities Identification Number." />
+          </div>
+          <div className="metric-value mono" style={{ fontSize: '1.25rem' }}>{company.isin || '—'}</div>
+        </div>
+      </div>
+
+      <div className="dashboard-content-grid">
+        <div className="dashboard-content-card">
+          <div className="card-header">
+            <h3>Description</h3>
+          </div>
+          <div className="card-body">
+            <p style={{ margin: 0, lineHeight: 1.5, fontSize: '0.85rem' }}>
+              {company.description || <span className="muted">No description provided.</span>}
+            </p>
+          </div>
+        </div>
+
+        <div className="dashboard-content-card">
+          <div className="card-header">
+            <h3>Price History <span className="muted" style={{ fontWeight: 'normal', fontSize: '0.9rem' }}>({history.length} records)</span></h3>
+          </div>
+          <div className="card-body" style={{ padding: 0, maxHeight: '400px', overflowY: 'auto' }}>
+            {history.length === 0 ? (
+              <p className="muted" style={{ padding: '1rem', margin: 0, fontSize: '0.85rem' }}>No price records yet. Use "Update Price" to add the first one.</p>
+            ) : (
+              <table style={{ width: '100%', borderCollapse: 'collapse', margin: 0, textAlign: 'left' }}>
+                <thead style={{ position: 'sticky', top: 0, background: 'var(--surface-2)', zIndex: 1 }}>
+                  <tr>
+                    <th style={{ padding: '0.5rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em' }}>Recorded At</th>
+                    <th style={{ padding: '0.5rem 1rem', borderBottom: '1px solid var(--border)', fontSize: '0.75rem', textTransform: 'uppercase', letterSpacing: '0.05em', textAlign: 'right' }}>Price (₹)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {[...history].reverse().map((p, idx) => (
+                    <tr key={p._id || idx} style={{ borderBottom: '1px solid var(--border)' }}>
+                      <td className="mono" style={{ padding: '0.6rem 1rem', fontSize: '0.85rem' }}>{new Date(p.recordedAt).toLocaleString('en-IN')}</td>
+                      <td className="mono" style={{ padding: '0.6rem 1rem', fontSize: '0.9rem', fontWeight: 600, textAlign: 'right' }}>{formatINR(p.price)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
       </div>
 
       {priceModalOpen && (
